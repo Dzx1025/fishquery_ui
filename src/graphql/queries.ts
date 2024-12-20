@@ -1,3 +1,4 @@
+//src/graphql/queries.ts
 import {gql} from '@apollo/client';
 
 export const SUB_CHAT_BY_UUID = gql`

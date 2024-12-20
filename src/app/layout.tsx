@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import Providers from '@/app/providers';
-import React from "react";
+import {Box} from '@mui/material';
+import {Suspense} from 'react';
 
 export const metadata: Metadata = {
     title: 'Next.js App with MUI',
@@ -14,8 +15,14 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-        <body>
-        <Providers>{children}</Providers>
+        <body suppressHydrationWarning>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Providers>
+                <Box component="main">
+                    {children}
+                </Box>
+            </Providers>
+        </Suspense>
         </body>
         </html>
     );
