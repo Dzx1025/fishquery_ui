@@ -1,10 +1,28 @@
 'use client';
 
-import {createContext, useContext, useState, useEffect} from 'react';
+import React, {createContext, useContext, useState, useEffect, useCallback, useRef} from 'react';
 
 interface AuthTokens {
     access: string;
     refresh: string;
+}
+
+interface DecodedToken {
+    token_type: string;
+    exp: number;
+    iat: number;
+    jti: string;
+    user_id: number;
+    'https://hasura.io/jwt/claims': {
+        'x-hasura-allowed-roles': string[];
+        'x-hasura-default-role': string;
+        'x-hasura-user-id': string;
+        'x-hasura-user-email': string;
+        'x-hasura-is-staff': string;
+    };
+    email: string;
+    username: string;
+    is_staff: boolean;
 }
 
 interface AuthContextType {
@@ -13,18 +31,30 @@ interface AuthContextType {
     logout: () => void;
     getAccessToken: () => string | null;
     refreshAccessToken: () => Promise<boolean>;
+    getUserId: () => number | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const decodeToken = (token: string): DecodedToken | null => {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64).split('').map(c =>
+                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            ).join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Error decoding token:', error);
+        return null;
+    }
+};
+
 export function AuthProvider({children}: { children: React.ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    useEffect(() => {
-        // Check for existing tokens in localStorage
-        const tokens = getStoredTokens();
-        setIsAuthenticated(!!tokens?.access);
-    }, []);
+    const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const getStoredTokens = (): AuthTokens | null => {
         const access = localStorage.getItem('accessToken');
@@ -38,12 +68,38 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
     const storeTokens = (tokens: AuthTokens) => {
         localStorage.setItem('accessToken', tokens.access);
         localStorage.setItem('refreshToken', tokens.refresh);
+
+        const decoded = decodeToken(tokens.access);
+        if (decoded?.user_id) {
+            localStorage.setItem('userId', decoded.user_id.toString());
+        }
     };
 
-    const clearTokens = () => {
+    const clearTokens = useCallback(() => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-    };
+        localStorage.removeItem('userId');
+        if (refreshTimerRef.current) {
+            clearTimeout(refreshTimerRef.current);
+            refreshTimerRef.current = null;
+        }
+    }, []);
+
+    const setupRefreshTimer = useCallback((token: string) => {
+        const decoded = decodeToken(token);
+        if (!decoded) return;
+
+        const expiresIn = decoded.exp * 1000 - Date.now();
+        const refreshTime = Math.max(0, expiresIn - 60000);
+
+        if (refreshTimerRef.current) {
+            clearTimeout(refreshTimerRef.current);
+        }
+
+        refreshTimerRef.current = setTimeout(async () => {
+            await refreshAccessToken();
+        }, refreshTime);
+    }, []);
 
     const refreshAccessToken = async (): Promise<boolean> => {
         const tokens = getStoredTokens();
@@ -64,12 +120,12 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
                 const newTokens = await response.json();
                 storeTokens({
                     access: newTokens.access,
-                    refresh: tokens.refresh, // Keep existing refresh token
+                    refresh: tokens.refresh,
                 });
+                setupRefreshTimer(newTokens.access);
                 return true;
             }
 
-            // If refresh failed, clear tokens and log out
             clearTokens();
             setIsAuthenticated(false);
             return false;
@@ -95,6 +151,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
                 const tokens: AuthTokens = await response.json();
                 storeTokens(tokens);
                 setIsAuthenticated(true);
+                setupRefreshTimer(tokens.access);
                 return true;
             }
             return false;
@@ -104,15 +161,57 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         }
     };
 
-    const logout = () => {
+    const logout = useCallback(() => {
         clearTokens();
         setIsAuthenticated(false);
-    };
+    }, [clearTokens]);
 
     const getAccessToken = (): string | null => {
         const tokens = getStoredTokens();
         return tokens?.access || null;
     };
+
+    const getUserId = (): number | null => {
+        const storedId = localStorage.getItem('userId');
+        return storedId ? parseInt(storedId, 10) : null;
+    };
+
+    useEffect(() => {
+        const initAuth = async () => {
+            const tokens = getStoredTokens();
+            if (!tokens?.access) {
+                setIsAuthenticated(false);
+                return;
+            }
+
+            const decoded = decodeToken(tokens.access);
+            if (!decoded) {
+                clearTokens();
+                setIsAuthenticated(false);
+                return;
+            }
+
+            const isExpired = decoded.exp * 1000 < Date.now();
+            if (!isExpired) {
+                setupRefreshTimer(tokens.access);
+                setIsAuthenticated(true);
+            } else {
+                const refreshSuccess = await refreshAccessToken();
+                if (!refreshSuccess) {
+                    clearTokens();
+                    setIsAuthenticated(false);
+                }
+            }
+        };
+
+        initAuth();
+
+        return () => {
+            if (refreshTimerRef.current) {
+                clearTimeout(refreshTimerRef.current);
+            }
+        };
+    }, [clearTokens, setupRefreshTimer]);
 
     return (
         <AuthContext.Provider
@@ -121,7 +220,8 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
                 login,
                 logout,
                 getAccessToken,
-                refreshAccessToken
+                refreshAccessToken,
+                getUserId
             }}
         >
             {children}
@@ -135,46 +235,4 @@ export const useAuth = () => {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
-};
-
-// Custom fetch hook that handles token management
-export const useAuthFetch = () => {
-    const {getAccessToken, logout, refreshAccessToken} = useAuth();
-
-    const authFetch = async (url: string, options: RequestInit = {}) => {
-        const accessToken = getAccessToken();
-        if (!accessToken) {
-            throw new Error('No access token available');
-        }
-
-        const headers = {
-            ...options.headers,
-            Authorization: `Bearer ${accessToken}`,
-        };
-
-        try {
-            const response = await fetch(url, {...options, headers});
-
-            // If we get a 401, try to refresh the token
-            if (response.status === 401) {
-                const refreshSuccessful = await refreshAccessToken();
-                if (refreshSuccessful) {
-                    // Retry the original request with the new token
-                    const newAccessToken = getAccessToken();
-                    headers.Authorization = `Bearer ${newAccessToken}`;
-                    return fetch(url, {...options, headers});
-                } else {
-                    logout();
-                    throw new Error('Session expired');
-                }
-            }
-
-            return response;
-        } catch (error) {
-            console.error('Auth fetch error:', error);
-            throw error;
-        }
-    };
-
-    return authFetch;
 };
