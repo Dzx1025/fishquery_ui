@@ -108,7 +108,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         if (!tokens?.refresh) return false;
 
         try {
-            const response = await fetch('${DJANGO_API_URL}/api/token/refresh/', {
+            const response = await fetch(`${DJANGO_API_URL}/api/token/refresh/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
 
     const login = async (username: string, password: string) => {
         try {
-            const response = await fetch('${DJANGO_API_URL}/api/token/', {
+            const response = await fetch(`${DJANGO_API_URL}/api/token/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
