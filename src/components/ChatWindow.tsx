@@ -39,6 +39,8 @@ interface ChatMessage {
     conversation_id: number;
 }
 
+const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL;
+
 export default function ChatWindow() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -151,7 +153,7 @@ export default function ChatWindow() {
 
         try {
             const accessToken = getAccessToken();
-            const response = await fetch(`http://localhost:8000/chat/conversations/${conversationId}/ask/`, {
+            const response = await fetch(`${DJANGO_API_URL}/chat/conversations/${conversationId}/ask/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

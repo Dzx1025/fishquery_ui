@@ -36,6 +36,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const DJANGO_API_URL = process.env.NEXT_PUBLIC_DJANGO_API_URL;
+
 const decodeToken = (token: string): DecodedToken | null => {
     try {
         const base64Url = token.split('.')[1];
@@ -106,7 +108,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
         if (!tokens?.refresh) return false;
 
         try {
-            const response = await fetch('http://localhost:8000/api/token/refresh/', {
+            const response = await fetch('${DJANGO_API_URL}/api/token/refresh/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +141,7 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
 
     const login = async (username: string, password: string) => {
         try {
-            const response = await fetch('http://localhost:8000/api/token/', {
+            const response = await fetch('${DJANGO_API_URL}/api/token/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
