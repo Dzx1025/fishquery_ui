@@ -6,6 +6,9 @@ import {setContext} from '@apollo/client/link/context';
 import {onError} from '@apollo/client/link/error';
 import {createClient} from 'graphql-ws';
 
+const GRAPHQL_HTTP_URL = process.env.NEXT_PUBLIC_GRAPHQL_HTTP_URL;
+const GRAPHQL_WS_URL = process.env.NEXT_PUBLIC_GRAPHQL_WS_URL;
+
 const getToken = () => {
     if (typeof window === 'undefined') return null;
     try {
@@ -31,7 +34,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
 
 // HTTP link with authentication
 const httpLink = new HttpLink({
-    uri: 'http://localhost:8080/v1/graphql',
+    uri: GRAPHQL_HTTP_URL,
 });
 
 // Auth link
@@ -49,7 +52,7 @@ const authLink = setContext((_, {headers}) => {
 const wsLink = typeof window !== 'undefined'
     ? new GraphQLWsLink(
         createClient({
-            url: 'ws://localhost:8080/v1/graphql',
+            url: GRAPHQL_WS_URL!,
             connectionParams: () => {
                 const token = getToken();
                 return {
