@@ -1,11 +1,11 @@
 import type {Metadata} from 'next';
 import Providers from '@/app/providers';
 import {Box} from '@mui/material';
-import {Suspense} from 'react';
+import React, {Suspense} from 'react';
 
 export const metadata: Metadata = {
-    title: 'Next.js App with MUI',
-    description: 'Next.js 14 app with Material-UI and authentication',
+    title: 'Fish Query',
+    description: 'Chat for Fishing Rules Query',
 };
 
 export default function RootLayout({

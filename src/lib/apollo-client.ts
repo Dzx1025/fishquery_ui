@@ -86,14 +86,10 @@ const cache = new InMemoryCache({
         Query: {
             fields: {
                 chat_conversation: {
-                    merge(existing, incoming) {
-                        return incoming;
-                    },
+                    merge: true,
                 },
                 chat_message: {
-                    merge(existing, incoming) {
-                        return incoming;
-                    },
+                    merge: true,
                 },
             },
         },
