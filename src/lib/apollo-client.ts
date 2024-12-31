@@ -1,5 +1,5 @@
 // src/lib/apollo-client.ts
-import {ApolloClient, InMemoryCache, split, HttpLink, from} from '@apollo/client';
+import {ApolloClient, from, HttpLink, InMemoryCache, split} from '@apollo/client';
 import {GraphQLWsLink} from '@apollo/client/link/subscriptions';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {setContext} from '@apollo/client/link/context';
@@ -86,10 +86,14 @@ const cache = new InMemoryCache({
         Query: {
             fields: {
                 chat_conversation: {
-                    merge: true,
+                    merge(existing, incoming) {
+                        return incoming;
+                    },
                 },
                 chat_message: {
-                    merge: true,
+                    merge(existing, incoming) {
+                        return incoming;
+                    },
                 },
             },
         },
