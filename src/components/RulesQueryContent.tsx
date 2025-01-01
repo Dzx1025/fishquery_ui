@@ -9,7 +9,7 @@ const PDFViewer = dynamic(() => import('./PDFViewer'), {
     loading: () => <div>Loading PDF viewer...</div>
 });
 
-const ChatWindow = dynamic(() => import('./ChatWindow'), {
+const ChatWindow = dynamic(() => import('./chat/ChatWindow'), {
     ssr: false,
     loading: () => <div>Loading chat...</div>
 });
