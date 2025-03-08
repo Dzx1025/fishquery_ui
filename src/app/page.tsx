@@ -3,14 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { SmartHeader } from "@/components/auth/smart-header";
 
@@ -22,32 +15,88 @@ export default function Home() {
     <>
       <SmartHeader />
 
-      <div className="container flex items-center justify-center h-[calc(100vh-4rem)]">
-        <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <CardTitle>New Conversation</CardTitle>
-            <CardDescription>
-              Start a new conversation with the AI assistant
-            </CardDescription>
-          </CardHeader>
-          <form>
-            <CardContent>
-              <Textarea
-                placeholder="Type your question here..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="min-h-32 resize-none"
-                disabled={sending}
-              />
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button type="submit" disabled={!message.trim() || sending}>
-                {sending ? "Sending..." : "Send"}
-              </Button>
-            </CardFooter>
-          </form>
-        </Card>
-      </div>
+      <main className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-8">
+        <div className="w-full max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-primary">
+              Fish Query
+            </h1>
+          </div>
+
+          <Card className="w-full border-0 shadow-md bg-card/70 backdrop-blur-sm mx-auto animate-fadeIn">
+            <form className="w-full">
+              <CardContent className="p-0">
+                <div className="relative">
+                  <Textarea
+                    placeholder="Ask anything..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="min-h-40 text-xl md:text-2xl p-6 border-0 shadow-none focus:ring-0 resize-none bg-transparent rounded-lg placeholder:text-muted-foreground/60 placeholder:text-xl md:placeholder:text-2xl transition-all duration-300 animate-textFocus"
+                    disabled={sending}
+                    autoFocus
+                    style={{ caretColor: "var(--primary)" }}
+                  />
+                  {/* Subtle gradient background that animates when typing */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-lg pointer-events-none transition-opacity duration-700 ${
+                      message ? "opacity-100" : "opacity-0"
+                    }`}
+                    aria-hidden="true"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-end px-6 py-4 rounded-b-lg bg-muted/20">
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="px-8 font-medium transition-all duration-200 hover:shadow-md"
+                  disabled={!message.trim() || sending}
+                >
+                  {sending ? "Sending..." : "Send"}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </div>
+      </main>
+
+      <style jsx global>{`
+        @keyframes textFocus {
+          0% {
+            opacity: 0.7;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-textFocus {
+          animation: textFocus 0.5s ease-out;
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.7s ease-out;
+        }
+
+        textarea::placeholder {
+          transition: opacity 0.3s;
+        }
+
+        textarea:focus::placeholder {
+          opacity: 0.3;
+        }
+      `}</style>
     </>
   );
 }
