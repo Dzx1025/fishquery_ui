@@ -95,7 +95,7 @@ export function NavUser() {
                         !user?.is_subscription_active
                           ? "text-gray-400"
                           : user?.subscription_type === "free"
-                          ? "text-gray-600"
+                          ? "text-gray-500"
                           : user?.subscription_type === "basic"
                           ? "text-blue-600"
                           : user?.subscription_type === "premium"

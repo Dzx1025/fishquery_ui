@@ -10,6 +10,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import { AuthProvider } from "@/contexts/AuthContext";
 import { getAuthStatus } from "@/lib/server-auth";
+import { ApolloWrapper } from "@/lib/apollo/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,8 +51,10 @@ export default async function RootLayout({
             {/* Now we can immediately render the correct layout without waiting */}
             {isAuthenticated ? (
               <SidebarProvider>
-                <AppSidebar />
-                <SidebarInset>{children}</SidebarInset>
+                <ApolloWrapper>
+                  <AppSidebar />
+                  <SidebarInset>{children}</SidebarInset>
+                </ApolloWrapper>
               </SidebarProvider>
             ) : (
               // For unauthenticated users

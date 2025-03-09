@@ -11,6 +11,10 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
 
+  const handleSend = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <SmartHeader />
@@ -24,7 +28,7 @@ export default function Home() {
           </div>
 
           <Card className="w-full p-0 border-0 shadow-md bg-card/70 backdrop-blur-sm mx-auto animate-fadeIn">
-            <form className="w-full">
+            <form onSubmit={handleSend} className="w-full">
               <CardContent className="p-0">
                 <div className="relative">
                   <Textarea
@@ -45,7 +49,7 @@ export default function Home() {
                   />
                 </div>
               </CardContent>
-              
+
               <CardFooter className="flex justify-end px-6 py-4 rounded-b-lg bg-muted/20">
                 <Button
                   type="submit"

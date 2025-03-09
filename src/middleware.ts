@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
   );
   // Check if user has authentication cookie
   const hasCookie =
-    request.cookies.has("auth_token") || request.cookies.has("refresh_token");
+    request.cookies.has("access_token") || request.cookies.has("refresh_token");
   // If accessing a protected path without cookie, redirect to login
   if (isProtectedPath && !hasCookie) {
     const url = new URL("/login", request.url);

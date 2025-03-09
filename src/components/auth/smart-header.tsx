@@ -4,35 +4,16 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Fish, MessageCirclePlus } from "lucide-react";
+import { Fish } from "lucide-react";
 
 export function SmartHeader() {
   const { isAuthenticated } = useAuthContext();
-  const router = useRouter();
-
-  const handleNewChat = async () => {
-    router.push("/");
-    router.refresh();
-  };
 
   if (isAuthenticated) {
     // Header for authenticated users
     return (
       <header className="flex h-16 shrink-0 items-center px-4 justify-between">
-        <div className="flex items-center gap-2">
-          <SidebarTrigger className="-ml-1 min-w-6 min-h-6" />
-        </div>
-
-        <div className="flex items-center">
-          <div className="p-3 md:p-2 touch-manipulation active:bg-gray-200 rounded-full hover:bg-gray-100 transition-all duration-200 cursor-pointer flex items-center justify-center">
-            <MessageCirclePlus
-              onClick={handleNewChat}
-              className="-mt-0.5 min-w-6 min-h-6"
-              size={22}
-            />
-          </div>
-        </div>
+        <SidebarTrigger className="min-w-6 min-h-6" />
       </header>
     );
   }
