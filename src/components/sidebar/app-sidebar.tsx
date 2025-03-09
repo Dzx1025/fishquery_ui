@@ -12,10 +12,10 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { UserProfile } from "@/lib/types";
 import { Fish } from "lucide-react";
+import Link from "next/link";
 
 const data = {
   chats: [
@@ -45,7 +45,7 @@ export default function AppSidebar({ user, ...props }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/">
+              <Link href="/">
                 <div className="bg-primary text-primary-foreground flex aspect-square size-9 items-center justify-center rounded-lg shadow-sm transition-all duration-200 hover:shadow-md hover:scale-105">
                   <Fish className="size-5 transition-transform hover:animate-pulse" />
                 </div>
@@ -54,7 +54,7 @@ export default function AppSidebar({ user, ...props }: AppSidebarProps) {
                     Fish Query
                   </span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

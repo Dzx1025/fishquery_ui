@@ -23,7 +23,7 @@ export default function Home() {
             </h1>
           </div>
 
-          <Card className="w-full border-0 shadow-md bg-card/70 backdrop-blur-sm mx-auto animate-fadeIn">
+          <Card className="w-full p-0 border-0 shadow-md bg-card/70 backdrop-blur-sm mx-auto animate-fadeIn">
             <form className="w-full">
               <CardContent className="p-0">
                 <div className="relative">
@@ -45,6 +45,7 @@ export default function Home() {
                   />
                 </div>
               </CardContent>
+              
               <CardFooter className="flex justify-end px-6 py-4 rounded-b-lg bg-muted/20">
                 <Button
                   type="submit"

@@ -26,11 +26,20 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const user = {
-    username: "Dzx",
-    email: "dzx@dzx.com",
+  const { user, logout } = useAuthContext();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const success = await logout();
+    if (success) {
+      router.push("/");
+      router.refresh();
+    }
   };
 
   return (
@@ -43,12 +52,12 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage alt={user.username} />
+                <AvatarImage alt={user?.username} />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.username}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-medium">{user?.username}</span>
+                <span className="truncate text-xs">{user?.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -62,39 +71,88 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage alt={user.username} />
+                  <AvatarImage alt={user?.username} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.username}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-medium">{user?.username}</span>
+                  <span className="truncate text-xs">{user?.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+                {user?.is_subscription_active ? (
+                  <BadgeCheck className="text-green-500" />
+                ) : (
+                  <BadgeCheck className="text-gray-400" />
+                )}
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={`font-medium capitalize ${
+                        !user?.is_subscription_active
+                          ? "text-gray-400"
+                          : user?.subscription_type === "free"
+                          ? "text-gray-600"
+                          : user?.subscription_type === "basic"
+                          ? "text-blue-600"
+                          : user?.subscription_type === "premium"
+                          ? "text-purple-600"
+                          : user?.subscription_type === "enterprise"
+                          ? "text-emerald-600"
+                          : ""
+                      }`}
+                    >
+                      {user?.subscription_type || "Free Plan"}
+                    </span>
+                    {user?.is_subscription_active &&
+                      (user?.subscription_type === "premium" ||
+                        user?.subscription_type === "enterprise") && (
+                        <Sparkles className="h-3 w-3 text-amber-500" />
+                      )}
+                  </div>
+                  <span
+                    className={`text-xs ${
+                      user?.is_subscription_active
+                        ? "text-green-500"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {user?.is_subscription_active ? "Active" : "Inactive"}
+                  </span>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
                 <CreditCard />
-                Billing
+                <div className="flex flex-col">
+                  <span className="font-medium">Usage</span>
+                  <span className="text-xs text-muted-foreground">
+                    {user?.messages_used_today || 0} /{" "}
+                    {user?.daily_message_quota || 0} messages
+                  </span>
+                </div>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
-                Notifications
+                <div className="flex flex-col">
+                  <span className="font-medium">Subscription</span>
+                  <span className="text-xs text-muted-foreground">
+                    {user?.subscription_expiry
+                      ? `Expires: ${new Date(
+                          user.subscription_expiry
+                        ).toLocaleDateString()}`
+                      : "No active subscription"}
+                  </span>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>
