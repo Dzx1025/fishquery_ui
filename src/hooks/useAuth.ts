@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { LoginCredentials, RegisterData, UserProfile } from "@/lib/types";
+import {useState, useEffect, useCallback} from "react";
+import {useRouter} from "next/navigation";
+import {LoginCredentials, RegisterData, UserProfile} from "@/lib/types";
 import authService from "@/lib/services/auth-service";
+import {setCurrentUser, ApolloLogout} from "@/lib/apollo/client";
 
 export interface AuthState {
   user: UserProfile | null;
@@ -19,13 +20,13 @@ export function useAuth(initialState?: InitialAuthState) {
   const router = useRouter();
   const [state, setState] = useState<AuthState>({
     user: initialState?.user || null,
-    isLoading: initialState ? false : true,
+    isLoading: !initialState,
     isAuthenticated: initialState?.isAuthenticated || false,
     error: null,
   });
 
   const fetchUser = useCallback(async () => {
-    setState((prev) => ({ ...prev, isLoading: true }));
+    setState((prev) => ({...prev, isLoading: true}));
     try {
       const response = await authService.getProfile();
       if (response.status === "success" && response.data) {
@@ -54,11 +55,17 @@ export function useAuth(initialState?: InitialAuthState) {
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({...prev, isLoading: true, error: null}));
     try {
       const response = await authService.login(credentials);
       if (response.status === "success") {
+        console.log("login response", response);
+        setCurrentUser({
+          userId: response.data.userid,
+          isAuthenticated: true,
+        });
         await fetchUser();
+
         return true;
       } else {
         setState((prev) => ({
@@ -79,9 +86,9 @@ export function useAuth(initialState?: InitialAuthState) {
   };
 
   const register = async (data: RegisterData) => {
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({...prev, isLoading: true, error: null}));
     try {
-      const { username, email, password, password_confirm } = data;
+      const {username, email, password, password_confirm} = data;
       const response = await authService.register({
         username,
         email,
@@ -124,9 +131,10 @@ export function useAuth(initialState?: InitialAuthState) {
   };
 
   const logout = async () => {
-    setState((prev) => ({ ...prev, isLoading: true }));
+    setState((prev) => ({...prev, isLoading: true}));
     try {
       const response = await authService.logout();
+      ApolloLogout();
       if (response.status === "success") {
         setState({
           user: null,
@@ -155,7 +163,7 @@ export function useAuth(initialState?: InitialAuthState) {
   };
 
   const updateProfile = async (data: Partial<UserProfile>) => {
-    setState((prev) => ({ ...prev, isLoading: true }));
+    setState((prev) => ({...prev, isLoading: true}));
     try {
       const response = await authService.updateProfile(data);
       if (response.status === "success" && response.data) {
