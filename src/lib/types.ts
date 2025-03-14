@@ -8,6 +8,7 @@ export interface ApiResponse<T = any> {
 }
 
 export interface UserProfile {
+  id: number;
   email: string;
   username: string;
   subscription_type: string;

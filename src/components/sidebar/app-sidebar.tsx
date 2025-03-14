@@ -14,6 +14,7 @@ import {
 import { UserProfile } from "@/lib/types";
 import { Fish, Plus } from "lucide-react";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user?: UserProfile;
@@ -25,13 +26,13 @@ export default function AppSidebar({ user, ...props }: AppSidebarProps) {
       <SidebarHeader className="p-4">
         <SidebarMenu className="flex flex-col space-y-2">
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg" className="py-10" asChild>
               <a
                 href="/"
                 className="flex items-center gap-3 hover:bg-gray-100 rounded-lg p-2 transition-colors"
               >
-                <div className="bg-primary text-primary-foreground flex aspect-square size-9 items-center justify-center rounded-lg shadow-sm transition-all duration-200 hover:shadow-md hover:scale-105">
-                  <Fish className="size-5 transition-transform hover:animate-pulse" />
+                <div className="bg-primary text-primary-foreground flex aspect-square size-10 items-center justify-center rounded-lg shadow-sm transition-all duration-200 hover:shadow-md hover:scale-105">
+                  <Fish className="size-6 transition-transform hover:animate-pulse" />
                 </div>
                 <div className="grid flex-1 text-left text-base leading-tight">
                   <span className="truncate font-bold transition-colors hover:text-primary">
@@ -46,7 +47,7 @@ export default function AppSidebar({ user, ...props }: AppSidebarProps) {
             <Link href="/">
               <SidebarMenuButton
                 size="lg"
-                className="w-full flex items-center gap-2 rounded-lg p-2 transition-colors"
+                className="w-full flex items-center gap-2 rounded-lg p-2 my-2 transition-colors"
               >
                 <Plus className="h-4 w-4" />
                 <span>New Chat</span>

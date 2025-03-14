@@ -53,6 +53,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 // Group chats by date (month and year)
 const groupChatsByDate = (chats: DBChat[]) => {
@@ -89,6 +90,7 @@ export function NavList() {
   const params = useParams();
   const router = useRouter();
   const currentChatId = params.id as string | undefined;
+  const { user } = useAuthContext();
 
   // Chat list state
   const {
@@ -96,7 +98,7 @@ export function NavList() {
     loading: chatLoading,
     error: chatFetchError,
     refetch,
-  } = useChatList();
+  } = useChatList(user?.id);
 
   // Group chats by date
   const groupedChats = useMemo(() => {

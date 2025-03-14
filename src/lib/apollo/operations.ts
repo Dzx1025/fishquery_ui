@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_CHAT_LIST = gql`
-  query Get_ChatList {
-    chats_chat {
+  query Get_ChatList($userId: bigint) {
+    chats_chat(where: { user_id: { _eq: $userId } }) {
       id
       title
       created_at

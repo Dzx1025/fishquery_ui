@@ -14,8 +14,10 @@ import { processMessageChunks, extractCitations } from "@/lib/utils";
 import { useAuthContext } from "@/contexts/AuthContext";
 
 // Hook for fetching chat list
-export function useChatList() {
-  const { data, loading, error, refetch } = useQuery(GET_CHAT_LIST);
+export function useChatList(userId?: number) {
+  const { data, loading, error, refetch } = useQuery(GET_CHAT_LIST, {
+    variables: { userId },
+  });
   return {
     chats: (data?.chats_chat as DBChat[]) || [],
     loading,

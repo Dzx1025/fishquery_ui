@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -13,8 +13,8 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const router = useRouter();
-  const { isAuthenticated } = useAuthContext();
-  const { refetch } = useChatList();
+  const { isAuthenticated, user } = useAuthContext();
+  const { refetch } = useChatList(user?.id);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
