@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {useState} from "react";
+import {useRouter} from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import {cn} from "@/lib/utils";
+import {Button} from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,17 +12,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {useAuthContext} from "@/contexts/AuthContext";
+import {Alert, AlertDescription} from "@/components/ui/alert";
+import {toast} from "sonner";
 
 export function RegisterForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+                               className,
+                               ...props
+                             }: React.ComponentPropsWithoutRef<"div">) {
   const router = useRouter();
-  const { register, error, isLoading } = useAuthContext();
+  const {register, error, isLoading} = useAuthContext();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -56,6 +57,7 @@ export function RegisterForm({
     });
 
     if (success) {
+      toast.success("Register successful");
       router.refresh();
     } else {
       setPassword("");

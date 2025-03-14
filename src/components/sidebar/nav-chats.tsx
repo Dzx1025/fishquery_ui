@@ -52,7 +52,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthContext } from "@/contexts/AuthContext";
 
 // Group chats by date (month and year)
@@ -128,11 +127,11 @@ export function NavList() {
     try {
       await renameChat(selectedChat.id, newChatTitle.trim());
 
-      toast("Chat renamed");
+      toast.success("Chat renamed");
 
       refetch(); // Refresh the chat list
     } catch (error) {
-      toast("Failed to rename chat");
+      toast.error("Failed to rename chat");
     }
 
     setIsRenameDialogOpen(false);
@@ -150,7 +149,7 @@ export function NavList() {
     try {
       await deleteChat(selectedChat.id);
 
-      toast("Chat deleted");
+      toast.success("Chat deleted");
 
       // If the deleted chat is the current one, navigate to the main page
       if (currentChatId === selectedChat.id) {
@@ -159,7 +158,7 @@ export function NavList() {
 
       refetch(); // Refresh the chat list
     } catch (error) {
-      toast("Failed to delete chat");
+      toast.error("Failed to delete chat");
     }
 
     setIsDeleteDialogOpen(false);
@@ -206,10 +205,6 @@ export function NavList() {
         <SidebarMenu>
           <div className="px-3 py-6 text-center text-sm text-muted-foreground">
             <p className="mb-2">No chats found</p>
-            <Button variant="outline" size="sm" className="mt-1">
-              <Plus className="mr-2 h-4 w-4" />
-              Create new chat
-            </Button>
           </div>
         </SidebarMenu>
       </SidebarGroup>

@@ -24,15 +24,14 @@ export function middleware(request: NextRequest) {
     (path) => pathname.startsWith(path) || pathname === path
   );
   // Check if user has authentication cookie
-  const hasCookie =
-    request.cookies.has("access_token") || request.cookies.has("refresh_token");
+  const hasCookie = request.cookies.has("access_token");
   // If accessing a protected path without cookie, redirect to login
   if (isProtectedPath && !hasCookie) {
     const url = new URL("/login", request.url);
     url.searchParams.set("from", pathname);
     return NextResponse.redirect(url);
   }
-  //   If accessing a public path with cookie, redirect to dashboard (optional)
+  // If accessing a public path with cookie, redirect to dashboard (optional)
   if (isPublicPath && hasCookie) {
     const url = new URL("/", request.url);
     return NextResponse.redirect(url);

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, {useState} from "react";
+import {useRouter} from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import {cn} from "@/lib/utils";
+import {Button} from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,17 +12,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {useAuthContext} from "@/contexts/AuthContext";
+import {Alert, AlertDescription} from "@/components/ui/alert";
+import {toast} from "sonner";
 
 export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+                            className,
+                            ...props
+                          }: React.ComponentPropsWithoutRef<"div">) {
   const router = useRouter();
-  const { login, error, isLoading } = useAuthContext();
+  const {login, error, isLoading} = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
@@ -36,8 +37,10 @@ export function LoginForm({
       return;
     }
 
-    const success = await login({ email, password });
+    const success = await login({email, password});
+
     if (success) {
+      toast.success("Login successful");
       router.push("/");
       router.refresh();
     }
