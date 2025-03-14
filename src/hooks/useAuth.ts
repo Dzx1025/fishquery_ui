@@ -1,4 +1,3 @@
-// src/lib/hooks/useAuth.ts
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { LoginCredentials, RegisterData, UserProfile } from "@/lib/types";

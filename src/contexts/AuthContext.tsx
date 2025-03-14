@@ -1,8 +1,7 @@
-// src/contexts/AuthContext.tsx
 "use client";
 
 import React, { createContext, useContext, ReactNode } from "react";
-import { useAuth, AuthState } from "@/lib/hooks/useAuth";
+import { useAuth, AuthState } from "@/hooks/useAuth";
 import { LoginCredentials, RegisterData, UserProfile } from "@/lib/types";
 
 interface AuthContextType {

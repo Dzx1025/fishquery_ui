@@ -27,8 +27,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useMemo, useState } from "react";
-import { Chat } from "@/lib/apollo/types";
-import { useChatList, useDeleteChat, useRenameChat } from "@/lib/apollo/hooks";
+import { DBChat } from "@/lib/apollo/types";
+import { useChatList, useDeleteChat, useRenameChat } from "@/hooks/useChat";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -55,8 +55,8 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Group chats by date (month and year)
-const groupChatsByDate = (chats: Chat[]) => {
-  const groups: Record<string, Chat[]> = {};
+const groupChatsByDate = (chats: DBChat[]) => {
+  const groups: Record<string, DBChat[]> = {};
 
   chats.forEach((chat) => {
     const updatedAt = new Date(chat.updated_at);
@@ -107,14 +107,14 @@ export function NavList() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [newChatTitle, setNewChatTitle] = useState("");
-  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+  const [selectedChat, setSelectedChat] = useState<DBChat | null>(null);
 
   // Chat operations
   const { renameChat, loading: renaming, error: renameError } = useRenameChat();
   const { deleteChat, loading: deleting, error: deleteError } = useDeleteChat();
 
   // Handle rename chat
-  const handleRenameClick = (chat: Chat) => {
+  const handleRenameClick = (chat: DBChat) => {
     setSelectedChat(chat);
     setNewChatTitle(chat.title);
     setIsRenameDialogOpen(true);
@@ -137,7 +137,7 @@ export function NavList() {
   };
 
   // Handle delete chat
-  const handleDeleteClick = (chat: Chat) => {
+  const handleDeleteClick = (chat: DBChat) => {
     setSelectedChat(chat);
     setIsDeleteDialogOpen(true);
   };
@@ -164,7 +164,7 @@ export function NavList() {
   };
 
   // Handle view source action
-  const handleViewSource = (chat: Chat) => {
+  const handleViewSource = (chat: DBChat) => {
     // Implement the view source functionality
     toast(`Viewing source for ${chat.title}`);
   };
@@ -228,7 +228,9 @@ export function NavList() {
             {dateChats.map((chat) => (
               <SidebarMenuItem
                 key={chat.id}
-                className={currentChatId === chat.id ? "bg-accent/100 rounded-md" : ""}
+                className={
+                  currentChatId === chat.id ? "bg-accent/100 rounded-md" : ""
+                }
               >
                 <SidebarMenuButton asChild>
                   <Link href={`/chat/${chat.id}`}>

@@ -36,20 +36,21 @@ export interface RegisterData {
   password_confirm: string;
 }
 
-// Chat types
-export interface ChatMessage {
-  id?: string;
-  content: string;
-  message_type: "user" | "assistant";
-  created_at: Date;
-  chat_id: number;
-}
-
-export interface Chat {
+// Front-end Chat types
+export type Message = {
   id: string;
-  title?: string;
-  session_id?: string;
-  created_at: Date;
-  updated_at: Date;
-  user_id: number;
-}
+  content: string;
+  type: "user" | "assistant";
+  timestamp: string;
+  citations?: Citation[];
+};
+
+export type Citation = {
+  page_content: string;
+  metadata: {
+    page: number;
+    chunk: number;
+    total_pages: number;
+    source: string;
+  };
+};

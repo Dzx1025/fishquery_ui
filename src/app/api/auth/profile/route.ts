@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth/profile/`,
+      `${process.env.DJANGO_API_URL}/api/auth/profile/`,
       {
         method: "GET",
         headers: {
@@ -39,7 +39,7 @@ export async function PATCH(request: NextRequest) {
 
     // Call Django profile endpoint
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth/profile/`,
+      `${process.env.DJANGO_API_URL}/api/auth/profile/`,
       {
         method: "PATCH",
         headers: {

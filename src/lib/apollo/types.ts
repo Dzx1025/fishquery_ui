@@ -1,19 +1,19 @@
 // lib/apollo/types.ts
-export interface Chat {
+export interface DBChat {
   id: string;
   title: string;
   created_at: string;
   updated_at: string;
 }
 
-export interface Message {
+export interface DBMessage {
   content: string;
   created_at: string;
-  message_type: string;
+  message_type: "user" | "assistant";
 }
 
 export interface GetChatListResponse {
-  chats_chat: Chat[];
+  chats_chat: DBChat[];
 }
 
 export interface RenameChatResponse {
@@ -29,7 +29,7 @@ export interface RenameChatVariables {
 }
 
 export interface SubMessageListResponse {
-  chats_message: Message[];
+  chats_message: DBMessage[];
 }
 
 export interface SubMessageListVariables {

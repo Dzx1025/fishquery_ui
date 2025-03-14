@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     const { email, password } = await request.json();
     // Request Django API authentication endpoint
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth/login/`,
+      `${process.env.DJANGO_API_URL}/api/auth/login/`,
       {
         method: "POST",
         headers: {

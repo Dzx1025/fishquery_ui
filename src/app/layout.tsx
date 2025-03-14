@@ -49,17 +49,17 @@ export default async function RootLayout({
           {/* Pass the server-side authentication state to the client */}
           <AuthProvider initialAuthState={{ isAuthenticated, user }}>
             {/* Now we can immediately render the correct layout without waiting */}
-            {isAuthenticated ? (
-              <SidebarProvider>
-                <ApolloWrapper>
+            <ApolloWrapper>
+              {isAuthenticated ? (
+                <SidebarProvider>
                   <AppSidebar />
                   <SidebarInset>{children}</SidebarInset>
-                </ApolloWrapper>
-              </SidebarProvider>
-            ) : (
-              // For unauthenticated users
-              <>{children}</>
-            )}
+                </SidebarProvider>
+              ) : (
+                // For unauthenticated users
+                <>{children}</>
+              )}
+            </ApolloWrapper>
           </AuthProvider>
         </ThemeProvider>
       </body>

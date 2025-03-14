@@ -23,7 +23,7 @@ export async function getAuthStatus(): Promise<{
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth/profile`,
+      `${process.env.DJANGO_API_URL}/api/auth/profile`,
       {
         method: "GET",
         headers: {
@@ -79,7 +79,7 @@ export async function validateAuth(request?: NextRequest) {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth/profile`,
+      `${process.env.DJANGO_API_URL}/api/auth/profile`,
       {
         method: "GET",
         headers: {

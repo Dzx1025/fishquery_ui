@@ -1,0 +1,116 @@
+// app/api/chat/[chatId]/route.ts
+import { NextRequest } from "next/server";
+
+// Handle POST requests for chat messages
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { chatId: string } }
+) {
+  const chatId = params.chatId;
+
+  try {
+    // Pass through the cookies from the client request
+    const cookieHeader = request.headers.get("cookie") || "";
+
+    // Get the message content from the request body
+    const body = await request.json();
+    const message = body.message;
+
+    if (!message) {
+      return new Response(JSON.stringify({ error: "Message is required" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Create headers for the API request
+    const headers = new Headers({
+      "Content-Type": "application/json",
+      Cookie: cookieHeader,
+    });
+
+    // Forward the request to the Django backend
+    const apiResponse = await fetch(
+      `${process.env.DJANGO_API_URL}/api/chat/${chatId}/`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ message }),
+        credentials: "include",
+      }
+    );
+
+    // Handle non-OK responses
+    if (!apiResponse.ok) {
+      return new Response(
+        JSON.stringify({
+          error: `Backend server responded with status ${apiResponse.status}`,
+        }),
+        {
+          status: apiResponse.status,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Create a readable stream from the response body
+    const reader = apiResponse.body?.getReader();
+
+    // Create a stream to send the SSE response back to the client
+    const stream = new ReadableStream({
+      async start(controller) {
+        if (!reader) {
+          controller.close();
+          return;
+        }
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+
+            if (done) {
+              controller.close();
+              break;
+            }
+
+            // Forward the SSE chunk to the client
+            controller.enqueue(value);
+          }
+        } catch (error) {
+          console.error("Stream reading error:", error);
+          controller.error(error);
+        }
+      },
+    });
+
+    // Set up headers for SSE response
+    const responseHeaders = new Headers({
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    });
+
+    // Add all the Set-Cookie headers from the Django response
+    const setCookieHeader = apiResponse.headers.get("Set-Cookie");
+    if (setCookieHeader) {
+      // Split multiple cookies if they exist
+      const cookies = setCookieHeader.split(",").map((c) => c.trim());
+      cookies.forEach((cookie) => {
+        responseHeaders.append("Set-Cookie", cookie);
+      });
+    }
+
+    return new Response(stream, {
+      headers: responseHeaders,
+    });
+  } catch (error) {
+    console.error("API route error:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to connect to backend service" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+}

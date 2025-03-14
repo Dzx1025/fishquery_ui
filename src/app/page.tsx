@@ -4,15 +4,45 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
 import { SmartHeader } from "@/components/auth/smart-header";
+import { useRouter } from "next/navigation";
+import { useChatList } from "@/hooks/useChat";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const router = useRouter();
+  const { isAuthenticated } = useAuthContext();
+  const { refetch } = useChatList();
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSending(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (isAuthenticated) {
+          refetch();
+        }
+        sessionStorage.setItem("question", message);
+        router.push("/chat/" + data.chat_id);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setSending(false);
   };
 
   return (
@@ -35,14 +65,14 @@ export default function Home() {
                     placeholder="Ask anything..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="min-h-40 text-xl md:text-2xl p-6 border-0 shadow-none focus:ring-0 resize-none bg-transparent rounded-lg placeholder:text-muted-foreground/60 placeholder:text-xl md:placeholder:text-2xl transition-all duration-300 animate-textFocus"
+                    className="min-h-40 text-xl md:text-2xl p-6 border-0 dark:bg-muted/40 shadow-none focus:ring-0 resize-none rounded-b-none bg-transparent placeholder:text-muted-foreground/60 placeholder:text-xl md:placeholder:text-2xl transition-all duration-300 animate-textFocus"
                     disabled={sending}
                     autoFocus
                     style={{ caretColor: "var(--primary)" }}
                   />
                   {/* Subtle gradient background that animates when typing */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-lg pointer-events-none transition-opacity duration-700 ${
+                    className={`absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent pointer-events-none transition-opacity duration-700 ${
                       message ? "opacity-100" : "opacity-0"
                     }`}
                     aria-hidden="true"

@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     // Call Django token refresh endpoint
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth/token/refresh/`,
+      `${process.env.DJANGO_API_URL}/api/auth/token/refresh/`,
       {
         method: "POST",
         headers: {

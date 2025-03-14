@@ -4,11 +4,25 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
 
+// Function to get token for WebSocket connection
+async function getTokenForWs() {
+  try {
+    const response = await fetch("/api/auth/token");
+    const data = await response.json();
+    return data.token;
+  } catch (error) {
+    console.warn("Failed to get token for WebSocket connection", error);
+    return "";
+  }
+}
+
+const cookies = await getTokenForWs();
+
 // Create an HTTP link (for queries and mutations)
 const httpLink = new HttpLink({
   uri: "http://localhost:8080/v1/graphql",
   headers: {
-    Authorization: `Bearer ${await getTokenForWs()}`,
+    Authorization: `Bearer ${cookies}`,
   },
 });
 
@@ -24,26 +38,13 @@ const wsLink =
             // But we can assume the user is authenticated at this point
             return {
               headers: {
-                Authorization: `Bearer ${await getTokenForWs()}`,
+                Authorization: `Bearer ${cookies}`,
               },
             };
           },
         })
       )
     : null;
-
-// Function to get token for WebSocket connection
-async function getTokenForWs() {
-  // Option 1: You could have an API endpoint that returns the token
-  try {
-    const response = await fetch("/api/auth/token");
-    const data = await response.json();
-    return data.token;
-  } catch (error) {
-    console.error("Failed to get token for WebSocket connection", error);
-    return "";
-  }
-}
 
 // Split links based on operation type
 const splitLink =

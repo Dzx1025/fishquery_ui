@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     // Call Django logout endpoint
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth/logout/`,
+      `${process.env.DJANGO_API_URL}/api/auth/logout/`,
       {
         method: "POST",
         headers: {
