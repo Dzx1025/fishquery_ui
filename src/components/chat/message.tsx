@@ -1,8 +1,11 @@
 "use client";
 
 import React from "react";
-import { cn } from "@/lib/utils";
-import { Citation } from "@/lib/types";
+import {cn} from "@/lib/utils";
+import {Avatar} from "@/components/ui/avatar";
+import {Card} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 
 interface MessageProps {
   id: string;
@@ -26,7 +29,7 @@ const parseCitationReferences = (
   let nextCitationNumber = 1;
 
   // Replace [citation:X] with clickable numbered references
-  const htmlContent = content.replace(/\[citation:(\d+)\]/g, (match, index) => {
+  return content.replace(/\[citation:(\d+)]/g, (match, index) => {
     const citationIndex = parseInt(index, 10);
     if (citationIndex >= 0 && citationIndex < citations.length) {
       // Check if we've seen this citation before
@@ -35,62 +38,97 @@ const parseCitationReferences = (
       }
       const citationNumber = citationMap.get(citationIndex);
 
-      return `<button class="citation-link inline-flex items-center justify-center h-5 w-5 text-xs font-medium rounded-full  text-blue-800 hover:bg-blue-200  dark:text-blue-200 dark:hover:bg-blue-800" data-index="${citationIndex}">[${citationNumber}]</button>`;
+      return `<button class="citation-link inline-flex items-center justify-center min-h-[0.5rem] min-w-[0.5rem] px-1 text-xs font-medium bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-sm shadow-sm transition-colors duration-150 ease-in-out mx-0.5 data-[active='true']:bg-primary/30" data-index="${citationIndex}">${citationNumber}</button>`;
     }
     return match;
   });
-
-  return htmlContent;
 };
 
 export const Message: React.FC<MessageProps> = ({
-  content,
-  type,
-  timestamp,
-  citations,
-  onCitationClick,
-}) => {
+                                                  content,
+                                                  type,
+                                                  timestamp,
+                                                  citations,
+                                                  onCitationClick,
+                                                }) => {
+  const formattedTime = new Date(timestamp).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
   return (
-    <div
-      className={cn("flex", type === "user" ? "justify-end" : "justify-start")}
-    >
-      <div
-        className={cn(
-          "rounded-lg px-4 py-2 max-w-[80%]",
+    <div className={cn(
+      "flex gap-3 mb-4 group",
+      type === "user" ? "justify-end" : "justify-start"
+    )}>
+      {type === "assistant" && (
+        <Avatar className="h-8 w-8 bg-primary/50 text-primary-foreground flex items-center justify-center mt-1">
+          <span className="text-xs">AI</span>
+        </Avatar>
+      )}
+
+      <div className="flex flex-col max-w-[80%]">
+        <Card className={cn(
+          "px-4 py-3 shadow-sm",
           type === "user"
-            ? "bg-primary text-primary-foreground"
-            : "bg-muted text-foreground"
-        )}
-      >
-        {type === "assistant" && citations ? (
-          <div
-            className="prose dark:prose-invert max-w-none"
-            dangerouslySetInnerHTML={{
-              __html: parseCitationReferences(
-                content,
-                citations,
-                onCitationClick
-              ),
-            }}
-            onClick={(e) => {
-              // Handle citation clicks
-              const target = e.target as HTMLElement;
-              if (target.classList.contains("citation-link")) {
-                const index = parseInt(
-                  target.getAttribute("data-index") || "0",
-                  10
-                );
-                onCitationClick(index, citations);
-              }
-            }}
-          />
-        ) : (
-          <div className="whitespace-pre-wrap">{content}</div>
-        )}
-        <div className="text-xs mt-1 opacity-70">
-          {new Date(timestamp).toLocaleTimeString()}
+            ? "bg-primary text-primary-foreground rounded-2xl rounded-tr-sm"
+            : "bg-muted text-foreground rounded-2xl rounded-tl-sm"
+        )}>
+          {type === "assistant" && citations ? (
+            <div
+              className="prose dark:prose-invert prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: parseCitationReferences(
+                  content,
+                  citations,
+                  onCitationClick
+                ),
+              }}
+              onClick={(e) => {
+                // Handle citation clicks
+                const target = e.target as HTMLElement;
+                if (target.classList.contains("citation-link")) {
+                  const index = parseInt(
+                    target.getAttribute("data-index") || "0",
+                    10
+                  );
+                  onCitationClick(index, citations);
+                }
+              }}
+            />
+          ) : (
+            <div className="whitespace-pre-wrap text-sm">{content}</div>
+          )}
+        </Card>
+
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+            {formattedTime}
+          </span>
+
+          {citations && citations.length > 0 && type === "assistant" && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="outline"
+                         className="text-xs py-0 h-5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {citations.length} {citations.length === 1 ? 'source' : 'sources'}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs">Click on citation numbers to view sources</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
       </div>
+
+      {type === "user" && (
+        <Avatar className="h-8 w-8 bg-blue-500 text-white flex items-center justify-center mt-1">
+          <span className="text-xs">You</span>
+        </Avatar>
+      )}
     </div>
   );
 };

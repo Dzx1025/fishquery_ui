@@ -1,40 +1,43 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { SmartHeader } from "@/components/auth/smart-header";
-import { Message as MessageComponent } from "@/components/chat/message";
-import { CitationDialog } from "@/components/chat/citation-dialog";
-import { useChat } from "@/hooks/useChat";
-import { Citation } from "@/lib/types";
-import { useAuthContext } from "@/contexts/AuthContext";
+import {useState, useRef, useEffect} from "react";
+import {useParams} from "next/navigation";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {ScrollArea} from "@/components/ui/scroll-area";
+import {SmartHeader} from "@/components/auth/smart-header";
+import {Message as MessageComponent} from "@/components/chat/message";
+import {CitationDialog} from "@/components/chat/citation-dialog";
+import {useChat} from "@/hooks/useChat";
+import {Citation} from "@/lib/types";
+import {useAuthContext} from "@/contexts/AuthContext";
+import {Send} from "lucide-react";
+import {cn} from "@/lib/utils";
 
 export default function ChatPage() {
-  const { chatId } = useParams<{ chatId: string }>();
-  const { isAuthenticated } = useAuthContext();
+  const {chatId} = useParams<{ chatId: string }>();
+  const {isAuthenticated} = useAuthContext();
   const [newMessage, setNewMessage] = useState("");
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(
     null
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { messages, isLoading, error, sendMessage } = useChat(chatId);
+  const {messages, isLoading, error, sendMessage} = useChat(chatId);
 
   // Submit message when first loading the chat
   useEffect(() => {
     const message = sessionStorage.getItem("question");
     sessionStorage.removeItem("question");
-    sendMessage(message || "");
+    if (message) {
+      sendMessage(message);
+    }
     setNewMessage("");
   }, []);
 
   // Scroll to bottom when messages update
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
   }, [messages]);
 
   // Handle form submission
@@ -54,22 +57,23 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen max-h-screen bg-gray-50 dark:bg-gray-900">
-      <Card className="h-screen flex flex-col border-0 rounded-none">
-        <SmartHeader />
+    <div
+      className={cn("flex flex-col  bg-background rounded-xl overflow-hidden border shadow-sm", isAuthenticated ? "h-full" : "min-h-screen")}>
+      <SmartHeader/>
 
-        <CardContent className="flex-1 p-4 overflow-auto">
-          <ScrollArea className="h-full pr-4">
+      <div className="flex-1 overflow-hidden relative">
+        <ScrollArea className="h-[calc(100vh-10rem)] md:h-[calc(100vh-12rem)] lg:h-[calc(100vh-10rem)]">
+          <div className="px-4 pt-4">
             {messages.length === 0 ? (
-              <div className="flex h-full items-center justify-center">
-                <p className="text-center text-gray-500 dark:text-gray-400">
+              <div className="flex h-64 items-center justify-center">
+                <p className="text-center text-muted-foreground">
                   {isAuthenticated
                     ? "No messages yet in this conversation."
                     : "Start a conversation by sending a message below"}
                 </p>
               </div>
             ) : (
-              <div className="space-y-4 py-4">
+              <div className="space-y-4">
                 {messages.map((message) => (
                   <MessageComponent
                     key={message.id}
@@ -77,38 +81,45 @@ export default function ChatPage() {
                     onCitationClick={handleCitationClick}
                   />
                 ))}
-                <div ref={messagesEndRef} />
+                <div ref={messagesEndRef} className="h-4"/>
               </div>
             )}
-          </ScrollArea>
-        </CardContent>
-
-        {error && (
-          <div className="px-4 py-2 bg-destructive/20 text-destructive text-center">
-            Error: {typeof error === "string" ? error : "An error occurred"}
           </div>
-        )}
+        </ScrollArea>
+      </div>
 
-        <CardFooter className="border-t p-4 gap-2 bg-white dark:bg-gray-800">
-          <form onSubmit={handleSubmit} className="flex w-full gap-2">
-            <Input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              disabled={isLoading}
-              placeholder="Type your message here..."
-              className="flex-1"
-            />
-            <Button
-              type="submit"
-              disabled={isLoading || !newMessage.trim()}
-              variant="default"
-            >
-              {isLoading ? "Sending..." : "Send"}
-            </Button>
-          </form>
-        </CardFooter>
-      </Card>
+      {error && (
+        <div className="px-4 py-2 bg-destructive/20 text-destructive text-center">
+          Error: {typeof error === "string" ? error : "An error occurred"}
+        </div>
+      )}
+
+      <div className="border-t p-4 bg-background">
+        <form onSubmit={handleSubmit} className="flex w-full gap-2">
+          <Input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            disabled={isLoading}
+            placeholder="Type your message here..."
+            className="flex-1 rounded-full"
+          />
+          <Button
+            type="submit"
+            disabled={isLoading || !newMessage.trim()}
+            variant="default"
+            size="icon"
+            className="rounded-full h-10 w-10 flex items-center justify-center"
+          >
+            {isLoading ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"/>
+            ) : (
+              <Send className="h-4 w-4"/>
+            )}
+            <span className="sr-only">Send</span>
+          </Button>
+        </form>
+      </div>
 
       <CitationDialog
         citation={selectedCitation}

@@ -1,22 +1,22 @@
 "use client";
 
-import { useQuery, useMutation, useSubscription } from "@apollo/client";
+import {useQuery, useMutation, useSubscription} from "@apollo/client";
 import {
   DELETE_CHAT,
   GET_CHAT_LIST,
   RENAME_CHAT,
   SUBSCRIBE_TO_MESSAGES,
 } from "@/lib/apollo/operations";
-import { DBChat, DBMessage } from "@/lib/apollo/types";
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { Message, Citation } from "@/lib/types";
-import { processMessageChunks, extractCitations } from "@/lib/utils";
-import { useAuthContext } from "@/contexts/AuthContext";
+import {DBChat, DBMessage} from "@/lib/apollo/types";
+import {useState, useEffect, useCallback, useMemo} from "react";
+import {Message, Citation} from "@/lib/types";
+import {processMessageChunks, extractCitations} from "@/lib/utils";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 // Hook for fetching chat list
 export function useChatList(userId?: number) {
-  const { data, loading, error, refetch } = useQuery(GET_CHAT_LIST, {
-    variables: { userId },
+  const {data, loading, error, refetch} = useQuery(GET_CHAT_LIST, {
+    variables: {userId},
   });
   return {
     chats: (data?.chats_chat as DBChat[]) || [],
@@ -28,12 +28,12 @@ export function useChatList(userId?: number) {
 
 // Hook for renaming a chat
 export function useRenameChat() {
-  const [renameChatMutation, { loading, error }] = useMutation(RENAME_CHAT);
+  const [renameChatMutation, {loading, error}] = useMutation(RENAME_CHAT);
 
   const renameChat = async (id: string, newTitle: string) => {
     try {
       const result = await renameChatMutation({
-        variables: { id, newTitle },
+        variables: {id, newTitle},
       });
       return result.data.update_chats_chat_by_pk;
     } catch (err) {
@@ -51,12 +51,12 @@ export function useRenameChat() {
 
 // Hook for deleting a chat
 export function useDeleteChat() {
-  const [deleteChatMutation, { loading, error }] = useMutation(DELETE_CHAT);
+  const [deleteChatMutation, {loading, error}] = useMutation(DELETE_CHAT);
 
   const deleteChat = async (id: string) => {
     try {
       const result = await deleteChatMutation({
-        variables: { id },
+        variables: {id},
       });
       return result.data.delete_chats_chat_by_pk;
     } catch (err) {
@@ -74,8 +74,8 @@ export function useDeleteChat() {
 
 // Hook for subscribing to messages
 export function useMessageSubscription(chatId: string) {
-  const { data, loading, error } = useSubscription(SUBSCRIBE_TO_MESSAGES, {
-    variables: { chatId },
+  const {data, loading, error} = useSubscription(SUBSCRIBE_TO_MESSAGES, {
+    variables: {chatId},
   });
 
   return {
@@ -85,11 +85,8 @@ export function useMessageSubscription(chatId: string) {
   };
 }
 
-// Helper functions outside of the component
-function processDBContent(content: string): {
-  processedContent: string;
-  citations: Citation[] | undefined;
-} {
+// Helper functions outside the component
+function processDBContent(content: string): { processedContent: string; citations: Citation[] | undefined; } {
   let processedContent = content;
   let citations: Citation[] | undefined = undefined;
 
@@ -131,12 +128,12 @@ function processDBContent(content: string): {
     processedContent = content;
   }
 
-  return { processedContent, citations };
+  return {processedContent, citations};
 }
 
 export function useChat(chatId: string) {
   // Authentication context
-  const { isAuthenticated } = useAuthContext();
+  const {isAuthenticated} = useAuthContext();
 
   // Local state
   const [messages, setMessages] = useState<Message[]>([]);
@@ -236,7 +233,7 @@ export function useChat(chatId: string) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ message: messageContent }),
+          body: JSON.stringify({message: messageContent}),
           credentials: "include",
         });
 
@@ -266,11 +263,11 @@ export function useChat(chatId: string) {
         let hasCitations = false;
 
         while (true) {
-          const { done, value } = await reader.read();
+          const {done, value} = await reader.read();
 
           if (done) break;
 
-          const chunk = decoder.decode(value, { stream: true });
+          const chunk = decoder.decode(value, {stream: true});
           buffer += chunk;
 
           let processedBuffer = "";
@@ -305,7 +302,7 @@ export function useChat(chatId: string) {
                           setMessages((prev) =>
                             prev.map((msg) =>
                               msg.id === assistantMessageId
-                                ? { ...msg, citations }
+                                ? {...msg, citations}
                                 : msg
                             )
                           );
@@ -319,7 +316,7 @@ export function useChat(chatId: string) {
                         setMessages((prev) =>
                           prev.map((msg) =>
                             msg.id === assistantMessageId
-                              ? { ...msg, content: messageContent }
+                              ? {...msg, content: messageContent}
                               : msg
                           )
                         );
@@ -331,7 +328,7 @@ export function useChat(chatId: string) {
                       setMessages((prev) =>
                         prev.map((msg) =>
                           msg.id === assistantMessageId
-                            ? { ...msg, content: messageContent }
+                            ? {...msg, content: messageContent}
                             : msg
                         )
                       );
@@ -384,7 +381,7 @@ export function useChat(chatId: string) {
           setMessages((prev) =>
             prev.map((msg) =>
               msg.id === assistantMessageId
-                ? { ...msg, content: messageContent }
+                ? {...msg, content: messageContent}
                 : msg
             )
           );

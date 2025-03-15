@@ -1,32 +1,31 @@
 "use client";
 
-import React, { use, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { SmartHeader } from "@/components/auth/smart-header";
-import { useRouter } from "next/navigation";
-import { useChatList } from "@/hooks/useChat";
-import { useAuthContext } from "@/contexts/AuthContext";
+import React, {use, useState} from "react";
+import {Button} from "@/components/ui/button";
+import {Textarea} from "@/components/ui/textarea";
+import {Card, CardContent, CardFooter} from "@/components/ui/card";
+import {SmartHeader} from "@/components/auth/smart-header";
+import {useRouter} from "next/navigation";
+import {useChatList} from "@/hooks/useChat";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthContext();
-  const { refetch } = useChatList(user?.id);
+  const {isAuthenticated, user} = useAuthContext();
+  const {refetch} = useChatList(user?.id);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
-
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({message}),
         credentials: "include",
       });
 
@@ -47,9 +46,9 @@ export default function Home() {
 
   return (
     <>
-      <SmartHeader />
+      <SmartHeader/>
 
-      <main className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-8">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-8">
         <div className="w-full max-w-3xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-primary">
@@ -68,7 +67,7 @@ export default function Home() {
                     className="min-h-40 text-xl md:text-2xl p-6 border-0 dark:bg-muted/40 shadow-none focus:ring-0 resize-none rounded-b-none bg-transparent placeholder:text-muted-foreground/60 placeholder:text-xl md:placeholder:text-2xl transition-all duration-300 animate-textFocus"
                     disabled={sending}
                     autoFocus
-                    style={{ caretColor: "var(--primary)" }}
+                    style={{caretColor: "var(--primary)"}}
                   />
                   {/* Subtle gradient background that animates when typing */}
                   <div
@@ -93,44 +92,44 @@ export default function Home() {
             </form>
           </Card>
         </div>
-      </main>
+      </div>
 
       <style jsx global>{`
-        @keyframes textFocus {
-          0% {
-            opacity: 0.7;
+          @keyframes textFocus {
+              0% {
+                  opacity: 0.7;
+              }
+              100% {
+                  opacity: 1;
+              }
           }
-          100% {
-            opacity: 1;
+
+          @keyframes fadeIn {
+              from {
+                  opacity: 0;
+                  transform: translateY(10px);
+              }
+              to {
+                  opacity: 1;
+                  transform: translateY(0);
+              }
           }
-        }
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
+          .animate-textFocus {
+              animation: textFocus 0.5s ease-out;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+
+          .animate-fadeIn {
+              animation: fadeIn 0.7s ease-out;
           }
-        }
 
-        .animate-textFocus {
-          animation: textFocus 0.5s ease-out;
-        }
+          textarea::placeholder {
+              transition: opacity 0.3s;
+          }
 
-        .animate-fadeIn {
-          animation: fadeIn 0.7s ease-out;
-        }
-
-        textarea::placeholder {
-          transition: opacity 0.3s;
-        }
-
-        textarea:focus::placeholder {
-          opacity: 0.3;
-        }
+          textarea:focus::placeholder {
+              opacity: 0.3;
+          }
       `}</style>
     </>
   );

@@ -5,7 +5,6 @@ import {
   FolderPen,
   Loader2,
   MoreHorizontal,
-  Plus,
   RefreshCw,
   Trash2,
   TriangleAlert,
@@ -111,8 +110,8 @@ export function NavList() {
   const [selectedChat, setSelectedChat] = useState<DBChat | null>(null);
 
   // Chat operations
-  const { renameChat, loading: renaming, error: renameError } = useRenameChat();
-  const { deleteChat, loading: deleting, error: deleteError } = useDeleteChat();
+  const { renameChat, loading: renaming} = useRenameChat();
+  const { deleteChat, loading: deleting} = useDeleteChat();
 
   // Handle rename chat
   const handleRenameClick = (chat: DBChat) => {
