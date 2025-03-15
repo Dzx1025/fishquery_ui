@@ -1,12 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
 
-// The correct type for the params in App Router
+
 export async function POST(
   request: NextRequest,
-  {params}: { params: { chatId: string } }
+  {params}: { params: Promise<{ chatId: string }> }
 ) {
-  const chatId = params.chatId;
-
+  const {chatId} = await params;
   try {
     // Pass through the cookies from the client request
     const cookieHeader = request.headers.get("cookie") || "";
