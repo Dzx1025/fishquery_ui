@@ -1,10 +1,9 @@
-// app/api/chat/[chatId]/route.ts
-import {NextRequest} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 
-// Handle POST requests for chat messages
+// The correct type for the params in App Router
 export async function POST(
   request: NextRequest,
-  {params}: { params: { chatId: Promise<string> } }
+  {params}: { params: { chatId: string } }
 ) {
   const chatId = params.chatId;
 
@@ -17,10 +16,7 @@ export async function POST(
     const message = body.message;
 
     if (!message) {
-      return new Response(JSON.stringify({error: "Message is required"}), {
-        status: 400,
-        headers: {"Content-Type": "application/json"},
-      });
+      return NextResponse.json({error: "Message is required"}, {status: 400});
     }
 
     // Create headers for the API request
@@ -42,28 +38,25 @@ export async function POST(
 
     // Handle non-OK responses
     if (!apiResponse.ok) {
-      return new Response(
-        JSON.stringify({
-          error: `Backend server responded with status ${apiResponse.status}`,
-        }),
-        {
-          status: apiResponse.status,
-          headers: {"Content-Type": "application/json"},
-        }
+      return NextResponse.json(
+        {error: `Backend server responded with status ${apiResponse.status}`},
+        {status: apiResponse.status}
       );
     }
 
     // Create a readable stream from the response body
     const reader = apiResponse.body?.getReader();
 
+    if (!reader) {
+      return NextResponse.json(
+        {error: "Failed to read response stream"},
+        {status: 500}
+      );
+    }
+
     // Create a stream to send the SSE response back to the client
     const stream = new ReadableStream({
       async start(controller) {
-        if (!reader) {
-          controller.close();
-          return;
-        }
-
         try {
           while (true) {
             const {done, value} = await reader.read();
@@ -105,12 +98,9 @@ export async function POST(
     });
   } catch (error) {
     console.error("API route error:", error);
-    return new Response(
-      JSON.stringify({error: "Failed to connect to backend service"}),
-      {
-        status: 500,
-        headers: {"Content-Type": "application/json"},
-      }
+    return NextResponse.json(
+      {error: "Failed to connect to backend service"},
+      {status: 500}
     );
   }
 }
