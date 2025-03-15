@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FishQuery UI
+
+FishQuery UI is a modern web application that provides an AI assistant interface for asking questions and receiving intelligent answers.
+
+## Overview
+
+FishQuery UI leverages cutting-edge technologies to deliver a responsive and intuitive user experience. The application includes features such as:
+
+- Interactive chat interface with an AI assistant
+- Citation support for verified information sources
+- Dark/light theme support
+- Responsive sidebar navigation
+- Authentication system
+
+## Technology Stack
+
+- **Framework**: Next.js 15 with App Router
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS 4
+- **Component Library**: Custom UI components built with Radix UI primitives
+- **GraphQL**: Apollo Client for data fetching
+- **Authentication**: Custom auth implementation
+
+## Key Components
+
+- **Chat Interface**: Interactive chat with AI responses and citation handling
+- **Citation Dialog**: Modal for displaying reference information and extracted content
+- **Theme Provider**: System for managing light/dark mode preferences
+- **Sidebar**: Collapsible navigation with responsive design for mobile and desktop
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (version compatible with Next.js 15)
+- pnpm package manager
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file in the root directory with the following variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Env | Example |
+| -------- | ------- |
+| DJANGO_API_URL  | <http://localhost:8000> |
+| NEXT_PUBLIC_GRAPHQL_WS_URL | <ws://localhost:8080/v1/graphql> |
+| NEXT_PUBLIC_GRAPHQL_HTTP_URL | <http://localhost:8080/v1/graphql> |
 
-## Learn More
+### Development
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Run development server with Turbopack
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Build for Production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Create production build
+pnpm build
 
-## Deploy on Vercel
+# Start production server
+pnpm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Linting
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Run ESLint
+pnpm lint
+```
+
+## Project Structure
+
+- `/src/app`: Next.js App Router pages and layouts
+- `/src/components`: React components
+  - `/ui`: Reusable UI components
+  - `/chat`: Chat-specific components
+  - `/sidebar`: Sidebar components
+- `/src/lib`: Utility functions and shared code
+- `/src/contexts`: React context providers
+
+## Styling
+
+The project uses Tailwind CSS with custom theming support. Color schemes are defined in `globals.css` with both light and dark mode variations.
+
+## License
+
+Copyright © 2024 FishQuery. All rights reserved.
