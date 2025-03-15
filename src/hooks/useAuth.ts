@@ -59,11 +59,12 @@ export function useAuth(initialState?: InitialAuthState) {
     setState((prev) => ({...prev, isLoading: true, error: null}));
     try {
       const response = await authService.login(credentials);
-      if (response.status === "success") {
+      if (response.status === "success" && response.data) {
         setCurrentUser({
           userId: response.data.userid,
           isAuthenticated: true,
         });
+
         await fetchUser();
 
         return true;

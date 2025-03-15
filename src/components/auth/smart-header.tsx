@@ -15,7 +15,7 @@ export function SmartHeader() {
     // Header for login and register pages
     return (
       <header className="flex mt-4 pb-2 items-center justify-between border-b px-4 lg:px-6">
-        <a
+        <Link
           href="/"
           className="flex items-center gap-3 hover:opacity-90 transition-opacity"
         >
@@ -27,7 +27,7 @@ export function SmartHeader() {
               Fish Query
             </span>
           </div>
-        </a>
+        </Link>
       </header>
     );
   } else if (isAuthenticated) {
@@ -41,7 +41,7 @@ export function SmartHeader() {
   // Header for unauthenticated users
   return (
     <header className="flex mt-4 pb-2 items-center justify-between border-b px-4 lg:px-6">
-      <a
+      <Link
         href="/"
         className="flex items-center gap-3 hover:opacity-90 transition-opacity"
       >
@@ -53,7 +53,7 @@ export function SmartHeader() {
             Fish Query
           </span>
         </div>
-      </a>
+      </Link>
 
       <div className="flex items-center gap-4">
         <Link href="/login">
