@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import {NextResponse} from "next/server";
+import type {NextRequest} from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     });
 
     return nextResponse;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json(
       {
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
         data: null,
         errors: ["Failed to process logout request"],
       },
-      { status: 500 }
+      {status: 500}
     );
   }
 }

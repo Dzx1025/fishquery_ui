@@ -44,6 +44,7 @@ export function useAuth(initialState?: InitialAuthState) {
           error: response.errors ? response.errors[0] : "Failed to fetch user",
         });
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setState({
         user: null,
@@ -59,7 +60,6 @@ export function useAuth(initialState?: InitialAuthState) {
     try {
       const response = await authService.login(credentials);
       if (response.status === "success") {
-        console.log("login response", response);
         setCurrentUser({
           userId: response.data.userid,
           isAuthenticated: true,
@@ -75,6 +75,7 @@ export function useAuth(initialState?: InitialAuthState) {
         }));
         return false;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setState((prev) => ({
         ...prev,
@@ -88,7 +89,7 @@ export function useAuth(initialState?: InitialAuthState) {
   const register = async (data: RegisterData) => {
     setState((prev) => ({...prev, isLoading: true, error: null}));
     try {
-      const {username, email, password, password_confirm} = data;
+      const {username, email, password} = data;
       const response = await authService.register({
         username,
         email,
@@ -120,6 +121,7 @@ export function useAuth(initialState?: InitialAuthState) {
         }));
         return false;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setState((prev) => ({
         ...prev,
@@ -152,6 +154,7 @@ export function useAuth(initialState?: InitialAuthState) {
         }));
         return false;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setState((prev) => ({
         ...prev,
@@ -182,6 +185,7 @@ export function useAuth(initialState?: InitialAuthState) {
         }));
         return false;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setState((prev) => ({
         ...prev,

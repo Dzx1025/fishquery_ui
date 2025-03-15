@@ -1,5 +1,5 @@
 // API response types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = never> {
   status: "success" | "error";
   code: number;
   message: string;

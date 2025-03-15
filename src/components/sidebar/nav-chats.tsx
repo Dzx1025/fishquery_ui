@@ -25,11 +25,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useMemo, useState } from "react";
-import { DBChat } from "@/lib/apollo/types";
-import { useChatList, useDeleteChat, useRenameChat } from "@/hooks/useChat";
+import {useMemo, useState} from "react";
+import {DBChat} from "@/lib/apollo/types";
+import {useChatList, useDeleteChat, useRenameChat} from "@/hooks/useChat";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,10 +48,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useAuthContext } from "@/contexts/AuthContext";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {toast} from "sonner";
+import {useAuthContext} from "@/contexts/AuthContext";
 
 // Group chats by date (month and year)
 const groupChatsByDate = (chats: DBChat[]) => {
@@ -59,7 +59,7 @@ const groupChatsByDate = (chats: DBChat[]) => {
 
   chats.forEach((chat) => {
     const updatedAt = new Date(chat.updated_at);
-
+    console.log("chat: ", chat.title, chat.updated_at);
     // Format the date as "Month Year" (e.g., "March 2025")
     const groupKey = updatedAt.toLocaleDateString("en-US", {
       month: "long",
@@ -79,16 +79,16 @@ const groupChatsByDate = (chats: DBChat[]) => {
     const monthYearA = new Date(dateA).getTime();
     const monthYearB = new Date(dateB).getTime();
 
-    return monthYearB - monthYearA;
+    return monthYearA - monthYearB;
   });
 };
 
 export function NavList() {
-  const { isMobile } = useSidebar();
+  const {isMobile} = useSidebar();
   const params = useParams();
   const router = useRouter();
-  const currentChatId = params.id as string | undefined;
-  const { user } = useAuthContext();
+  const currentChatId = params.chatId as string | undefined;
+  const {user} = useAuthContext();
 
   // Chat list state
   const {
@@ -110,8 +110,8 @@ export function NavList() {
   const [selectedChat, setSelectedChat] = useState<DBChat | null>(null);
 
   // Chat operations
-  const { renameChat, loading: renaming} = useRenameChat();
-  const { deleteChat, loading: deleting} = useDeleteChat();
+  const {renameChat, loading: renaming} = useRenameChat();
+  const {deleteChat, loading: deleting} = useDeleteChat();
 
   // Handle rename chat
   const handleRenameClick = (chat: DBChat) => {
@@ -129,6 +129,7 @@ export function NavList() {
       toast.success("Chat renamed");
 
       refetch(); // Refresh the chat list
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to rename chat");
     }
@@ -156,6 +157,7 @@ export function NavList() {
       }
 
       refetch(); // Refresh the chat list
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to delete chat");
     }
@@ -176,7 +178,7 @@ export function NavList() {
         <SidebarGroupLabel>Chats</SidebarGroupLabel>
         <div className="p-3 mx-2 my-2 rounded-md border bg-background/80 border-border dark:border-border/30 shadow-sm">
           <div className="flex items-center gap-2 mb-2 text-destructive dark:text-destructive/90">
-            <TriangleAlert className="h-4 w-4" />
+            <TriangleAlert className="h-4 w-4"/>
             <span className="font-medium text-sm">Connection Error</span>
           </div>
           <p className="text-xs text-muted-foreground mb-3">
@@ -188,7 +190,7 @@ export function NavList() {
             className="w-full text-xs justify-center bg-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0"
             onClick={() => refetch()}
           >
-            <RefreshCw className="h-3.5 w-3.5 mr-2" />
+            <RefreshCw className="h-3.5 w-3.5 mr-2"/>
             Retry
           </Button>
         </div>
@@ -236,7 +238,7 @@ export function NavList() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuAction showOnHover>
-                      <MoreHorizontal />
+                      <MoreHorizontal/>
                       <span className="sr-only">
                         More options for {chat.title}
                       </span>
@@ -248,19 +250,19 @@ export function NavList() {
                     align={isMobile ? "end" : "start"}
                   >
                     <DropdownMenuItem onClick={() => handleViewSource(chat)}>
-                      <FileSliders className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <FileSliders className="mr-2 h-4 w-4 text-muted-foreground"/>
                       <span>Check Source</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleRenameClick(chat)}>
-                      <FolderPen className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <FolderPen className="mr-2 h-4 w-4 text-muted-foreground"/>
                       <span>Rename Chat</span>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator/>
                     <DropdownMenuItem
                       className="text-red-500 focus:text-red-500"
                       onClick={() => handleDeleteClick(chat)}
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
+                      <Trash2 className="mr-2 h-4 w-4"/>
                       <span>Delete Chat</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -298,7 +300,7 @@ export function NavList() {
               onClick={handleRenameSubmit}
               disabled={!newChatTitle.trim() || renaming}
             >
-              {renaming && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {renaming && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
               Save
             </Button>
           </DialogFooter>
@@ -314,7 +316,7 @@ export function NavList() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the chat "{selectedChat?.title}".
+              This will permanently delete the chat &#34;{selectedChat?.title}&#34;.
               This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -325,7 +327,7 @@ export function NavList() {
               className="bg-red-500 hover:bg-red-600"
               disabled={deleting}
             >
-              {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
