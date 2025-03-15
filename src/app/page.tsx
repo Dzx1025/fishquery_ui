@@ -1,6 +1,6 @@
 "use client";
 
-import React, {use, useState} from "react";
+import React, {useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Textarea} from "@/components/ui/textarea";
 import {Card, CardContent, CardFooter} from "@/components/ui/card";
@@ -113,14 +113,6 @@ export default function Home() {
                   opacity: 1;
                   transform: translateY(0);
               }
-          }
-
-          .animate-textFocus {
-              animation: textFocus 0.5s ease-out;
-          }
-
-          .animate-fadeIn {
-              animation: fadeIn 0.7s ease-out;
           }
 
           textarea::placeholder {

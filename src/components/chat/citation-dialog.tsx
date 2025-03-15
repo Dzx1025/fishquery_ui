@@ -16,7 +16,7 @@ import {extractFilename} from "@/lib/utils";
 import {Card, CardContent} from "@/components/ui/card";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Badge} from "@/components/ui/badge";
-import {FileText, Info, Book, ExternalLink} from "lucide-react";
+import {FileText, Info, Book} from "lucide-react";
 
 interface CitationDialogProps {
   citation: Citation | null;
