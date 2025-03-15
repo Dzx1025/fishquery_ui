@@ -258,8 +258,8 @@ export function useChat(chatId: string) {
         // Stream handling
         const decoder = new TextDecoder();
         let buffer = "";
-        let contentChunks: string[] = [];
-        let citations: any[] = [];
+        const contentChunks: string[] = [];
+        let citations: Citation[] = [];
         let hasCitations = false;
 
         while (true) {
@@ -361,6 +361,7 @@ export function useChat(chatId: string) {
               if (chunk.includes("__LLM_RESPONSE__")) {
                 const parts = chunk.split("__LLM_RESPONSE__");
                 if (parts.length > 1) {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   citationContent = parts[0];
                   messageContent += parts[1];
                 }

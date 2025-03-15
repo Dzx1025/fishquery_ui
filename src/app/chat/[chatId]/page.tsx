@@ -1,12 +1,12 @@
 "use client";
 
-import {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {useParams} from "next/navigation";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {SmartHeader} from "@/components/auth/smart-header";
-import {Message as MessageComponent} from "@/components/chat/message";
+import {MessageBubble} from "@/components/chat/message";
 import {CitationDialog} from "@/components/chat/citation-dialog";
 import {useChat} from "@/hooks/useChat";
 import {Citation} from "@/lib/types";
@@ -29,10 +29,10 @@ export default function ChatPage() {
 
   // Submit message when first loading the chat
   useEffect(() => {
-    const message = sessionStorage.getItem("question");
+    const InitMessage = sessionStorage.getItem("question");
     sessionStorage.removeItem("question");
-    if (message) {
-      sendMessage(message);
+    if (InitMessage) {
+      sendMessage(InitMessage);
     }
   }, []);
 
@@ -61,7 +61,7 @@ export default function ChatPage() {
   };
 
   // Handle citation click
-  const handleCitationClick = (citationIndex: number, citations: any[]) => {
+  const handleCitationClick = (citationIndex: number, citations: Citation[]) => {
     if (citationIndex >= 0 && citationIndex < citations.length) {
       setSelectedCitation(citations[citationIndex]);
     }
@@ -86,7 +86,7 @@ export default function ChatPage() {
             ) : (
               <div className="space-y-4">
                 {messages.map((message) => (
-                  <MessageComponent
+                  <MessageBubble
                     key={message.id}
                     {...message}
                     onCitationClick={handleCitationClick}
@@ -126,11 +126,6 @@ export default function ChatPage() {
                 isLoading && "text-muted-foreground"
               )}
             />
-            {isLoading && (
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                <Loader2 className="h-4 w-4 animate-spin text-muted-foreground"/>
-              </div>
-            )}
           </div>
           <Button
             type="submit"

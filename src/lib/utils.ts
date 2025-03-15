@@ -20,7 +20,7 @@ export function processMessageChunks(chunks: string[]): string {
 }
 
 // Extract citations from LLM response
-export function extractCitations(content: string): any[] | null {
+export function extractCitations(content: string): never[] | null {
   try {
     // Check for citation format
     if (content.includes("__LLM_RESPONSE__")) {

@@ -6,21 +6,16 @@ import {Avatar} from "@/components/ui/avatar";
 import {Card} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import {Message, Citation} from "@/lib/types";
 
-interface MessageProps {
-  id: string;
-  content: string;
-  type: "user" | "assistant";
-  timestamp: string;
-  citations?: any[];
-  onCitationClick: (index: number, citations: any[]) => void;
+interface MessageProps extends Message {
+  onCitationClick: (index: number, citations: Citation[]) => void;
 }
 
 // Function to parse citation references and render as numbered links
 const parseCitationReferences = (
   content: string,
-  citations: any[] | undefined,
-  onCitationClick: (index: number, citations: any[]) => void
+  citations: Citation[]
 ) => {
   if (!citations || citations.length === 0) return content;
 
@@ -44,13 +39,13 @@ const parseCitationReferences = (
   });
 };
 
-export const Message: React.FC<MessageProps> = ({
-                                                  content,
-                                                  type,
-                                                  timestamp,
-                                                  citations,
-                                                  onCitationClick,
-                                                }) => {
+export const MessageBubble: React.FC<MessageProps> = ({
+                                                        content,
+                                                        type,
+                                                        timestamp,
+                                                        citations,
+                                                        onCitationClick,
+                                                      }) => {
   const formattedTime = new Date(timestamp).toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit'
@@ -80,8 +75,7 @@ export const Message: React.FC<MessageProps> = ({
               dangerouslySetInnerHTML={{
                 __html: parseCitationReferences(
                   content,
-                  citations,
-                  onCitationClick
+                  citations
                 ),
               }}
               onClick={(e) => {

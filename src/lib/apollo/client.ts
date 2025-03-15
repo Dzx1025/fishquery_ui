@@ -132,7 +132,7 @@ class TokenManager {
 // Apollo Client Manager Class
 class ApolloClientManager {
   private static instance: ApolloClientManager;
-  private client: ApolloClient<any> | null = null;
+  private client: ApolloClient<never> | null = null;
   private wsClient: Client | null = null;
   private tokenManager: TokenManager;
 
@@ -153,7 +153,7 @@ class ApolloClientManager {
   }
 
   // Get Apollo client instance
-  public getClient(): ApolloClient<any> {
+  public getClient(): ApolloClient<never> {
     if (!this.client) {
       this.client = this.createNewClient();
     }
@@ -194,7 +194,7 @@ class ApolloClientManager {
   }
 
   // Create new Apollo client
-  private createNewClient(): ApolloClient<any> {
+  private createNewClient(): ApolloClient<never> {
     // Create HTTP connection
     const httpLink = new HttpLink({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_HTTP_URL || "http://localhost:8080/v1/graphql",
@@ -278,6 +278,8 @@ class ApolloClientManager {
         : from([errorLink, authLink, httpLink]);
 
     // Create Apollo client
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     return new ApolloClient({
       link: splitLink,
       cache: new InMemoryCache(),

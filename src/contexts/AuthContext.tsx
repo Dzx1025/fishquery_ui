@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, ReactNode } from "react";
-import { useAuth, AuthState } from "@/hooks/useAuth";
-import { LoginCredentials, RegisterData, UserProfile } from "@/lib/types";
+import React, {createContext, useContext, ReactNode} from "react";
+import {useAuth} from "@/hooks/useAuth";
+import {LoginCredentials, RegisterData, UserProfile} from "@/lib/types";
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -27,9 +27,9 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({
-  children,
-  initialAuthState,
-}: AuthProviderProps) {
+                               children,
+                               initialAuthState,
+                             }: AuthProviderProps) {
   const auth = useAuth(initialAuthState);
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
