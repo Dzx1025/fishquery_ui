@@ -6,7 +6,7 @@ import {
 } from "@/lib/types";
 
 class AuthService {
-  async login(credentials: LoginCredentials): Promise<ApiResponse<any>> {
+  async login(credentials: LoginCredentials): Promise<ApiResponse<{ userid: number, email: string }>> {
     const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
@@ -19,7 +19,7 @@ class AuthService {
     return await response.json();
   }
 
-  async register(data: RegisterCredentials): Promise<ApiResponse<any>> {
+  async register(data: RegisterCredentials): Promise<ApiResponse> {
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: {
@@ -40,7 +40,7 @@ class AuthService {
     return await response.json();
   }
 
-  async refreshToken(): Promise<ApiResponse<any>> {
+  async refreshToken(): Promise<ApiResponse> {
     const response = await fetch("/api/auth/token/refresh", {
       method: "POST",
       credentials: "include", // Important for cookies
