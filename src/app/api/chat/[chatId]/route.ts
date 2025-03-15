@@ -1,10 +1,10 @@
 // app/api/chat/[chatId]/route.ts
-import { NextRequest } from "next/server";
+import {NextRequest} from "next/server";
 
 // Handle POST requests for chat messages
 export async function POST(
   request: NextRequest,
-  { params }: { params: { chatId: string } }
+  {params}: { params: { chatId: Promise<string> } }
 ) {
   const chatId = params.chatId;
 
@@ -17,9 +17,9 @@ export async function POST(
     const message = body.message;
 
     if (!message) {
-      return new Response(JSON.stringify({ error: "Message is required" }), {
+      return new Response(JSON.stringify({error: "Message is required"}), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       });
     }
 
@@ -35,7 +35,7 @@ export async function POST(
       {
         method: "POST",
         headers,
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({message}),
         credentials: "include",
       }
     );
@@ -48,7 +48,7 @@ export async function POST(
         }),
         {
           status: apiResponse.status,
-          headers: { "Content-Type": "application/json" },
+          headers: {"Content-Type": "application/json"},
         }
       );
     }
@@ -66,7 +66,7 @@ export async function POST(
 
         try {
           while (true) {
-            const { done, value } = await reader.read();
+            const {done, value} = await reader.read();
 
             if (done) {
               controller.close();
@@ -106,10 +106,10 @@ export async function POST(
   } catch (error) {
     console.error("API route error:", error);
     return new Response(
-      JSON.stringify({ error: "Failed to connect to backend service" }),
+      JSON.stringify({error: "Failed to connect to backend service"}),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       }
     );
   }

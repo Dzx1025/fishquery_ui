@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 
 // User management interface
 interface UserContext {
-  userId: string | null;
+  userId: number;
   isAuthenticated: boolean;
 }
 
@@ -18,7 +18,7 @@ class TokenManager {
   private static instance: TokenManager;
   private tokenCache: Record<string, string> = {};
   private tokenPromises: Record<string, Promise<string> | null> = {};
-  private currentUserId: string | null = null;
+  private currentUserId: number | null = null;
   private changeListeners: Array<() => void> = [];
 
   private constructor() {
@@ -32,7 +32,7 @@ class TokenManager {
   }
 
   // Set current user ID
-  public setCurrentUser(userId: string | null): void {
+  public setCurrentUser(userId: number | null): void {
     if (this.currentUserId === userId) return;
 
     console.log(
@@ -47,7 +47,7 @@ class TokenManager {
   }
 
   // Get current user ID
-  public getCurrentUserId(): string | null {
+  public getCurrentUserId(): number | null {
     return this.currentUserId;
   }
 

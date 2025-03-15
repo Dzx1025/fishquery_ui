@@ -3,7 +3,7 @@ export interface ApiResponse<T = never> {
   status: "success" | "error";
   code: number;
   message: string;
-  data: T | null;
+  data: T;
   errors: string[] | null;
 }
 
