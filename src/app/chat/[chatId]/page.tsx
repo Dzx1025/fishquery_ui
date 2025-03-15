@@ -11,17 +11,19 @@ import {CitationDialog} from "@/components/chat/citation-dialog";
 import {useChat} from "@/hooks/useChat";
 import {Citation} from "@/lib/types";
 import {useAuthContext} from "@/contexts/AuthContext";
-import {Send} from "lucide-react";
+import {Send, Loader2} from "lucide-react";
 import {cn} from "@/lib/utils";
 
 export default function ChatPage() {
   const {chatId} = useParams<{ chatId: string }>();
   const {isAuthenticated} = useAuthContext();
   const [newMessage, setNewMessage] = useState("");
+  const [pendingMessage, setPendingMessage] = useState("");
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(
     null
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const {messages, isLoading, error, sendMessage} = useChat(chatId);
 
@@ -32,7 +34,6 @@ export default function ChatPage() {
     if (message) {
       sendMessage(message);
     }
-    setNewMessage("");
   }, []);
 
   // Scroll to bottom when messages update
@@ -40,12 +41,22 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
   }, [messages]);
 
+  // Clear input and focus after response is received
+  useEffect(() => {
+    if (!isLoading && pendingMessage) {
+      setNewMessage("");
+      setPendingMessage("");
+      inputRef.current?.focus();
+    }
+  }, [isLoading, pendingMessage]);
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newMessage.trim()) {
+    if (newMessage.trim() && !isLoading) {
+      setPendingMessage(newMessage);
       sendMessage(newMessage);
-      setNewMessage("");
+      // Don't clear newMessage here to keep it in the input while loading
     }
   };
 
@@ -58,11 +69,11 @@ export default function ChatPage() {
 
   return (
     <div
-      className={cn("flex flex-col  bg-background rounded-xl overflow-hidden border shadow-sm", isAuthenticated ? "h-full" : "min-h-screen")}>
+      className={cn("flex flex-col bg-background rounded-xl overflow-hidden border shadow-sm", isAuthenticated ? "h-full" : "min-h-screen")}>
       <SmartHeader/>
 
       <div className="flex-1 overflow-hidden relative">
-        <ScrollArea className="h-[calc(100vh-10rem)] md:h-[calc(100vh-12rem)] lg:h-[calc(100vh-10rem)]">
+        <ScrollArea className="h-[calc(100vh-10rem)] md:h-[calc(100vh-12rem)] lg:h-[calc(100vh-9rem)]">
           <div className="px-4 pt-4">
             {messages.length === 0 ? (
               <div className="flex h-64 items-center justify-center">
@@ -81,6 +92,12 @@ export default function ChatPage() {
                     onCitationClick={handleCitationClick}
                   />
                 ))}
+                {isLoading && (
+                  <div className="flex items-center space-x-2 animate-pulse p-4 rounded-lg bg-muted/50">
+                    <Loader2 className="h-5 w-5 animate-spin text-primary"/>
+                    <p className="text-sm text-muted-foreground">Generating response...</p>
+                  </div>
+                )}
                 <div ref={messagesEndRef} className="h-4"/>
               </div>
             )}
@@ -96,14 +113,25 @@ export default function ChatPage() {
 
       <div className="border-t p-4 bg-background">
         <form onSubmit={handleSubmit} className="flex w-full gap-2">
-          <Input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            disabled={isLoading}
-            placeholder="Type your message here..."
-            className="flex-1 rounded-full"
-          />
+          <div className="relative flex-1">
+            <Input
+              ref={inputRef}
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              disabled={isLoading}
+              placeholder={isLoading ? "Waiting for response..." : "Type your message here..."}
+              className={cn(
+                "flex-1 rounded-full pr-10",
+                isLoading && "text-muted-foreground"
+              )}
+            />
+            {isLoading && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <Loader2 className="h-4 w-4 animate-spin text-muted-foreground"/>
+              </div>
+            )}
+          </div>
           <Button
             type="submit"
             disabled={isLoading || !newMessage.trim()}
