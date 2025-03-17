@@ -25,7 +25,7 @@ const parseCitationReferences = (
 
   // Replace [citation:X] with clickable numbered references
   return content.replace(/\[citation:(\d+)]/g, (match, index) => {
-    const citationIndex = parseInt(index, 10);
+    const citationIndex = parseInt(index, 10) - 1;
     if (citationIndex >= 0 && citationIndex < citations.length) {
       // Check if we've seen this citation before
       if (!citationMap.has(citationIndex)) {

@@ -59,7 +59,6 @@ const groupChatsByDate = (chats: DBChat[]) => {
 
   chats.forEach((chat) => {
     const updatedAt = new Date(chat.updated_at);
-    console.log("chat: ", chat.title, chat.updated_at);
     // Format the date as "Month Year" (e.g., "March 2025")
     const groupKey = updatedAt.toLocaleDateString("en-US", {
       month: "long",
@@ -71,6 +70,11 @@ const groupChatsByDate = (chats: DBChat[]) => {
     }
 
     groups[groupKey].push(chat);
+  });
+
+  // Sort the chats in each group by date (newest first)
+  Object.keys(groups).forEach((key) => {
+    groups[key].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
   });
 
   // Sort the groups by date (newest first)
@@ -165,12 +169,6 @@ export function NavList() {
     setIsDeleteDialogOpen(false);
   };
 
-  // Handle view source action
-  const handleViewSource = (chat: DBChat) => {
-    // Implement the view source functionality
-    toast(`Viewing source for ${chat.title}`);
-  };
-
   // Show error when fetching chats fails
   if (chatFetchError && !chatLoading && chats.length === 0) {
     return (
@@ -249,7 +247,7 @@ export function NavList() {
                     side={isMobile ? "bottom" : "right"}
                     align={isMobile ? "end" : "start"}
                   >
-                    <DropdownMenuItem onClick={() => handleViewSource(chat)}>
+                    <DropdownMenuItem>
                       <FileSliders className="mr-2 h-4 w-4 text-muted-foreground"/>
                       <span>Check Source</span>
                     </DropdownMenuItem>
