@@ -227,11 +227,13 @@ export function useChat(chatId: string) {
           ]);
         }
 
+        const fingerprint = localStorage.getItem("browserFingerprint") || "";
         // API request
         const response = await fetch(`/api/chat/${chatId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-Browser-Fingerprint": fingerprint,
           },
           body: JSON.stringify({message: messageContent}),
           credentials: "include",

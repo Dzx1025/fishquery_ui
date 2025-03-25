@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Textarea} from "@/components/ui/textarea";
 import {Card, CardContent, CardFooter} from "@/components/ui/card";
@@ -8,6 +8,7 @@ import {SmartHeader} from "@/components/auth/smart-header";
 import {useRouter} from "next/navigation";
 import {useChatList} from "@/hooks/useChat";
 import {useAuthContext} from "@/contexts/AuthContext";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -16,26 +17,51 @@ export default function Home() {
   const {isAuthenticated, user} = useAuthContext();
   const {refetch} = useChatList(user?.id);
 
+  // Generate a browser fingerprint when the component mounts
+  useEffect(() => {
+    const fingerprintKey = 'browserFingerprint';
+
+    // Check if the fingerprint already exists
+    if (localStorage.getItem(fingerprintKey)) {
+      console.log('Fingerprint already exists:', localStorage.getItem(fingerprintKey));
+      return;
+    }
+
+    FingerprintJS.load()
+      .then(fp => fp.get())
+      .then(result => {
+        const visitorId = result.visitorId;
+        localStorage.setItem(fingerprintKey, visitorId);
+        console.log('Generated and stored fingerprint:', visitorId);
+      })
+      .catch(err => {
+        console.error('Failed to generate fingerprint:', err);
+      });
+  }, []);
+
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
     try {
+      const fingerprint = localStorage.getItem('browserFingerprint') || '';
+
       const response = await fetch("/api/chat", {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "X-Browser-Fingerprint": fingerprint,
         },
         body: JSON.stringify({message}),
         credentials: "include",
       });
 
-      const data = await response.json();
-
       if (response.ok) {
         if (isAuthenticated) {
-          refetch();
+          await refetch();
         }
         sessionStorage.setItem("question", message);
+        const data = await response.json();
         router.push("/chat/" + data.chat_id);
       }
     } catch (err) {

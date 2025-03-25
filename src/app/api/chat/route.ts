@@ -1,23 +1,24 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import {NextResponse} from "next/server";
+import type {NextRequest} from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json();
+    const {message} = await request.json();
 
     const response = await fetch(`${process.env.DJANGO_API_URL}/api/chat/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-Browser-Fingerprint": request.headers.get("x-browser-fingerprint") || "",
         Cookie: request.headers.get("cookie") || "",
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({message}),
       credentials: "include",
     });
 
     const data = await response.json();
 
-    return NextResponse.json(data, { status: response.status });
+    return NextResponse.json(data, {status: response.status});
   } catch (error) {
     console.error("Profile fetch error:", error);
     return NextResponse.json(
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
         data: null,
         errors: ["Failed to fetch profile"],
       },
-      { status: 500 }
+      {status: 500}
     );
   }
 }

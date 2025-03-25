@@ -22,6 +22,7 @@ export async function POST(
     // Create headers for the API request
     const headers = new Headers({
       "Content-Type": "application/json",
+      "X-Browser-Fingerprint": request.headers.get("x-browser-fingerprint") || "",
       Cookie: cookieHeader,
     });
 
