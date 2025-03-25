@@ -32,9 +32,9 @@ export default function ChatPage() {
     const InitMessage = sessionStorage.getItem("question");
     sessionStorage.removeItem("question");
     if (InitMessage) {
-      sendMessage(InitMessage);
+      void sendMessage(InitMessage);
     }
-  }, []);
+  }, [sendMessage]);
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function ChatPage() {
     e.preventDefault();
     if (newMessage.trim() && !isLoading) {
       setPendingMessage(newMessage);
-      sendMessage(newMessage);
+      void sendMessage(newMessage);
       // Don't clear newMessage here to keep it in the input while loading
     }
   };

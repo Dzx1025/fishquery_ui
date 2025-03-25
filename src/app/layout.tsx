@@ -13,6 +13,7 @@ import {AuthProvider} from "@/contexts/AuthContext";
 import {getAuthStatus} from "@/lib/server-auth";
 import {ApolloWrapper} from "@/lib/apollo/provider";
 import {Toaster} from "sonner";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
