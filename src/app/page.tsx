@@ -47,7 +47,7 @@ export default function Home() {
       const fingerprint = localStorage.getItem('browserFingerprint') || '';
 
       const response = await fetch("/api/chat", {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Browser-Fingerprint": fingerprint,
