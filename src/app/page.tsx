@@ -17,6 +17,33 @@ export default function Home() {
   const {isAuthenticated, user} = useAuthContext();
   const {refetch} = useChatList(user?.id);
 
+  const recommendedQuestions: string[] = [
+    "What is the boat limit for Western rock lobsters?",
+    "What should I do if I catch an undersized fish?",
+    "How should I measure a fish correctly?",
+    "What licence exemptions apply to Aboriginal fishers?",
+    "Is there a daily bag limit for southern garfish?",
+    "What is shark depredation and how can it be mitigated?",
+    "What is the purpose of using a release weight?",
+    "Do I need a fishing licence to fish from a boat?",
+    "What are the bag limits for demersal scalefish in the West Coast bioregion?",
+    "Can I continue fishing once I’ve reached my daily bag limit?",
+  ];
+
+  const [visibleQuestions, setVisibleQuestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Randomly select 3 or 4 questions to display
+    const pool = [...recommendedQuestions];
+    // Fisher-Yates shuffle
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    const count = Math.min(pool.length, Math.random() < 0.5 ? 3 : 4);
+    setVisibleQuestions(pool.slice(0, count));
+  }, []);
+
   // Generate a browser fingerprint when the component mounts
   useEffect(() => {
     const fingerprintKey = 'browserFingerprint';
@@ -39,9 +66,8 @@ export default function Home() {
       });
   }, []);
 
-
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const sendMessage = async (text: string) => {
+    if (!text.trim()) return;
     setSending(true);
     try {
       const fingerprint = localStorage.getItem('browserFingerprint') || '';
@@ -52,7 +78,7 @@ export default function Home() {
           "Content-Type": "application/json",
           "X-Browser-Fingerprint": fingerprint,
         },
-        body: JSON.stringify({message}),
+        body: JSON.stringify({message: text}),
         credentials: "include",
       });
 
@@ -60,14 +86,26 @@ export default function Home() {
         if (isAuthenticated) {
           await refetch();
         }
-        sessionStorage.setItem("question", message);
+        sessionStorage.setItem("question", text);
         const data = await response.json();
         router.push("/chat/" + data.chat_id);
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setSending(false);
     }
-    setSending(false);
+  };
+
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await sendMessage(message);
+  };
+
+  const handleSuggestionClick = async (q: string) => {
+    // Let the question clicked show up in the textarea
+    setMessage(q);
+    await sendMessage(q);
   };
 
   return (
@@ -102,6 +140,23 @@ export default function Home() {
                     }`}
                     aria-hidden="true"
                   />
+                </div>
+
+                {/* Recommended questions section (random 3-4) */}
+                <div className="px-6 pt-4 pb-2 flex flex-wrap gap-2">
+                  {visibleQuestions.map((q) => (
+                    <Button
+                      key={q}
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleSuggestionClick(q)}
+                      disabled={sending}
+                      className="rounded-full"
+                    >
+                      {q}
+                    </Button>
+                  ))}
                 </div>
               </CardContent>
 
