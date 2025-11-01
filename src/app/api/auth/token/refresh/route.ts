@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import {NextResponse} from "next/server";
+import type {NextRequest} from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,10 +22,8 @@ export async function POST(request: NextRequest) {
     const nextResponse = NextResponse.json(data);
 
     // Forward cookies from the backend
-    response.headers.forEach((value, key) => {
-      if (key.toLowerCase() === "set-cookie") {
-        nextResponse.headers.append("Set-Cookie", value);
-      }
+    response.headers.getSetCookie().forEach(cookie => {
+      nextResponse.headers.append("Set-Cookie", cookie);
     });
 
     return nextResponse;
@@ -39,7 +37,7 @@ export async function POST(request: NextRequest) {
         data: null,
         errors: ["Failed to refresh token"],
       },
-      { status: 500 }
+      {status: 500}
     );
   }
 }
