@@ -35,11 +35,6 @@ class TokenManager {
   public setCurrentUser(userId: number | null): void {
     if (this.currentUserId === userId) return;
 
-    console.log(
-      `Switching user from ${this.currentUserId || "none"} to ${
-        userId || "none"
-      }`
-    );
     this.currentUserId = userId;
 
     // Trigger user change event
