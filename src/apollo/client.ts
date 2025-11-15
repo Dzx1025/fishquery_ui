@@ -111,9 +111,9 @@ class TokenManager {
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`Token fetch failed: ${response.status}`);
-      }
+      // if (!response.ok) {
+      //   throw new Error(`Token fetch failed: ${response.status}`);
+      // }
 
       const data = await response.json();
       return data.token || "";

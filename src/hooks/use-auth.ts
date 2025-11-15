@@ -1,8 +1,8 @@
 import {useState, useEffect, useCallback} from "react";
 import {useRouter} from "next/navigation";
-import {LoginCredentials, RegisterData, UserProfile} from "@/lib/types";
-import authService from "@/lib/services/auth-service";
-import {setCurrentUser, ApolloLogout} from "@/lib/apollo/client";
+import {LoginCredentials, RegisterData, UserProfile} from "@/services/authTypes";
+import authService from "@/services/authService";
+import {setCurrentUser, ApolloLogout} from "@/apollo/client";
 
 export interface AuthState {
   user: UserProfile | null;
@@ -44,13 +44,12 @@ export function useAuth(initialState?: InitialAuthState) {
           error: response.errors ? response.errors[0] : "Failed to fetch user",
         });
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setState({
         user: null,
         isLoading: false,
         isAuthenticated: false,
-        error: "Authentication error",
+        error: "Authentication error: " + error,
       });
     }
   }, []);
@@ -91,20 +90,9 @@ export function useAuth(initialState?: InitialAuthState) {
     setState((prev) => ({...prev, isLoading: true, error: null}));
     try {
       const {username, email, password} = data;
-      const response = await authService.register({
-        username,
-        email,
-        password,
-      });
+      const response = await authService.register({username, email, password});
       if (response.status === "success") {
-        // Optionally auto-login the user after registration
-        // or redirect to login page
-        // router.push("/login");
-        // return true;
-        const autoLoginSuccess = await login({
-          email: data.email,
-          password: data.password,
-        });
+        const autoLoginSuccess = await login({email: data.email, password: data.password});
         if (autoLoginSuccess) {
           router.push("/");
           return true;
@@ -201,7 +189,9 @@ export function useAuth(initialState?: InitialAuthState) {
   useEffect(() => {
     // Only fetch user data if not provided in initialState
     if (!initialState) {
-      fetchUser();
+      fetchUser().catch((error) => {
+        console.error("Unhandled error in fetchUser:", error);
+      });
     }
   }, [fetchUser, initialState]);
 

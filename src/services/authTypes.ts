@@ -18,13 +18,6 @@ export interface UserProfile {
   subscription_expiry: string | null;
 }
 
-export interface AuthState {
-  user: UserProfile | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  error: string | null;
-}
-
 // Auth API types
 export interface LoginCredentials {
   email: string;
@@ -43,22 +36,3 @@ export interface RegisterData {
   password: string;
   password_confirm: string;
 }
-
-// Front-end Page Chat types
-export type Citation = {
-  page_content: string;
-  metadata: {
-    page: number;
-    chunk: number;
-    total_pages: number;
-    source: string;
-  };
-};
-
-export type Message = {
-  id: string;
-  content: string;
-  type: "user" | "assistant";
-  timestamp: string;
-  citations?: Citation[];
-};

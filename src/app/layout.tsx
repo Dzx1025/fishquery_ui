@@ -9,9 +9,9 @@ const AppSidebar = dynamic(() => import("@/components/sidebar/app-sidebar"), {
 });
 import {SidebarInset, SidebarProvider} from "@/components/ui/sidebar";
 
-import {AuthProvider} from "@/contexts/AuthContext";
+import {AuthProvider} from "@/contexts/auth-context";
 import {getAuthStatus} from "@/lib/server-auth";
-import {ApolloWrapper} from "@/lib/apollo/provider";
+import {ApolloWrapper} from "@/apollo/provider";
 import {Toaster} from "sonner";
 import React from "react";
 
@@ -30,29 +30,17 @@ export const metadata: Metadata = {
   description: "Ask questions and get intelligent answers",
 };
 
-export default async function RootLayout({
-                                           children,
-                                         }: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
   // Get authentication status server-side before rendering
   const {isAuthenticated, user} = await getAuthStatus();
 
   return (
     <html lang="en" suppressHydrationWarning>
-    <body
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    >
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <Toaster/>
       {/* Pass the server-side authentication state to the client */}
       <AuthProvider initialAuthState={{isAuthenticated, user}}>
-        {/* Now we can immediately render the correct layout without waiting */}
         <ApolloWrapper>
           {isAuthenticated ? (
             <SidebarProvider>

@@ -8,9 +8,9 @@ import {ScrollArea} from "@/components/ui/scroll-area";
 import {SmartHeader} from "@/components/auth/smart-header";
 import {MessageBubble} from "@/components/chat/message";
 import {CitationDialog} from "@/components/chat/citation-dialog";
-import {useChat} from "@/hooks/useChat";
-import {Citation} from "@/lib/types";
-import {useAuthContext} from "@/contexts/AuthContext";
+import {useChat} from "@/hooks/use-chat";
+import {Citation} from "@/services/chatTypes";
+import {useAuthContext} from "@/contexts/auth-context";
 import {Send, Loader2} from "lucide-react";
 import {cn} from "@/lib/utils";
 

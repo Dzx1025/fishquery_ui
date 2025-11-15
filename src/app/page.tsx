@@ -6,8 +6,8 @@ import {Textarea} from "@/components/ui/textarea";
 // removed Card wrappers in favor of a simpler form container
 import {SmartHeader} from "@/components/auth/smart-header";
 import {useRouter} from "next/navigation";
-import {useChatList} from "@/hooks/useChat";
-import {useAuthContext} from "@/contexts/AuthContext";
+import {useChatList} from "@/hooks/use-chat";
+import {useAuthContext} from "@/contexts/auth-context";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
 import {Send, Loader2} from "lucide-react";
