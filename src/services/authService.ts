@@ -1,9 +1,4 @@
-import {
-  ApiResponse,
-  LoginCredentials,
-  RegisterCredentials,
-  UserProfile,
-} from "@/lib/types";
+import {ApiResponse, LoginCredentials, RegisterCredentials, UserProfile} from "@/services/authTypes";
 
 class AuthService {
   async login(credentials: LoginCredentials): Promise<ApiResponse<{ userid: number, email: string }>> {
@@ -13,7 +8,7 @@ class AuthService {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(credentials),
-      credentials: "include", // Important for cookies
+      credentials: "include",
     });
 
     return await response.json();
@@ -34,7 +29,7 @@ class AuthService {
   async logout(): Promise<ApiResponse<null>> {
     const response = await fetch("/api/auth/logout", {
       method: "POST",
-      credentials: "include", // Important for cookies
+      credentials: "include",
     });
 
     return await response.json();
@@ -43,7 +38,7 @@ class AuthService {
   async refreshToken(): Promise<ApiResponse> {
     const response = await fetch("/api/auth/token/refresh", {
       method: "POST",
-      credentials: "include", // Important for cookies
+      credentials: "include",
     });
 
     return await response.json();
@@ -52,22 +47,20 @@ class AuthService {
   async getProfile(): Promise<ApiResponse<UserProfile>> {
     const response = await fetch("/api/auth/profile", {
       method: "GET",
-      credentials: "include", // Important for cookies
+      credentials: "include",
     });
 
     return await response.json();
   }
 
-  async updateProfile(
-    data: Partial<UserProfile>
-  ): Promise<ApiResponse<UserProfile>> {
+  async updateProfile(data: Partial<UserProfile>): Promise<ApiResponse<UserProfile>> {
     const response = await fetch("/api/auth/profile", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-      credentials: "include", // Important for cookies
+      credentials: "include",
     });
 
     return await response.json();

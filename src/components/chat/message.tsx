@@ -6,7 +6,7 @@ import {Avatar} from "@/components/ui/avatar";
 import {Card} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
-import {Message, Citation} from "@/lib/types";
+import {Message, Citation} from "@/services/chatTypes";
 
 interface MessageProps extends Message {
   onCitationClick: (index: number, citations: Citation[]) => void;

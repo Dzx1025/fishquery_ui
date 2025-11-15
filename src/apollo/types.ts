@@ -1,4 +1,3 @@
-// lib/apollo/types.ts
 export interface DBChat {
   id: string;
   title: string;

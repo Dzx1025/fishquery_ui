@@ -6,12 +6,12 @@ import {
   GET_CHAT_LIST,
   RENAME_CHAT,
   SUBSCRIBE_TO_MESSAGES,
-} from "@/lib/apollo/operations";
-import {DBChat, DBMessage} from "@/lib/apollo/types";
+} from "@/apollo/operations";
+import {DBChat, DBMessage} from "@/apollo/types";
 import {useState, useEffect, useCallback} from "react";
-import {Message, Citation} from "@/lib/types";
+import {Message, Citation} from "@/services/chatTypes";
 import {processMessageChunks, extractCitations} from "@/lib/utils";
-import {useAuthContext} from "@/contexts/AuthContext";
+import {useAuthContext} from "@/contexts/auth-context";
 
 // Hook for fetching chat list
 export function useChatList(userId?: number) {

@@ -5,23 +5,14 @@ import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {useAuthContext} from "@/contexts/AuthContext";
+import {useAuthContext} from "@/contexts/auth-context";
 import {Alert, AlertDescription} from "@/components/ui/alert";
 import {toast} from "sonner";
 
-export function LoginForm({
-                            className,
-                            ...props
-                          }: React.ComponentPropsWithoutRef<"div">) {
+export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<"div">) {
   const router = useRouter();
   const {login, error, isLoading} = useAuthContext();
   const [email, setEmail] = useState("");

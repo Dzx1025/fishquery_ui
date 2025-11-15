@@ -26,8 +26,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import {useMemo, useState} from "react";
-import {DBChat} from "@/lib/apollo/types";
-import {useChatList, useDeleteChat, useRenameChat} from "@/hooks/useChat";
+import {DBChat} from "@/apollo/types";
+import {useChatList, useDeleteChat, useRenameChat} from "@/hooks/use-chat";
 import Link from "next/link";
 import {useParams, useRouter} from "next/navigation";
 import {
@@ -51,7 +51,7 @@ import {
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
-import {useAuthContext} from "@/contexts/AuthContext";
+import {useAuthContext} from "@/contexts/auth-context";
 
 // Group chats by date (month and year)
 const groupChatsByDate = (chats: DBChat[]) => {

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Button} from "@/components/ui/button";
-import {Citation} from "@/lib/types";
+import {Citation} from "@/services/chatTypes";
 import {extractFilename} from "@/lib/utils";
 import {Card, CardContent} from "@/components/ui/card";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
