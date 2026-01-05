@@ -16,6 +16,7 @@ import {
   User,
   Info
 } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 
 export default function Home() {
@@ -35,16 +36,28 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-8">
             <div className="hidden items-center gap-6 text-sm font-semibold text-muted-foreground md:flex">
-              <a href="#" className="hover:text-primary transition-colors">Rules</a>
-              <a href="#" className="hover:text-primary transition-colors">Species</a>
-              <a href="#" className="hover:text-primary transition-colors">Safety</a>
-              <a href="#" className="hover:text-primary transition-colors">About</a>
+              <a href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Rules</a>
+              <a href="https://rules.fish.wa.gov.au/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Species</a>
             </div>
             <div className="flex items-center gap-4">
               <ModeToggle />
-              <button className="hidden sm:flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:translate-y-[-1px] hover:shadow-lg active:scale-95 active:translate-y-0">
-                Lauch Chat
-              </button>
+              <div className="hidden sm:flex items-center gap-2 border-l border-border pl-4 mr-2">
+                <Link href="/login">
+                  <button className="text-sm font-bold hover:text-primary transition-colors px-3 py-2">
+                    Log in
+                  </button>
+                </Link>
+                <Link href="/register">
+                  <button className="text-sm font-bold border border-border rounded-full px-4 py-2 hover:bg-muted transition-all">
+                    Sign up
+                  </button>
+                </Link>
+              </div>
+              <Link href="/chat">
+                <button className="hidden lg:flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:translate-y-[-1px] hover:shadow-lg active:scale-95 active:translate-y-0 text-nowrap">
+                  Launch Chat
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -66,12 +79,16 @@ export default function Home() {
                 Instant, AI-powered answers for Western Australia's recreational fishing regulations, size limits, and species identification.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
-                <button className="group flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95">
-                  Start Chatting Now <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </button>
-                <button className="flex items-center gap-2 rounded-2xl border border-border bg-background px-8 py-4 text-lg font-bold shadow-sm transition-all hover:bg-muted/50">
-                  Read the Rules
-                </button>
+                <Link href="/chat">
+                  <button className="group flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95">
+                    Start Chatting Now <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </Link>
+                <a href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/" target="_blank" rel="noopener noreferrer">
+                  <button className="flex items-center gap-2 rounded-2xl border border-border bg-background px-8 py-4 text-lg font-bold shadow-sm transition-all hover:bg-muted/50">
+                    Read the Rules
+                  </button>
+                </a>
               </div>
               <div className="flex items-center gap-4 pt-4 text-sm font-medium text-muted-foreground">
                 <div className="flex -space-x-2">
@@ -191,9 +208,11 @@ export default function Home() {
                 Join thousands of responsible WA anglers using FishQuery to protect our marine life and stay compliant.
               </p>
               <div className="flex justify-center gap-4 pt-4">
-                <button className="rounded-full bg-background text-foreground px-10 py-4 font-bold transition-transform hover:scale-105 active:scale-95">
-                  Launch Assistant
-                </button>
+                <Link href="/chat">
+                  <button className="rounded-full bg-background text-foreground px-10 py-4 font-bold transition-transform hover:scale-105 active:scale-95">
+                    Launch Assistant
+                  </button>
+                </Link>
               </div>
             </div>
             {/* Background elements */}
@@ -221,9 +240,9 @@ export default function Home() {
             <div className="space-y-4">
               <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">Resources</h4>
               <ul className="space-y-2 text-sm font-medium">
-                <li><a href="#" className="hover:text-primary">DPIRD Website</a></li>
-                <li><a href="#" className="hover:text-primary">Recfishwest</a></li>
-                <li><a href="#" className="hover:text-primary">Marine Parks WA</a></li>
+                <li><a href="https://www.wa.gov.au/organisation/department-of-primary-industries-and-regional-development" target="_blank" rel="noopener noreferrer" className="hover:text-primary">DPIRD Website</a></li>
+                <li><a href="https://rules.fish.wa.gov.au/" target="_blank" rel="noopener noreferrer" className="hover:text-primary">Species Guide</a></li>
+                <li><a href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/" target="_blank" rel="noopener noreferrer" className="hover:text-primary">Fishing Rules Guide</a></li>
               </ul>
             </div>
             <div className="space-y-4">
