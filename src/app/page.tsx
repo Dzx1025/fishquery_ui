@@ -128,7 +128,7 @@ export default function Home() {
                   <div className="flex gap-3 flex-row-reverse">
                     <div className="h-8 w-8 rounded-full bg-primary flex flex-shrink-0 items-center justify-center text-primary-foreground font-bold text-[10px]">FQ</div>
                     <div className="rounded-2xl rounded-tr-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
-                      <p className="mb-2 italic opacity-90">Checking DPIRD 2024 Guidelines...</p>
+                      <p className="mb-2 italic opacity-90">Checking DPIRD 2025 Guidelines...</p>
                       Yes, but currently the West Coast Bioregion is in an <span className="underline decoration-2 font-bold underline-offset-2">open season</span>.
                       <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-sans">
                         <li>Min Size: 500mm</li>
