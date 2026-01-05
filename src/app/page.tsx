@@ -7,10 +7,16 @@ import {
   Settings,
   ArrowRight,
   CheckCircle2,
-  AlertCircle,
-  Clock,
-  ExternalLink
+  ShieldCheck,
+  MessageSquare,
+  MapPin,
+  ExternalLink,
+  ChevronRight,
+  Send,
+  User,
+  Info
 } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -19,182 +25,238 @@ export default function Home() {
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold">F</div>
-            <span className="text-xl font-bold tracking-tight">FishQuery UI</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="hidden items-center gap-4 text-sm font-medium text-muted-foreground md:flex">
-              <a href="#" className="hover:text-foreground transition-colors">Components</a>
-              <a href="#" className="hover:text-foreground transition-colors">Themes</a>
-              <a href="#" className="hover:text-foreground transition-colors">Docs</a>
+            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+              <span className="text-xl font-bold tracking-tighter">FQ</span>
             </div>
-            <ModeToggle />
+            <div className="flex flex-col leading-none">
+              <span className="text-xl font-bold tracking-tight">FishQuery</span>
+              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">WA Rules Assistant</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-8">
+            <div className="hidden items-center gap-6 text-sm font-semibold text-muted-foreground md:flex">
+              <a href="#" className="hover:text-primary transition-colors">Rules</a>
+              <a href="#" className="hover:text-primary transition-colors">Species</a>
+              <a href="#" className="hover:text-primary transition-colors">Safety</a>
+              <a href="#" className="hover:text-primary transition-colors">About</a>
+            </div>
+            <div className="flex items-center gap-4">
+              <ModeToggle />
+              <button className="hidden sm:flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-md transition-all hover:translate-y-[-1px] hover:shadow-lg active:scale-95 active:translate-y-0">
+                Lauch Chat
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      <main className="mx-auto max-w-7xl px-6 py-12 space-y-24">
+      <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden rounded-3xl bg-primary px-8 py-20 text-primary-foreground shadow-2xl">
-          <div className="relative z-10 max-w-2xl space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-sm border border-white/20">
-              <span className="flex h-2 w-2 rounded-full bg-white animate-pulse" />
-              v1.0.0 Now Available
-            </div>
-            <h1 className="font-serif text-5xl font-bold leading-tight md:text-6xl">
-              Beautifully crafted for <span className="italic font-light">modern</span> web apps.
-            </h1>
-            <p className="text-lg text-primary-foreground/80 font-sans leading-relaxed">
-              Explore our design system powered by OKLCH colors, fluid typography, and dynamic shadow systems.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <button className="flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-primary transition-all hover:scale-105 hover:shadow-lg active:scale-95">
-                Go Fishing <ArrowRight className="h-4 w-4" />
-              </button>
-              <button className="flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold backdrop-blur-sm transition-all hover:bg-white/10">
-                View GitHub
-              </button>
-            </div>
-          </div>
-          {/* Decorative background element */}
-          <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -bottom-20 right-20 h-64 w-64 rounded-full bg-secondary/20 blur-3xl underline" />
-        </section>
-
-        {/* Color Palette */}
-        <section className="space-y-8">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight">System Colors</h2>
-            <p className="text-muted-foreground italic">Powered by OKLCH for consistent perceived lightness.</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-            <ColorSwatch name="Primary" bg="bg-primary" text="text-primary-foreground" />
-            <ColorSwatch name="Secondary" bg="bg-secondary" text="text-secondary-foreground" />
-            <ColorSwatch name="Muted" bg="bg-muted" text="text-muted-foreground" />
-            <ColorSwatch name="Accent" bg="bg-accent" text="text-accent-foreground" />
-            <ColorSwatch name="Card" bg="bg-card" text="text-card-foreground" border="border border-border" />
-            <ColorSwatch name="Popover" bg="bg-popover" text="text-popover-foreground" border="border border-border" />
-            <ColorSwatch name="Destructive" bg="bg-destructive" text="text-destructive-foreground" />
-            <ColorSwatch name="Background" bg="bg-background" text="text-foreground" border="border border-border" />
-          </div>
-        </section>
-
-        {/* Typography & Shadows */}
-        <div className="grid gap-12 md:grid-cols-2">
-          {/* Typography */}
-          <section className="space-y-8">
-            <h2 className="text-2xl font-bold tracking-tight">Typography</h2>
-            <div className="space-y-6 rounded-2xl border border-border p-8">
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">Sans-Serif (Default)</p>
-                <p className="font-sans text-3xl font-medium">Inter Interface Text</p>
+        <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/5 to-background py-16 md:py-32">
+          <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8 relative z-10">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary border border-primary/20">
+                <ShieldCheck className="h-4 w-4" />
+                Official WA Fishing Guidelines
               </div>
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">Serif</p>
-                <p className="font-serif text-3xl italic">Elegant Lora Display</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">Monospace</p>
-                <p className="font-mono text-xl text-primary">const fish = "query";</p>
-              </div>
-            </div>
-          </section>
-
-          {/* Shadows & Radii */}
-          <section className="space-y-8">
-            <h2 className="text-2xl font-bold tracking-tight">Elevations</h2>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="flex h-32 items-center justify-center rounded-sm bg-card shadow-sm border border-border/50 font-medium">shadow-sm</div>
-              <div className="flex h-32 items-center justify-center rounded-md bg-card shadow-md border border-border/50 font-medium">shadow-md</div>
-              <div className="flex h-32 items-center justify-center rounded-lg bg-card shadow-lg border border-border/50 font-medium">shadow-lg</div>
-              <div className="flex h-32 items-center justify-center rounded-xl bg-card shadow-xl border border-border/50 font-medium">shadow-xl</div>
-            </div>
-          </section>
-        </div>
-
-        {/* Components Preview */}
-        <section className="space-y-8">
-          <h2 className="text-2xl font-bold tracking-tight">Interactive Components</h2>
-          <div className="grid gap-8 md:grid-cols-3">
-            {/* Action Card */}
-            <div className="group rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                <Search className="h-6 w-6" />
-              </div>
-              <h3 className="mb-2 text-xl font-bold">Search Database</h3>
-              <p className="mb-6 text-sm text-muted-foreground leading-relaxed">
-                Connect your data sources and perform high-speed queries across all fish species.
+              <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight md:text-7xl">
+                Navigate WA Fishing Rules with <span className="text-primary italic">Confidence.</span>
+              </h1>
+              <p className="max-w-xl text-lg text-muted-foreground font-sans leading-relaxed md:text-xl">
+                Instant, AI-powered answers for Western Australia's recreational fishing regulations, size limits, and species identification.
               </p>
-              <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-4 py-2 font-medium text-secondary-foreground hover:bg-secondary/80">
-                Launch Search
-              </button>
+              <div className="flex flex-wrap gap-4 pt-4">
+                <button className="group flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95">
+                  Start Chatting Now <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </button>
+                <button className="flex items-center gap-2 rounded-2xl border border-border bg-background px-8 py-4 text-lg font-bold shadow-sm transition-all hover:bg-muted/50">
+                  Read the Rules
+                </button>
+              </div>
+              <div className="flex items-center gap-4 pt-4 text-sm font-medium text-muted-foreground">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center">
+                      <User className="h-4 w-4" />
+                    </div>
+                  ))}
+                </div>
+                <span>Trusted by 2,000+ WA anglers</span>
+              </div>
             </div>
 
-            {/* Status Card */}
-            <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-              <div className="mb-6 flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
-                  <Clock className="h-3 w-3" /> Processing
-                </span>
-                <Settings className="h-5 w-5 text-muted-foreground" />
+            {/* Chat Mockup */}
+            <div className="relative group">
+              <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-primary to-secondary blur-2xl opacity-10 group-hover:opacity-20 transition-opacity" />
+              <div className="relative flex flex-col rounded-[2rem] border border-border bg-card shadow-2xl overflow-hidden aspect-[4/5] sm:aspect-[3/4] md:aspect-auto">
+                {/* Chat Header */}
+                <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">FQ</div>
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-sm font-bold">FishQuery Assistant</span>
+                      <span className="text-[10px] text-chart-3 font-bold uppercase tracking-wider">Online</span>
+                    </div>
+                  </div>
+                  <Settings className="h-4 w-4 text-muted-foreground" />
+                </div>
+
+                {/* Chat Body */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                  <div className="flex gap-3">
+                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center"><User className="h-4 w-4" /></div>
+                    <div className="rounded-2xl rounded-tl-none bg-muted px-4 py-2.5 text-sm font-medium max-w-[80%]">
+                      Can I keep a West Australian Dhufish in the Perth region right now?
+                    </div>
+                  </div>
+                  <div className="flex gap-3 flex-row-reverse">
+                    <div className="h-8 w-8 rounded-full bg-primary flex flex-shrink-0 items-center justify-center text-primary-foreground font-bold text-[10px]">FQ</div>
+                    <div className="rounded-2xl rounded-tr-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
+                      <p className="mb-2 italic opacity-90">Checking DPIRD 2024 Guidelines...</p>
+                      Yes, but currently the West Coast Bioregion is in an <span className="underline decoration-2 font-bold underline-offset-2">open season</span>.
+                      <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-sans">
+                        <li>Min Size: 500mm</li>
+                        <li>Bag Limit: 1 per person</li>
+                        <li>Boat Limit: 2 per boat</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center"><User className="h-4 w-4" /></div>
+                    <div className="rounded-2xl rounded-tl-none bg-muted px-4 py-2.5 text-sm font-medium">
+                      Thanks! What about the closed season dates?
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chat Input */}
+                <div className="p-4 bg-muted/30 border-t border-border mt-auto">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Ask about rules, bag limits..."
+                      className="w-full pl-4 pr-12 py-3 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                      readOnly
+                    />
+                    <button className="absolute right-2 top-1.5 p-1.5 rounded-lg bg-primary text-primary-foreground">
+                      <Send className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
               </div>
-              <h3 className="mb-4 text-xl font-bold">Latest Analysis</h3>
-              <div className="space-y-3">
-                <StatusItem icon={<CheckCircle2 className="text-green-500" />} label="Database Connection" status="Healthy" />
-                <StatusItem icon={<CheckCircle2 className="text-green-500" />} label="Query Engine" status="Optimal" />
-                <StatusItem icon={<AlertCircle className="text-amber-500" />} label="Storage Capacity" status="85% Full" />
-              </div>
+            </div>
+          </div>
+
+          {/* Decorative background stuff */}
+          <div className="absolute top-1/4 -left-24 h-96 w-96 rounded-full bg-primary/5 blur-3xl -z-0" />
+          <div className="absolute bottom-0 right-0 h-[600px] w-[600px] bg-[radial-gradient(circle_at_bottom_right,var(--color-primary),transparent_70%)] opacity-[0.03] -z-0" />
+        </section>
+
+        {/* Features / Trust Section */}
+        <section className="py-24 bg-background">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="max-w-2xl mb-16 space-y-4">
+              <h2 className="text-3xl font-black tracking-tight sm:text-4xl text-foreground">Why use FishQuery?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                We bridge the gap between complex legal documents and the instant answers you need while on the water.
+              </p>
             </div>
 
-            {/* Activity Card */}
-            <div className="rounded-3xl bg-secondary/30 p-6 border border-border/50 backdrop-blur-sm shadow-2xs">
-              <h3 className="mb-6 text-xl font-bold">Quick Actions</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <QuickActionButton icon={<Plus className="h-4 w-4" />} label="New Project" />
-                <QuickActionButton icon={<ExternalLink className="h-4 w-4" />} label="Export Data" />
-                <QuickActionButton icon={<CheckCircle2 className="h-4 w-4" />} label="Verify All" />
-                <QuickActionButton icon={<Search className="h-4 w-4" />} label="Advanced" />
+            <div className="grid md:grid-cols-3 gap-8">
+              <FeatureCard
+                icon={<ShieldCheck className="h-7 w-7" />}
+                title="Official Data Sync"
+                description="Our AI models are trained and updated daily with guidelines from WA Department of Primary Industries and Regional Development."
+              />
+              <FeatureCard
+                icon={<MapPin className="h-7 w-7" />}
+                title="Location Aware"
+                description="Get rules specific to the bioregion you are currently in. Marine parks, sanctuary zones, and local restrictions included."
+              />
+              <FeatureCard
+                icon={<MessageSquare className="h-7 w-7" />}
+                title="Plain Language"
+                description="No more scrolling through PDFs. Ask in plain English and get straightforward answers about boat limits and gear restrictions."
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action */}
+        <section className="py-24 px-6 border-t border-border">
+          <div className="mx-auto max-w-5xl rounded-[3rem] bg-foreground text-background p-12 md:p-20 text-center space-y-8 relative overflow-hidden">
+            <div className="relative z-10 space-y-4">
+              <h2 className="text-3xl md:text-5xl font-black">Ready for your next catch?</h2>
+              <p className="text-lg opacity-80 max-w-xl mx-auto">
+                Join thousands of responsible WA anglers using FishQuery to protect our marine life and stay compliant.
+              </p>
+              <div className="flex justify-center gap-4 pt-4">
+                <button className="rounded-full bg-background text-foreground px-10 py-4 font-bold transition-transform hover:scale-105 active:scale-95">
+                  Launch Assistant
+                </button>
               </div>
             </div>
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 h-full w-full opacity-20 bg-[radial-gradient(circle_at_top_right,var(--color-primary),transparent_50%)]" />
           </div>
         </section>
       </main>
 
-      <footer className="mt-24 border-t border-border py-12">
-        <div className="mx-auto max-w-7xl px-6 text-center text-muted-foreground">
-          <p>© 2026 FishQuery UI System. Designed with precision.</p>
+      <footer className="border-t border-border bg-muted/30 py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-2 space-y-6">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold">FQ</div>
+                <span className="text-xl font-bold tracking-tight">FishQuery</span>
+              </div>
+              <p className="max-w-sm text-sm text-muted-foreground leading-relaxed">
+                FishQuery is an AI-powered assistant designed to help West Australian recreational fishers understand and comply with local regulations.
+              </p>
+              <div className="flex items-center gap-3 text-xs font-bold font-sans rounded-lg bg-chart-4/10 text-chart-4 border border-chart-4/20 p-4">
+                <Info className="h-4 w-4 flex-shrink-0" />
+                <span>DISCLAIMER: This is an AI tool. Always verify rules with official DPIRD sources before fishing.</span>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">Resources</h4>
+              <ul className="space-y-2 text-sm font-medium">
+                <li><a href="#" className="hover:text-primary">DPIRD Website</a></li>
+                <li><a href="#" className="hover:text-primary">Recfishwest</a></li>
+                <li><a href="#" className="hover:text-primary">Marine Parks WA</a></li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">Contact</h4>
+              <ul className="space-y-2 text-sm font-medium">
+                <li><a href="#" className="hover:text-primary">Support</a></li>
+                <li><a href="#" className="hover:text-primary">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-primary">Terms of Use</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border pt-8 text-xs font-medium text-muted-foreground">
+            <p>© 2026 FishQuery Assistant. All rights reserved.</p>
+            <div className="flex items-center gap-6">
+              <a href="#" className="flex items-center gap-1 hover:text-foreground">GitHub <ExternalLink className="h-3 w-3" /></a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
   );
 }
 
-function ColorSwatch({ name, bg, text, border = "" }: { name: string, bg: string, text: string, border?: string }) {
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className={`aspect-square w-full rounded-2xl ${bg} ${border} shadow-sm transition-transform hover:scale-105 active:scale-95`} />
-      <span className="text-xs font-semibold text-center">{name}</span>
-    </div>
-  )
-}
-
-function StatusItem({ icon, label, status }: { icon: React.ReactNode, label: string, status: string }) {
-  return (
-    <div className="flex items-center justify-between py-2 border-b border-border last:border-0">
-      <div className="flex items-center gap-2">
+    <div className="p-8 rounded-3xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:translate-y-[-4px]">
+      <div className="mb-6 h-14 w-14 rounded-2xl bg-primary/5 text-primary flex items-center justify-center">
         {icon}
-        <span className="text-sm font-medium">{label}</span>
       </div>
-      <span className="text-sm text-muted-foreground">{status}</span>
+      <h3 className="text-xl font-black mb-3">{title}</h3>
+      <p className="text-muted-foreground leading-relaxed text-sm font-medium">
+        {description}
+      </p>
     </div>
-  )
-}
-
-function QuickActionButton({ icon, label }: { icon: React.ReactNode, label: string }) {
-  return (
-    <button className="flex flex-col items-center gap-2 rounded-2xl bg-background p-4 text-sm font-medium border border-border/50 shadow-sm transition-all hover:shadow-md hover:bg-accent hover:text-accent-foreground active:scale-95">
-      {icon}
-      <span>{label}</span>
-    </button>
   )
 }
