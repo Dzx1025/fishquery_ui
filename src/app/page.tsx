@@ -2,11 +2,7 @@
 
 import { ModeToggle } from "@/components/mode-toggle";
 import {
-  Plus,
-  Search,
   Settings,
-  ArrowRight,
-  CheckCircle2,
   ShieldCheck,
   MessageSquare,
   MapPin,
@@ -17,7 +13,6 @@ import {
   Info
 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -90,7 +85,7 @@ export default function Home() {
                 Navigate WA Fishing Rules with <span className="text-primary italic">Confidence.</span>
               </h1>
               <p className="max-w-xl text-lg text-muted-foreground font-sans leading-relaxed md:text-xl">
-                Instant, AI-powered answers for Western Australia's recreational fishing regulations, size limits, and species identification.
+                Instant, AI-powered answers for Western Australia&apos;s recreational fishing regulations, size limits, and species identification.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link href="/chat">

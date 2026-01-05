@@ -3,17 +3,17 @@
 import * as React from "react"
 import { Moon, Sun, Monitor } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
 
 export function ModeToggle() {
     const { theme, setTheme } = useTheme()
-    const [mounted, setMounted] = useState(false)
+    const [mounted, setMounted] = React.useState(false)
 
-    // Avoid hydration mismatch
-    useEffect(() => {
+    // Use useLayoutEffect equivalent pattern to avoid cascading renders
+    React.useEffect(() => {
         setMounted(true)
     }, [])
 
+    // Show placeholder during SSR to prevent hydration mismatch
     if (!mounted) {
         return <div className="w-[100px] h-9" /> // Placeholder to prevent layout shift
     }
@@ -23,8 +23,8 @@ export function ModeToggle() {
             <button
                 onClick={() => setTheme("light")}
                 className={`rounded-full p-1.5 transition-all ${theme === "light"
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                     }`}
                 title="Light Mode"
             >
@@ -33,8 +33,8 @@ export function ModeToggle() {
             <button
                 onClick={() => setTheme("dark")}
                 className={`rounded-full p-1.5 transition-all ${theme === "dark"
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                     }`}
                 title="Dark Mode"
             >
@@ -43,8 +43,8 @@ export function ModeToggle() {
             <button
                 onClick={() => setTheme("system")}
                 className={`rounded-full p-1.5 transition-all ${theme === "system"
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                     }`}
                 title="Follow System"
             >
