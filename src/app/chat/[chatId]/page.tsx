@@ -79,16 +79,17 @@ export default function ChatDetailPage() {
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const initialSentRef = React.useRef(false);
 
-  // Subscribe to messages
+  // Subscribe to messages (only for logged-in users)
   const { data: subData, loading: subLoading } =
     useSubscription<SubscriptionData>(SUBSCRIBE_TO_MESSAGES, {
       variables: { chatId },
       skip: !chatId || !user,
     });
 
-  // Update messages when subscription data changes (only when not streaming)
+  // Update messages when subscription data changes (only for logged-in users, not during streaming)
   React.useEffect(() => {
-    if (subData?.chats_message && !isLoading) {
+    // Only update from subscription if user is logged in and we have data
+    if (user && subData?.chats_message && !isLoading) {
       const formattedMessages: Message[] = subData.chats_message.map(
         (msg, idx) => ({
           id: `msg-${idx}-${msg.created_at}`,
@@ -104,23 +105,16 @@ export default function ChatDetailPage() {
       setMessages(formattedMessages);
       setStreamingMessage(null);
     }
-  }, [subData, isLoading]);
+  }, [subData, isLoading, user]);
 
   // Scroll to bottom on new messages
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streamingMessage]);
 
-  // Redirect if not authenticated
+  // Handle initial question from query param (works for both logged-in and anonymous users)
   React.useEffect(() => {
-    if (!authLoading && !user) {
-      router.push("/login");
-    }
-  }, [authLoading, user, router]);
-
-  // Handle initial question from query param
-  React.useEffect(() => {
-    if (initialQuestion && !initialSentRef.current && user && !authLoading) {
+    if (initialQuestion && !initialSentRef.current && !authLoading) {
       initialSentRef.current = true;
       // Clear the query param from URL
       router.replace(`/chat/${chatId}`, { scroll: false });
@@ -154,7 +148,7 @@ export default function ChatDetailPage() {
 
       sendInitialQuestion();
     }
-  }, [initialQuestion, user, authLoading, chatId, router]);
+  }, [initialQuestion, authLoading, chatId, router]);
 
   const handleLogout = async () => {
     await logout();
@@ -249,7 +243,24 @@ export default function ChatDetailPage() {
       }
     }
 
-    // Streaming complete - subscription will update with final messages
+    // Streaming complete
+    // For anonymous users, add the streaming message to messages array
+    // For logged-in users, subscription will update with final messages
+    if (!user) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `assistant-${Date.now()}`,
+          role: "assistant",
+          content: assistantContent,
+          sources: collectedSources,
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ]);
+    }
     setStreamingMessage(null);
   };
 

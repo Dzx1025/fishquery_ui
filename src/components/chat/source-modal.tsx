@@ -38,10 +38,6 @@ export function SourceModal({
               <h3 className="font-bold text-foreground text-sm">
                 {source.title}
               </h3>
-              <p className="text-[10px] text-muted-foreground font-medium">
-                Relevance Score:{" "}
-                {((source.document?.score ?? 0) * 100).toFixed(1)}%
-              </p>
             </div>
           </div>
           <button
