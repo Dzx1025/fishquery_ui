@@ -4,11 +4,60 @@ import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
-import { ArrowLeft, Lock, Mail, Eye, EyeOff } from "lucide-react"
+import { ArrowLeft, Lock, Mail, Eye, EyeOff, Loader2, CheckCircle } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function LoginPage() {
     const router = useRouter()
+    const { login, user } = useAuth()
+    const [email, setEmail] = React.useState("")
+    const [password, setPassword] = React.useState("")
     const [showPassword, setShowPassword] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false)
+    const [error, setError] = React.useState("")
+    const [success, setSuccess] = React.useState("")
+
+    // Redirect if already logged in
+    React.useEffect(() => {
+        if (user) {
+            router.push("/chat")
+        }
+    }, [user, router])
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError("")
+        setSuccess("")
+
+        // Basic validation
+        if (!email.trim()) {
+            setError("Please enter your email address")
+            return
+        }
+        if (!password) {
+            setError("Please enter your password")
+            return
+        }
+
+        setIsLoading(true)
+
+        try {
+            const res = await login(email, password)
+            if (res.success) {
+                setSuccess("Login successful")
+                // Redirect after a brief delay to show success message
+                setTimeout(() => {
+                    router.push("/chat")
+                }, 500)
+            } else {
+                setError(res.error || "Invalid email or password")
+            }
+        } catch {
+            setError("Network error. Please check your connection.")
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col transition-colors duration-300">
@@ -36,7 +85,20 @@ export default function LoginPage() {
                         </p>
                     </div>
 
-                    <div className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        {error && (
+                            <div className="bg-destructive/10 border border-destructive/20 text-destructive rounded-xl px-4 py-3 text-sm font-medium">
+                                {error}
+                            </div>
+                        )}
+
+                        {success && (
+                            <div className="bg-chart-3/10 border border-chart-3/20 text-chart-3 rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2">
+                                <CheckCircle className="h-4 w-4" />
+                                {success}
+                            </div>
+                        )}
+
                         <div className="space-y-2">
                             <label className="text-sm font-semibold px-1" htmlFor="email">Email address</label>
                             <div className="relative">
@@ -44,8 +106,11 @@ export default function LoginPage() {
                                 <input
                                     id="email"
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     placeholder="name@example.com"
                                     className="w-full bg-muted/50 border border-border rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                                    disabled={isLoading}
                                 />
                             </div>
                         </div>
@@ -60,8 +125,11 @@ export default function LoginPage() {
                                 <input
                                     id="password"
                                     type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
                                     className="w-full bg-muted/50 border border-border rounded-xl py-3 pl-10 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                                    disabled={isLoading}
                                 />
                                 <button
                                     type="button"
@@ -73,10 +141,21 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <button className="w-full bg-primary text-primary-foreground font-bold py-3 rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-1px] hover:shadow-xl active:scale-95 transition-all">
-                            Log in
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-primary text-primary-foreground font-bold py-3 rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-1px] hover:shadow-xl active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:active:scale-100 flex items-center justify-center gap-2"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    Logging in...
+                                </>
+                            ) : (
+                                "Log in"
+                            )}
                         </button>
-                    </div>
+                    </form>
 
                     <p className="text-center text-sm text-muted-foreground">
                         Don&apos;t have an account?{" "}
