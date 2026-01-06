@@ -49,7 +49,7 @@ export default function PricingPage() {
           </div>
 
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent animate-in fade-in slide-in-from-bottom-6 duration-700">
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight bg-linear-to-b from-foreground to-foreground/70 bg-clip-text text-transparent animate-in fade-in slide-in-from-bottom-6 duration-700">
               Premium Plans are Underway
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000">

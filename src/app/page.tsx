@@ -58,10 +58,10 @@ export default function Home() {
             </div>
 
             <Link href="/chat">
-              <button className="hidden sm:flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] hover:shadow-primary/30 active:scale-95 text-nowrap">
+              <button className="hidden sm:flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-primary/30 active:scale-95 text-nowrap">
                 Launch Chat
               </button>
-              <button className="sm:hidden flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] hover:shadow-primary/30 active:scale-95 text-nowrap">
+              <button className="sm:hidden flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-primary/30 active:scale-95 text-nowrap">
                 Chat
               </button>
             </Link>
@@ -71,7 +71,7 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/5 to-background py-16 md:py-32">
+        <section className="relative overflow-hidden border-b border-border bg-linear-to-b from-primary/5 to-background py-16 md:py-32">
           <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8 relative z-10">
               <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary border border-primary/20">
@@ -108,8 +108,8 @@ export default function Home() {
 
             {/* Chat Mockup */}
             <div className="relative group">
-              <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-primary to-secondary blur-2xl opacity-10 group-hover:opacity-20 transition-opacity" />
-              <div className="relative flex flex-col rounded-[2rem] border border-border bg-card shadow-2xl overflow-hidden aspect-[4/5] sm:aspect-[3/4] md:aspect-auto">
+              <div className="absolute -inset-4 rounded-[2.5rem] bg-linear-to-br from-primary to-secondary blur-2xl opacity-10 group-hover:opacity-20 transition-opacity" />
+              <div className="relative flex flex-col rounded-[2rem] border border-border bg-card shadow-2xl overflow-hidden aspect-4/5 sm:aspect-3/4 md:aspect-auto">
                 {/* Chat Header */}
                 <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
                   <div className="flex items-center gap-3">
@@ -137,7 +137,7 @@ export default function Home() {
                 {/* Chat Body */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
                   <div className="flex gap-3 flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-muted flex shrink-0 items-center justify-center">
                       <User className="h-4 w-4" />
                     </div>
                     <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium max-w-[80%]">
@@ -146,7 +146,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <div className="h-8 w-8 rounded-full flex flex-shrink-0 items-center justify-center overflow-hidden border border-border/50">
+                    <div className="h-8 w-8 rounded-full flex shrink-0 items-center justify-center overflow-hidden border border-border/50">
                       <Image
                         src="/assistant-avatar.png"
                         alt="Assistant"
@@ -172,7 +172,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex gap-3 flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-muted flex shrink-0 items-center justify-center">
                       <User className="h-4 w-4" />
                     </div>
                     <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium">
@@ -200,8 +200,8 @@ export default function Home() {
           </div>
 
           {/* Decorative background stuff */}
-          <div className="absolute top-1/4 -left-24 h-96 w-96 rounded-full bg-primary/5 blur-3xl -z-0" />
-          <div className="absolute bottom-0 right-0 h-[600px] w-[600px] bg-[radial-gradient(circle_at_bottom_right,var(--color-primary),transparent_70%)] opacity-[0.03] -z-0" />
+          <div className="absolute top-1/4 -left-24 h-96 w-96 rounded-full bg-primary/5 blur-3xl z-0" />
+          <div className="absolute bottom-0 right-0 h-[600px] w-[600px] bg-[radial-gradient(circle_at_bottom_right,var(--color-primary),transparent_70%)] opacity-[0.03] z-0" />
         </section>
 
         {/* Features / Trust Section */}
@@ -286,7 +286,7 @@ export default function Home() {
                 regulations.
               </p>
               <div className="flex items-center gap-3 text-xs font-bold font-sans rounded-lg bg-chart-4/10 text-chart-4 border border-chart-4/20 p-4">
-                <Info className="h-4 w-4 flex-shrink-0" />
+                <Info className="h-4 w-4 shrink-0" />
                 <span>
                   DISCLAIMER: This is an AI tool. Always verify rules with
                   official DPIRD sources before fishing.

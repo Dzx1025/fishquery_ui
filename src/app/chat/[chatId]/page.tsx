@@ -550,7 +550,7 @@ export default function ChatDetailPage() {
           </div>
 
           {/* Input Area */}
-          <div className="p-6 bg-gradient-to-t from-background to-transparent">
+          <div className="p-6 bg-linear-to-t from-background to-transparent">
             <form
               onSubmit={handleSubmit}
               className="max-w-4xl mx-auto relative group"
