@@ -80,7 +80,7 @@ export default function RegisterPage() {
           setError(
             firstError ||
               res.message ||
-              "Registration failed. Please try again."
+              "Registration failed. Please try again.",
           );
         } else {
           setError(res.message || "Registration failed. Please try again.");

@@ -23,7 +23,7 @@ function createApolloClient() {
   const wsLink = new GraphQLWsLink(
     createClient({
       url: GRAPHQL_WS_URL,
-    })
+    }),
   );
 
   // Split based on operation type
@@ -36,7 +36,7 @@ function createApolloClient() {
       );
     },
     wsLink,
-    httpLink
+    httpLink,
   );
 
   return new ApolloClient({

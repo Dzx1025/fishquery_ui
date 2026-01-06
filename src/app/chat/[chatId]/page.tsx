@@ -105,7 +105,7 @@ export default function ChatDetailPage() {
             hour: "2-digit",
             minute: "2-digit",
           }),
-        })
+        }),
       );
       setMessages(formattedMessages);
       setStreamingMessage(null);
@@ -245,7 +245,7 @@ export default function ChatDetailPage() {
                         content: assistantContent,
                         sources: [...collectedSources],
                       }
-                    : null
+                    : null,
                 );
               }
             } catch {

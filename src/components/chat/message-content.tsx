@@ -93,7 +93,7 @@ export function MessageContent({
 }) {
   const parts = React.useMemo(
     () => parseCitations(content, sources),
-    [content, sources]
+    [content, sources],
   );
 
   return (
@@ -103,7 +103,7 @@ export function MessageContent({
           <CitationLink key={i} source={part.source} label={part.content} />
         ) : (
           <span key={i}>{part.content}</span>
-        )
+        ),
       )}
     </div>
   );

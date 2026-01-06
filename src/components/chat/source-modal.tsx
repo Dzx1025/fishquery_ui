@@ -78,23 +78,31 @@ export function SourceModal({
                 {/* Source/Document Name */}
                 {Boolean(source.document.metadata.source) && (
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="font-bold text-muted-foreground">Document:</span>
+                    <span className="font-bold text-muted-foreground">
+                      Document:
+                    </span>
                     <span className="text-foreground font-medium">
-                      {String(source.document.metadata.source).split('/').pop()}
+                      {String(source.document.metadata.source).split("/").pop()}
                     </span>
                   </div>
                 )}
 
                 {/* Page Information */}
-                {(source.document.metadata.page !== undefined || source.document.metadata.total_pages !== undefined) && (
+                {(source.document.metadata.page !== undefined ||
+                  source.document.metadata.total_pages !== undefined) && (
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="font-bold text-muted-foreground">Page:</span>
+                    <span className="font-bold text-muted-foreground">
+                      Page:
+                    </span>
                     <span className="text-foreground">
                       {source.document.metadata.page !== undefined
                         ? `${Number(source.document.metadata.page) + 1}`
-                        : '?'}
+                        : "?"}
                       {source.document.metadata.total_pages !== undefined && (
-                        <span className="text-muted-foreground"> of {String(source.document.metadata.total_pages)}</span>
+                        <span className="text-muted-foreground">
+                          {" "}
+                          of {String(source.document.metadata.total_pages)}
+                        </span>
                       )}
                     </span>
                   </div>
@@ -102,18 +110,20 @@ export function SourceModal({
 
                 {/* Other Metadata (excluding already displayed fields) */}
                 {Object.entries(source.document.metadata)
-                  .filter(([key]) => !['source', 'page', 'total_pages', 'chunk'].includes(key))
+                  .filter(
+                    ([key]) =>
+                      !["source", "page", "total_pages", "chunk"].includes(key),
+                  )
                   .map(([key, value]) => (
                     <div key={key} className="flex items-start gap-2 text-xs">
                       <span className="font-bold text-muted-foreground capitalize min-w-[80px]">
-                        {key.replace(/_/g, ' ')}:
+                        {key.replace(/_/g, " ")}:
                       </span>
                       <span className="text-foreground break-all">
                         {String(value)}
                       </span>
                     </div>
-                  ))
-                }
+                  ))}
               </div>
             </div>
           )}
@@ -124,13 +134,23 @@ export function SourceModal({
           {/* Open Source Link */}
           {Boolean(source.document?.metadata?.source) && (
             <a
-              href={`${String(source.document.metadata.source)}${source.document.metadata.page !== undefined ? `#page=${Number(source.document.metadata.page) + 1}` : ''}`}
+              href={`${String(source.document.metadata.source)}${source.document.metadata.page !== undefined ? `#page=${Number(source.document.metadata.page) + 1}` : ""}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-xl border border-border hover:bg-muted transition-colors"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
               </svg>
               Open Source
             </a>

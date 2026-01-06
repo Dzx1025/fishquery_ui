@@ -220,7 +220,7 @@ function ChatList({ userId }: { userId: number }) {
     {
       variables: { userId },
       skip: !userId,
-    }
+    },
   );
 
   const [renameChat] = useMutation(RENAME_CHAT, {
@@ -326,7 +326,7 @@ export function SidebarContent({ onNewChat }: { onNewChat?: () => void }) {
             onClick={() =>
               window.open(
                 "https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/",
-                "_blank"
+                "_blank",
               )
             }
           />

@@ -103,7 +103,7 @@ export function UserProfileButton() {
                 style={{
                   width: `${Math.min(
                     (user.messages_used_today / user.daily_message_quota) * 100,
-                    100
+                    100,
                   )}%`,
                 }}
               />
