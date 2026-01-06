@@ -14,12 +14,20 @@ pnpm build    # Production build
 pnpm lint     # Run ESLint
 ```
 
+## Code Quality
+
+Pre-commit hooks (Husky + lint-staged) automatically run on every commit:
+
+- `eslint --fix` and `prettier --write` for `.js/.jsx/.ts/.tsx` files
+- `prettier --write` for `.json/.md/.css` files
+
 ## Architecture
 
 - **Framework**: Next.js 16 with App Router
 - **State Management**: Apollo Client 4 for GraphQL (queries, mutations, subscriptions)
 - **Styling**: Tailwind CSS 4 with CSS variables for theming
 - **Auth**: Custom JWT-based auth via `useAuth` hook, tokens stored in localStorage
+- **Images**: Use Next.js `<Image>` component instead of `<img>` for optimization
 
 ## Key Files
 
@@ -34,6 +42,8 @@ pnpm lint     # Run ESLint
 - Path alias `@/` maps to `src/`
 - Components use Tailwind with `cn()` utility from `src/lib/utils.ts` for class merging
 - GraphQL operations follow naming: `GET_*`, `SUBSCRIBE_TO_*`, `*_MUTATION`
+- Use `&apos;` for apostrophes in JSX text content
+- Remove unused imports to pass ESLint checks
 
 ## Environment Variables
 

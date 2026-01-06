@@ -47,6 +47,17 @@ src/
 - 🌙 Dark/light theme toggle
 - 📡 GraphQL subscriptions for live updates
 
+## Development
+
+### Code Quality
+
+This project uses Husky and lint-staged to ensure code quality on every commit:
+
+- **ESLint** - Linting for JS/TS files
+- **Prettier** - Code formatting
+
+Pre-commit hooks automatically run `eslint --fix` and `prettier --write` on staged files.
+
 ## License
 
 © 2026 FishQuery Assistant
