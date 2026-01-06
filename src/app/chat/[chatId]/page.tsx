@@ -11,6 +11,8 @@ import {
   MoreVertical,
   Square,
   Loader2,
+  AlertCircle,
+  X,
 } from "lucide-react";
 import { ChatSidebar } from "@/components/chat/sidebar";
 import { ChatMessage } from "@/components/chat/chat-message";
@@ -74,6 +76,7 @@ export default function ChatDetailPage() {
     React.useState<Message | null>(null);
   const [input, setInput] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const initialSentRef = React.useRef(false);
@@ -138,7 +141,10 @@ export default function ChatDetailPage() {
         try {
           await sendMessage(initialQuestion);
         } catch (error) {
-          console.error("Failed to send initial message:", error);
+          // Error is already displayed in UI via setError, only log unexpected errors
+          if (error instanceof Error && !error.message.includes("limit")) {
+            console.error("Failed to send initial message:", error);
+          }
         } finally {
           setIsLoading(false);
           abortControllerRef.current = null;
@@ -152,6 +158,9 @@ export default function ChatDetailPage() {
 
   // Send message and handle SSE stream
   const sendMessage = async (content: string) => {
+    // Clear any previous error
+    setError(null);
+
     const res = await fetch(`${API_URL}/api/chat/${chatId}/`, {
       method: "POST",
       headers: {
@@ -164,6 +173,19 @@ export default function ChatDetailPage() {
     });
 
     if (!res.ok) {
+      // Try to parse the error response
+      try {
+        const errorData = await res.json();
+        if (errorData.error) {
+          setError(errorData.error);
+          throw new Error(errorData.error);
+        }
+      } catch (parseError) {
+        // If we already set an error message and threw, re-throw it
+        if (parseError instanceof Error && parseError.message !== "Failed to send message") {
+          throw parseError;
+        }
+      }
       throw new Error("Failed to send message");
     }
 
@@ -283,7 +305,10 @@ export default function ChatDetailPage() {
     try {
       await sendMessage(question);
     } catch (error) {
-      console.error("Failed to send message:", error);
+      // Error is already displayed in UI via setError, only log unexpected errors
+      if (error instanceof Error && !error.message.includes("limit")) {
+        console.error("Failed to send message:", error);
+      }
     } finally {
       setIsLoading(false);
       abortControllerRef.current = null;
@@ -318,8 +343,8 @@ export default function ChatDetailPage() {
             href="/"
             className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
           >
-            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all">
-              <span className="text-xl font-bold tracking-tighter">FQ</span>
+            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all overflow-hidden">
+              <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
             </div>
             <div className="hidden sm:flex flex-col leading-none">
               <span className="text-lg font-black tracking-tight">
@@ -395,8 +420,8 @@ export default function ChatDetailPage() {
               !streamingMessage &&
               messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm">
-                    <span className="font-bold text-xs">FQ</span>
+                  <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm overflow-hidden">
+                    <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
                   </div>
                   <div className="bg-card border border-border rounded-2xl rounded-tl-none px-5 py-3">
                     <div className="flex gap-1.5">
@@ -407,6 +432,61 @@ export default function ChatDetailPage() {
                   </div>
                 </div>
               )}
+
+            {/* Error message modal */}
+            {error && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                {/* Backdrop */}
+                <div
+                  className="absolute inset-0 bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-300"
+                  onClick={() => setError(null)}
+                />
+
+                {/* Modal Content */}
+                <div className="relative bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-destructive/5">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+                        <AlertCircle className="h-5 w-5 text-destructive" />
+                      </div>
+                      <h3 className="text-lg font-bold text-foreground">Message Limit</h3>
+                    </div>
+                    <button
+                      onClick={() => setError(null)}
+                      className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
+
+                  {/* Body */}
+                  <div className="px-6 py-5">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {error}
+                    </p>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="px-6 py-4 border-t border-border bg-muted/30 flex items-center justify-end gap-3">
+                    <button
+                      onClick={() => setError(null)}
+                      className="px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    {error.toLowerCase().includes("upgrade") && (
+                      <a
+                        href="/pricing"
+                        className="px-5 py-2.5 text-sm font-bold uppercase tracking-wider bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                      >
+                        Upgrade Plan
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div ref={messagesEndRef} />
           </div>
@@ -421,7 +501,10 @@ export default function ChatDetailPage() {
                 <input
                   type="text"
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    if (error) setError(null);
+                  }}
                   placeholder="Ask FishQuery about WA fishing rules..."
                   className="w-full py-4 pl-6 pr-24 bg-transparent text-sm focus:outline-none font-medium placeholder:text-muted-foreground/60"
                   disabled={isLoading}

@@ -9,6 +9,8 @@ import {
   ShieldCheck,
   MoreVertical,
   Square,
+  AlertCircle,
+  X,
 } from "lucide-react";
 import { ChatEntryScreen } from "@/components/chat/chat-entry-screen";
 import { InitialQuestionScreen } from "@/components/chat/initial-question-screen";
@@ -32,6 +34,7 @@ export default function ChatPage() {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [errorModal, setErrorModal] = React.useState<{ show: boolean; message: string }>({ show: false, message: "" });
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
@@ -64,10 +67,17 @@ export default function ChatPage() {
       body: JSON.stringify({ message }),
       credentials: "include",
     });
+
+    const data = await res.json();
+
     if (!res.ok) {
+      // Check for quota error
+      if (data.error) {
+        throw new Error(data.error);
+      }
       throw new Error("Failed to create chat session");
     }
-    const data = await res.json();
+
     return data.chat_id;
   };
 
@@ -198,6 +208,12 @@ export default function ChatPage() {
       router.push(`/chat/${newChatId}?q=${encodeURIComponent(question)}`);
     } catch (error) {
       console.error("Failed to start chat:", error);
+      // Show error modal for quota exceeded or other errors
+      if (error instanceof Error) {
+        setErrorModal({ show: true, message: error.message });
+      } else {
+        setErrorModal({ show: true, message: "Failed to start chat. Please try again." });
+      }
       setIsLoading(false);
     }
   };
@@ -257,6 +273,57 @@ export default function ChatPage() {
   // Main layout with shared header and sidebar
   return (
     <div className="flex flex-col h-screen bg-background text-foreground transition-colors duration-300">
+      {/* Error Modal */}
+      {errorModal.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setErrorModal({ show: false, message: "" })}
+          />
+          {/* Modal */}
+          <div className="relative bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-destructive/5">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+                  <AlertCircle className="h-5 w-5 text-destructive" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">Message Limit Reached</h3>
+              </div>
+              <button
+                onClick={() => setErrorModal({ show: false, message: "" })}
+                className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            {/* Content */}
+            <div className="px-6 py-5">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {errorModal.message}
+              </p>
+            </div>
+            {/* Footer */}
+            <div className="px-6 py-4 border-t border-border bg-muted/30 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setErrorModal({ show: false, message: "" })}
+                className="px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Cancel
+              </button>
+              {errorModal.message.toLowerCase().includes("upgrade") && (
+                <a
+                  href="/pricing"
+                  className="px-5 py-2.5 text-sm font-bold uppercase tracking-wider bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                >
+                  Upgrade Plan
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
         <div className="flex items-center gap-4">
@@ -265,8 +332,8 @@ export default function ChatPage() {
             href="/"
             className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
           >
-            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all">
-              <span className="text-xl font-bold tracking-tighter">FQ</span>
+            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all overflow-hidden">
+              <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
             </div>
             <div className="hidden sm:flex flex-col leading-none">
               <span className="text-lg font-black tracking-tight">
@@ -357,8 +424,8 @@ export default function ChatPage() {
                 {isLoading &&
                   messages[messages.length - 1]?.role === "user" && (
                     <div className="flex gap-4">
-                      <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm">
-                        <span className="font-bold text-xs">FQ</span>
+                      <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm overflow-hidden">
+                        <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
                       </div>
                       <div className="bg-card border border-border rounded-2xl rounded-tl-none px-5 py-3">
                         <div className="flex gap-1.5">

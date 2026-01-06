@@ -22,8 +22,8 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02]">
-            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all">
-              <span className="text-xl font-bold tracking-tighter">FQ</span>
+            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all overflow-hidden">
+              <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-xl font-black tracking-tight">FishQuery</span>
@@ -108,7 +108,9 @@ export default function Home() {
                 {/* Chat Header */}
                 <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">FQ</div>
+                    <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold overflow-hidden">
+                      <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                    </div>
                     <div className="flex flex-col leading-tight">
                       <span className="text-sm font-bold">FishQuery Assistant</span>
                       <span className="text-[10px] text-chart-3 font-bold uppercase tracking-wider">Online</span>
@@ -119,15 +121,17 @@ export default function Home() {
 
                 {/* Chat Body */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 flex-row-reverse">
                     <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center"><User className="h-4 w-4" /></div>
-                    <div className="rounded-2xl rounded-tl-none bg-muted px-4 py-2.5 text-sm font-medium max-w-[80%]">
+                    <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium max-w-[80%]">
                       Can I keep a West Australian Dhufish in the Perth region right now?
                     </div>
                   </div>
-                  <div className="flex gap-3 flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-primary flex flex-shrink-0 items-center justify-center text-primary-foreground font-bold text-[10px]">FQ</div>
-                    <div className="rounded-2xl rounded-tr-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
+                  <div className="flex gap-3">
+                    <div className="h-8 w-8 rounded-full bg-primary flex flex-shrink-0 items-center justify-center text-primary-foreground font-bold text-[10px] overflow-hidden">
+                      <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                    </div>
+                    <div className="rounded-2xl rounded-tl-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
                       <p className="mb-2 italic opacity-90">Checking DPIRD 2025 Guidelines...</p>
                       Yes, but currently the West Coast Bioregion is in an <span className="underline decoration-2 font-bold underline-offset-2">open season</span>.
                       <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-sans">
@@ -137,9 +141,9 @@ export default function Home() {
                       </ul>
                     </div>
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 flex-row-reverse">
                     <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center"><User className="h-4 w-4" /></div>
-                    <div className="rounded-2xl rounded-tl-none bg-muted px-4 py-2.5 text-sm font-medium">
+                    <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium">
                       Thanks! What about the closed season dates?
                     </div>
                   </div>
@@ -225,7 +229,9 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-2 space-y-6">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold">FQ</div>
+                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold overflow-hidden">
+                  <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                </div>
                 <span className="text-xl font-bold tracking-tight">FishQuery</span>
               </div>
               <p className="max-w-sm text-sm text-muted-foreground leading-relaxed">

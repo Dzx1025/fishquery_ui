@@ -76,8 +76,8 @@ export default function LoginPage() {
             <main className="flex-1 flex items-center justify-center p-6">
                 <div className="w-full max-w-[400px] space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="text-center space-y-2">
-                        <div className="mx-auto h-12 w-12 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-xl shadow-primary/20 mb-4">
-                            <span className="text-2xl font-bold tracking-tighter">FQ</span>
+                        <div className="mx-auto h-12 w-12 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-xl shadow-primary/20 mb-4 overflow-hidden">
+                            <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
                         </div>
                         <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
                         <p className="text-muted-foreground text-sm">

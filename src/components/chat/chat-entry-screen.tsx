@@ -8,8 +8,8 @@ export function ChatEntryScreen({ onSelectMode }: { onSelectMode: (mode: "anonym
         <div className="flex-1 flex items-center justify-center p-6">
             <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="text-center space-y-4">
-                    <div className="mx-auto h-16 w-16 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-xl shadow-primary/20">
-                        <span className="text-3xl font-bold tracking-tighter">FQ</span>
+                    <div className="mx-auto h-16 w-16 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-xl shadow-primary/20 overflow-hidden">
+                        <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
                     </div>
                     <h1 className="text-3xl font-black tracking-tight">Start Chatting</h1>
                     <p className="text-muted-foreground text-sm max-w-sm mx-auto">

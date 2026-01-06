@@ -26,7 +26,9 @@ export function ChatMessage({ message, isLoading }: ChatMessageProps) {
                 {isUser ? (
                     <User className="h-5 w-5" />
                 ) : (
-                    <span className="font-bold text-xs">FQ</span>
+                    <div className="h-full w-full overflow-hidden rounded-xl">
+                        <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                    </div>
                 )}
             </div>
             <div
