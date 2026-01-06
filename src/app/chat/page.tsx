@@ -96,52 +96,60 @@ export default function ChatPage() {
 
         let buffer = ""
 
-        while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
+        try {
+            while (true) {
+                const { done, value } = await reader.read()
+                if (done) break
 
-            buffer += decoder.decode(value, { stream: true })
-            const lines = buffer.split("\n")
-            buffer = lines.pop() || ""
+                buffer += decoder.decode(value, { stream: true })
+                const lines = buffer.split("\n")
+                buffer = lines.pop() || ""
 
-            for (const line of lines) {
-                if (line.startsWith("event: ")) {
-                    // Event type line, we handle data in next line
-                    continue
-                }
-                if (line.startsWith("data: ")) {
-                    const dataStr = line.slice(6)
-                    if (dataStr === "[DONE]") continue
+                for (const line of lines) {
+                    if (line.startsWith("event: ")) {
+                        // Event type line, we handle data in next line
+                        continue
+                    }
+                    if (line.startsWith("data: ")) {
+                        const dataStr = line.slice(6)
+                        if (dataStr === "[DONE]") continue
 
-                    try {
-                        const parsed = JSON.parse(dataStr)
+                        try {
+                            const parsed = JSON.parse(dataStr)
 
-                        // Handle source events
-                        if (parsed.type === "source" && parsed.value) {
-                            const sourceData = parsed.value
-                            collectedSources.push(sourceData)
-                        }
+                            // Handle source events
+                            if (parsed.type === "source" && parsed.value) {
+                                const sourceData = parsed.value
+                                collectedSources.push(sourceData)
+                            }
 
-                        // Handle text-delta events
-                        if (parsed.type === "text-delta" && parsed.value?.delta) {
-                            assistantContent += parsed.value.delta
-                            setMessages((prev) => {
-                                const updated = [...prev]
-                                const lastMsg = updated[updated.length - 1]
-                                if (lastMsg && lastMsg.role === "assistant") {
-                                    updated[updated.length - 1] = {
-                                        ...lastMsg,
-                                        content: assistantContent,
-                                        sources: collectedSources,
+                            // Handle text-delta events
+                            if (parsed.type === "text-delta" && parsed.value?.delta) {
+                                assistantContent += parsed.value.delta
+                                setMessages((prev) => {
+                                    const updated = [...prev]
+                                    const lastMsg = updated[updated.length - 1]
+                                    if (lastMsg && lastMsg.role === "assistant") {
+                                        updated[updated.length - 1] = {
+                                            ...lastMsg,
+                                            content: assistantContent,
+                                            sources: collectedSources,
+                                        }
                                     }
-                                }
-                                return updated
-                            })
+                                    return updated
+                                })
+                            }
+                        } catch {
+                            // Ignore parse errors
                         }
-                    } catch {
-                        // Ignore parse errors
                     }
                 }
+            }
+        } catch (error: any) {
+            if (error.name === "AbortError" || error.message === "BodyStreamBuffer was aborted") {
+                console.log("Fetch aborted by user")
+            } else {
+                console.error("Error reading stream:", error)
             }
         }
 

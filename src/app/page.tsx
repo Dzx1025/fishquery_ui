@@ -247,8 +247,7 @@ export default function Home() {
             <div className="space-y-4">
               <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">Contact</h4>
               <ul className="space-y-2 text-sm font-medium">
-                <li><a href="#" className="hover:text-primary">Support</a></li>
-                <li><a href="#" className="hover:text-primary">Privacy Policy</a></li>
+                <li><a href="https://dzx1025.com/" className="hover:text-primary">Support</a></li>
                 <li><a href="#" className="hover:text-primary">Terms of Use</a></li>
               </ul>
             </div>
@@ -256,7 +255,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border pt-8 text-xs font-medium text-muted-foreground">
             <p>© 2026 FishQuery Assistant. All rights reserved.</p>
             <div className="flex items-center gap-6">
-              <a href="#" className="flex items-center gap-1 hover:text-foreground">GitHub <ExternalLink className="h-3 w-3" /></a>
+              <a href="https://github.com/Dzx1025/fishquery_ui" className="flex items-center gap-1 hover:text-foreground">GitHub <ExternalLink className="h-3 w-3" /></a>
             </div>
           </div>
         </div>
