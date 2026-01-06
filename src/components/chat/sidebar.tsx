@@ -86,7 +86,7 @@ function ChatListItem({
   const [editTitle, setEditTitle] = React.useState(chat.title || "New Chat");
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const formattedDate = new Date(chat.updated_at).toLocaleDateString("zh-CN", {
+  const formattedDate = new Date(chat.updated_at).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
