@@ -298,11 +298,11 @@ function ChatList({ userId }: { userId: number }) {
   );
 }
 
-export function ChatSidebar({ onNewChat }: { onNewChat?: () => void }) {
+export function SidebarContent({ onNewChat }: { onNewChat?: () => void }) {
   const { user } = useAuth();
 
   return (
-    <aside className="hidden md:flex flex-col w-72 border-r border-border bg-muted/30 p-4 space-y-6 overflow-y-auto">
+    <div className="flex flex-col h-full space-y-6">
       {/* New Chat Button */}
       <div className="px-2">
         <SidebarButton
@@ -334,7 +334,7 @@ export function ChatSidebar({ onNewChat }: { onNewChat?: () => void }) {
 
       {/* Chat History - Only for authenticated users */}
       {user && (
-        <div className="space-y-3">
+        <div className="space-y-3 flex-1 overflow-y-auto min-h-0">
           <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-2">
             Chat History
           </h3>
@@ -342,7 +342,7 @@ export function ChatSidebar({ onNewChat }: { onNewChat?: () => void }) {
         </div>
       )}
 
-      {/* Info Card */}
+      {/* Info Card - Push to bottom */}
       <div className="mt-auto p-4 rounded-2xl bg-primary/5 border border-primary/10">
         <div className="flex items-center gap-2 text-primary mb-2">
           <Info className="h-4 w-4" />
@@ -353,6 +353,14 @@ export function ChatSidebar({ onNewChat }: { onNewChat?: () => void }) {
           mobile reception.
         </p>
       </div>
+    </div>
+  );
+}
+
+export function ChatSidebar({ onNewChat }: { onNewChat?: () => void }) {
+  return (
+    <aside className="hidden md:flex flex-col w-72 border-r border-border bg-muted/30 p-4 overflow-hidden h-full">
+      <SidebarContent onNewChat={onNewChat} />
     </aside>
   );
 }

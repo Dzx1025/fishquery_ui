@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
   Settings,
@@ -10,7 +11,9 @@ import {
   ChevronRight,
   Send,
   User,
-  Info
+  Info,
+  Menu,
+  X
 } from "lucide-react";
 import Link from "next/link";
 
@@ -18,7 +21,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md transition-all duration-300">
+      <nav className="sticky top-0 z-50 border-b border-border bg-background backdrop-blur-md transition-all duration-300">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02]">
@@ -26,46 +29,30 @@ export default function Home() {
               <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-xl font-black tracking-tight">FishQuery</span>
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-80">WA Rules Assistant</span>
+              <span className="text-xl font-black tracking-tight hidden min-[460px]:block">FishQuery</span>
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-80 hidden sm:block">WA Rules Assistant</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-1 bg-muted/30 p-1 rounded-full border border-border/50">
-            <a
-              href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-primary hover:bg-background rounded-full transition-all"
-            >
-              Rules
-            </a>
-            <a
-              href="https://rules.fish.wa.gov.au/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-primary hover:bg-background rounded-full transition-all"
-            >
-              Species
-            </a>
-          </div>
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
             <ModeToggle />
 
-            <div className="hidden sm:flex items-center gap-1 border-l border-border pl-3">
+            <div className="flex items-center gap-1 border-l border-border pl-3">
               <Link href="/login">
-                <button className="text-sm font-bold text-muted-foreground hover:text-foreground px-4 py-2 rounded-full transition-colors">
+                <button className="text-sm font-bold text-muted-foreground hover:text-foreground px-3 py-2 sm:px-4 rounded-full transition-colors">
                   Log in
                 </button>
               </Link>
             </div>
 
             <Link href="/chat">
-              <button className="flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] hover:shadow-primary/30 active:scale-95 text-nowrap">
+              <button className="hidden sm:flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] hover:shadow-primary/30 active:scale-95 text-nowrap">
                 Launch Chat
+              </button>
+              <button className="sm:hidden flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:translate-y-[-1px] hover:shadow-primary/30 active:scale-95 text-nowrap">
+                Chat
               </button>
             </Link>
           </div>

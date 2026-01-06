@@ -11,10 +11,11 @@ import {
   Square,
   AlertCircle,
   X,
+  Menu,
 } from "lucide-react";
 import { ChatEntryScreen } from "@/components/chat/chat-entry-screen";
 import { InitialQuestionScreen } from "@/components/chat/initial-question-screen";
-import { ChatSidebar } from "@/components/chat/sidebar";
+import { ChatSidebar, SidebarContent } from "@/components/chat/sidebar";
 import { ChatMessage } from "@/components/chat/chat-message";
 import { UserProfileButton } from "@/components/chat/user-profile-button";
 import { Message, Source } from "@/types/chat";
@@ -35,6 +36,7 @@ export default function ChatPage() {
   const [input, setInput] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [errorModal, setErrorModal] = React.useState<{ show: boolean; message: string }>({ show: false, message: "" });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
@@ -327,6 +329,14 @@ export default function ChatPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
         <div className="flex items-center gap-4">
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="p-2 -ml-2 rounded-full hover:bg-muted transition-colors text-muted-foreground md:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+
           {/* Logo - Links to home */}
           <Link
             href="/"
@@ -362,16 +372,46 @@ export default function ChatPage() {
 
 
           {/* User Profile Button */}
-          <div className="hidden sm:block border-l border-border pl-3">
-            <UserProfileButton />
+          <div className="border-l border-border pl-3">
+            {user ? (
+              <UserProfileButton />
+            ) : (
+              <Link href="/login">
+                <button className="text-sm font-bold text-muted-foreground hover:text-foreground px-3 py-2 rounded-full transition-colors">
+                  Log in
+                </button>
+              </Link>
+            )}
           </div>
 
           <SettingsMenu />
-          <button className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground md:hidden">
-            <MoreVertical className="h-5 w-5" />
-          </button>
         </div>
       </header>
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          <div
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="relative w-72 bg-background border-r border-border h-full shadow-2xl animate-in slide-in-from-left duration-300 flex flex-col p-4">
+            <div className="flex items-center justify-between mb-4 px-2">
+              <span className="font-bold text-lg">Menu</span>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-1 rounded-full hover:bg-muted"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <SidebarContent onNewChat={() => {
+              resetChat();
+              setIsMobileMenuOpen(false);
+            }} />
+          </div>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
