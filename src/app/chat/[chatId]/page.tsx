@@ -4,10 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSubscription } from "@apollo/client/react";
-import { ModeToggle } from "@/components/mode-toggle";
+import { SettingsMenu } from "@/components/chat/settings-menu";
 import {
   Send,
-  Settings,
   ShieldCheck,
   MoreVertical,
   Square,
@@ -351,10 +350,7 @@ export default function ChatDetailPage() {
             <UserProfileButton />
           </div>
 
-          <ModeToggle />
-          <button className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground">
-            <Settings className="h-5 w-5" />
-          </button>
+          <SettingsMenu />
           <button className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground md:hidden">
             <MoreVertical className="h-5 w-5" />
           </button>

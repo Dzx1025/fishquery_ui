@@ -3,14 +3,12 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ModeToggle } from "@/components/mode-toggle";
+import { SettingsMenu } from "@/components/chat/settings-menu";
 import {
   Send,
-  Settings,
   ShieldCheck,
   MoreVertical,
   Square,
-  Loader2,
 } from "lucide-react";
 import { ChatEntryScreen } from "@/components/chat/chat-entry-screen";
 import { InitialQuestionScreen } from "@/components/chat/initial-question-screen";
@@ -301,10 +299,7 @@ export default function ChatPage() {
             <UserProfileButton />
           </div>
 
-          <ModeToggle />
-          <button className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground">
-            <Settings className="h-5 w-5" />
-          </button>
+          <SettingsMenu />
           <button className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground md:hidden">
             <MoreVertical className="h-5 w-5" />
           </button>
