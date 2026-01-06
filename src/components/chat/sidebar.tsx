@@ -16,6 +16,8 @@ import {
   X,
   Check,
   Plus,
+  BookOpen,
+  Search,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -142,15 +144,15 @@ function ChatListItem({
   return (
     <div
       className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all group cursor-pointer ${isActive
-          ? "bg-primary/10 text-primary"
-          : "hover:bg-primary/10 hover:text-primary text-muted-foreground"
+        ? "bg-primary/10 text-primary"
+        : "hover:bg-primary/10 hover:text-primary text-muted-foreground"
         }`}
       onClick={onSelect}
     >
       <div
         className={`p-1.5 rounded-lg border transition-colors shadow-sm ${isActive
-            ? "bg-primary text-primary-foreground border-primary"
-            : "bg-background border-border group-hover:bg-primary group-hover:text-primary-foreground"
+          ? "bg-primary text-primary-foreground border-primary"
+          : "bg-background border-border group-hover:bg-primary group-hover:text-primary-foreground"
           }`}
       >
         <MessageSquare className="h-4 w-4" />
@@ -318,12 +320,14 @@ export function ChatSidebar({ onNewChat }: { onNewChat?: () => void }) {
         </h3>
         <div className="grid gap-2">
           <SidebarButton
-            icon={<ShieldCheck className="h-4 w-4" />}
-            label="Review Daily Limits"
+            icon={<BookOpen className="h-4 w-4" />}
+            label="Fishing Guides"
+            onClick={() => window.open("https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/", "_blank")}
           />
           <SidebarButton
-            icon={<MessageSquare className="h-4 w-4" />}
-            label="Species ID Guide"
+            icon={<Search className="h-4 w-4" />}
+            label="Identify Fish Species"
+            onClick={() => window.open("https://rules.fish.wa.gov.au/", "_blank")}
           />
         </div>
       </div>
