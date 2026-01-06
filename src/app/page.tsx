@@ -1,6 +1,5 @@
-"use client"
+"use client";
 
-import { useState } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
   Settings,
@@ -12,10 +11,9 @@ import {
   Send,
   User,
   Info,
-  Menu,
-  X
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -24,16 +22,28 @@ export default function Home() {
       <nav className="sticky top-0 z-50 border-b border-border bg-background backdrop-blur-md transition-all duration-300">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           {/* Logo Section */}
-          <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02]">
+          <Link
+            href="/"
+            className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
+          >
             <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-lg transition-all overflow-hidden border border-border/50">
-              <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+              <Image
+                src="/favicon.ico"
+                alt="FQ"
+                width={40}
+                height={40}
+                className="h-full w-full object-cover"
+              />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-xl font-black tracking-tight hidden min-[460px]:block">FishQuery</span>
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-80 hidden sm:block">WA Rules Assistant</span>
+              <span className="text-xl font-black tracking-tight hidden min-[460px]:block">
+                FishQuery
+              </span>
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-80 hidden sm:block">
+                WA Rules Assistant
+              </span>
             </div>
           </Link>
-
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
@@ -69,18 +79,26 @@ export default function Home() {
                 Official WA Fishing Guidelines
               </div>
               <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight md:text-7xl">
-                Navigate WA Fishing Rules with <span className="text-primary italic">Confidence.</span>
+                Navigate WA Fishing Rules with{" "}
+                <span className="text-primary italic">Confidence.</span>
               </h1>
               <p className="max-w-xl text-lg text-muted-foreground font-sans leading-relaxed md:text-xl">
-                Instant, AI-powered answers for Western Australia&apos;s recreational fishing regulations, size limits, and species identification.
+                Instant, AI-powered answers for Western Australia&apos;s
+                recreational fishing regulations, size limits, and species
+                identification.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link href="/chat">
                   <button className="group flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95">
-                    Start Chatting Now <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    Start Chatting Now{" "}
+                    <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </button>
                 </Link>
-                <a href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <button className="flex items-center gap-2 rounded-2xl border border-border bg-background px-8 py-4 text-lg font-bold shadow-sm transition-all hover:bg-muted/50">
                     Read the Rules
                   </button>
@@ -96,11 +114,21 @@ export default function Home() {
                 <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full flex items-center justify-center overflow-hidden border border-border/50">
-                      <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
+                      <Image
+                        src="/assistant-avatar.png"
+                        alt="Assistant"
+                        width={32}
+                        height={32}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <div className="flex flex-col leading-tight">
-                      <span className="text-sm font-bold">FishQuery Assistant</span>
-                      <span className="text-[10px] text-chart-3 font-bold uppercase tracking-wider">Online</span>
+                      <span className="text-sm font-bold">
+                        FishQuery Assistant
+                      </span>
+                      <span className="text-[10px] text-chart-3 font-bold uppercase tracking-wider">
+                        Online
+                      </span>
                     </div>
                   </div>
                   <Settings className="h-4 w-4 text-muted-foreground" />
@@ -109,18 +137,33 @@ export default function Home() {
                 {/* Chat Body */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
                   <div className="flex gap-3 flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center"><User className="h-4 w-4" /></div>
+                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center">
+                      <User className="h-4 w-4" />
+                    </div>
                     <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium max-w-[80%]">
-                      Can I keep a West Australian Dhufish in the Perth region right now?
+                      Can I keep a West Australian Dhufish in the Perth region
+                      right now?
                     </div>
                   </div>
                   <div className="flex gap-3">
                     <div className="h-8 w-8 rounded-full flex flex-shrink-0 items-center justify-center overflow-hidden border border-border/50">
-                      <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
+                      <Image
+                        src="/assistant-avatar.png"
+                        alt="Assistant"
+                        width={32}
+                        height={32}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <div className="rounded-2xl rounded-tl-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
-                      <p className="mb-2 italic opacity-90">Checking DPIRD 2025 Guidelines...</p>
-                      Yes, but currently the West Coast Bioregion is in an <span className="underline decoration-2 font-bold underline-offset-2">open season</span>.
+                      <p className="mb-2 italic opacity-90">
+                        Checking DPIRD 2025 Guidelines...
+                      </p>
+                      Yes, but currently the West Coast Bioregion is in an{" "}
+                      <span className="underline decoration-2 font-bold underline-offset-2">
+                        open season
+                      </span>
+                      .
                       <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-sans">
                         <li>Min Size: 500mm</li>
                         <li>Bag Limit: 1 per person</li>
@@ -129,7 +172,9 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex gap-3 flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center"><User className="h-4 w-4" /></div>
+                    <div className="h-8 w-8 rounded-full bg-muted flex flex-shrink-0 items-center justify-center">
+                      <User className="h-4 w-4" />
+                    </div>
                     <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium">
                       Thanks! What about the closed season dates?
                     </div>
@@ -163,9 +208,12 @@ export default function Home() {
         <section className="py-24 bg-background">
           <div className="mx-auto max-w-7xl px-6">
             <div className="max-w-2xl mb-16 space-y-4">
-              <h2 className="text-3xl font-black tracking-tight sm:text-4xl text-foreground">Why use FishQuery?</h2>
+              <h2 className="text-3xl font-black tracking-tight sm:text-4xl text-foreground">
+                Why use FishQuery?
+              </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                We bridge the gap between complex legal documents and the instant answers you need while on the water.
+                We bridge the gap between complex legal documents and the
+                instant answers you need while on the water.
               </p>
             </div>
 
@@ -193,9 +241,12 @@ export default function Home() {
         <section className="py-24 px-6 border-t border-border">
           <div className="mx-auto max-w-5xl rounded-[3rem] bg-foreground text-background p-12 md:p-20 text-center space-y-8 relative overflow-hidden">
             <div className="relative z-10 space-y-4">
-              <h2 className="text-3xl md:text-5xl font-black">Ready for your next catch?</h2>
+              <h2 className="text-3xl md:text-5xl font-black">
+                Ready for your next catch?
+              </h2>
               <p className="text-lg opacity-80 max-w-xl mx-auto">
-                Join thousands of responsible WA anglers using FishQuery to protect our marine life and stay compliant.
+                Join thousands of responsible WA anglers using FishQuery to
+                protect our marine life and stay compliant.
               </p>
               <div className="flex justify-center gap-4 pt-4">
                 <Link href="/chat">
@@ -217,38 +268,95 @@ export default function Home() {
             <div className="col-span-2 space-y-6">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold overflow-hidden">
-                  <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                  <Image
+                    src="/favicon.ico"
+                    alt="FQ"
+                    width={32}
+                    height={32}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
-                <span className="text-xl font-bold tracking-tight">FishQuery</span>
+                <span className="text-xl font-bold tracking-tight">
+                  FishQuery
+                </span>
               </div>
               <p className="max-w-sm text-sm text-muted-foreground leading-relaxed">
-                FishQuery is an AI-powered assistant designed to help West Australian recreational fishers understand and comply with local regulations.
+                FishQuery is an AI-powered assistant designed to help West
+                Australian recreational fishers understand and comply with local
+                regulations.
               </p>
               <div className="flex items-center gap-3 text-xs font-bold font-sans rounded-lg bg-chart-4/10 text-chart-4 border border-chart-4/20 p-4">
                 <Info className="h-4 w-4 flex-shrink-0" />
-                <span>DISCLAIMER: This is an AI tool. Always verify rules with official DPIRD sources before fishing.</span>
+                <span>
+                  DISCLAIMER: This is an AI tool. Always verify rules with
+                  official DPIRD sources before fishing.
+                </span>
               </div>
             </div>
             <div className="space-y-4">
-              <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">Resources</h4>
+              <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">
+                Resources
+              </h4>
               <ul className="space-y-2 text-sm font-medium">
-                <li><a href="https://www.wa.gov.au/organisation/department-of-primary-industries-and-regional-development" target="_blank" rel="noopener noreferrer" className="hover:text-primary">DPIRD Website</a></li>
-                <li><a href="https://rules.fish.wa.gov.au/" target="_blank" rel="noopener noreferrer" className="hover:text-primary">Species Guide</a></li>
-                <li><a href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/" target="_blank" rel="noopener noreferrer" className="hover:text-primary">Fishing Rules Guide</a></li>
+                <li>
+                  <a
+                    href="https://www.wa.gov.au/organisation/department-of-primary-industries-and-regional-development"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
+                    DPIRD Website
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://rules.fish.wa.gov.au/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
+                    Species Guide
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
+                    Fishing Rules Guide
+                  </a>
+                </li>
               </ul>
             </div>
             <div className="space-y-4">
-              <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">Contact</h4>
+              <h4 className="font-bold uppercase text-[10px] tracking-widest text-muted-foreground">
+                Contact
+              </h4>
               <ul className="space-y-2 text-sm font-medium">
-                <li><a href="https://dzx1025.com/" className="hover:text-primary">Support</a></li>
-                <li><a href="#" className="hover:text-primary">Terms of Use</a></li>
+                <li>
+                  <a href="https://dzx1025.com/" className="hover:text-primary">
+                    Support
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-primary">
+                    Terms of Use
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border pt-8 text-xs font-medium text-muted-foreground">
             <p>© 2026 FishQuery Assistant. All rights reserved.</p>
             <div className="flex items-center gap-6">
-              <a href="https://github.com/Dzx1025/fishquery_ui" className="flex items-center gap-1 hover:text-foreground">GitHub <ExternalLink className="h-3 w-3" /></a>
+              <a
+                href="https://github.com/Dzx1025/fishquery_ui"
+                className="flex items-center gap-1 hover:text-foreground"
+              >
+                GitHub <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
           </div>
         </div>
@@ -257,7 +365,15 @@ export default function Home() {
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
   return (
     <div className="p-8 rounded-3xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:translate-y-[-4px]">
       <div className="mb-6 h-14 w-14 rounded-2xl bg-primary/5 text-primary flex items-center justify-center">
@@ -268,5 +384,5 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
         {description}
       </p>
     </div>
-  )
+  );
 }

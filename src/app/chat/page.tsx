@@ -2,17 +2,10 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SettingsMenu } from "@/components/chat/settings-menu";
-import {
-  Send,
-  ShieldCheck,
-  MoreVertical,
-  Square,
-  AlertCircle,
-  X,
-  Menu,
-} from "lucide-react";
+import { Send, ShieldCheck, Square, AlertCircle, X, Menu } from "lucide-react";
 import { ChatEntryScreen } from "@/components/chat/chat-entry-screen";
 import { InitialQuestionScreen } from "@/components/chat/initial-question-screen";
 import { ChatSidebar, SidebarContent } from "@/components/chat/sidebar";
@@ -35,7 +28,10 @@ export default function ChatPage() {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [input, setInput] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [errorModal, setErrorModal] = React.useState<{ show: boolean; message: string }>({ show: false, message: "" });
+  const [errorModal, setErrorModal] = React.useState<{
+    show: boolean;
+    message: string;
+  }>({ show: false, message: "" });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const abortControllerRef = React.useRef<AbortController | null>(null);
@@ -214,7 +210,10 @@ export default function ChatPage() {
       if (error instanceof Error) {
         setErrorModal({ show: true, message: error.message });
       } else {
-        setErrorModal({ show: true, message: "Failed to start chat. Please try again." });
+        setErrorModal({
+          show: true,
+          message: "Failed to start chat. Please try again.",
+        });
       }
       setIsLoading(false);
     }
@@ -291,7 +290,9 @@ export default function ChatPage() {
                 <div className="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center">
                   <AlertCircle className="h-5 w-5 text-destructive" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground">Message Limit Reached</h3>
+                <h3 className="text-lg font-bold text-foreground">
+                  Message Limit Reached
+                </h3>
               </div>
               <button
                 onClick={() => setErrorModal({ show: false, message: "" })}
@@ -343,7 +344,13 @@ export default function ChatPage() {
             className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
           >
             <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all overflow-hidden">
-              <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+              <Image
+                src="/favicon.ico"
+                alt="FQ"
+                width={40}
+                height={40}
+                className="h-full w-full object-cover"
+              />
             </div>
             <div className="hidden sm:flex flex-col leading-none">
               <span className="text-lg font-black tracking-tight">
@@ -359,8 +366,9 @@ export default function ChatPage() {
           {chatId && (
             <div className="hidden md:flex items-center gap-1.5 border-l border-border pl-4">
               <span
-                className={`h-2 w-2 rounded-full ${isLoading ? "bg-chart-4 animate-pulse" : "bg-chart-3"
-                  }`}
+                className={`h-2 w-2 rounded-full ${
+                  isLoading ? "bg-chart-4 animate-pulse" : "bg-chart-3"
+                }`}
               />
               <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
                 {isLoading ? "Thinking..." : "Online"}
@@ -369,8 +377,6 @@ export default function ChatPage() {
           )}
         </div>
         <div className="flex items-center gap-2">
-
-
           {/* User Profile Button */}
           <div className="border-l border-border pl-3">
             {user ? (
@@ -405,10 +411,12 @@ export default function ChatPage() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <SidebarContent onNewChat={() => {
-              resetChat();
-              setIsMobileMenuOpen(false);
-            }} />
+            <SidebarContent
+              onNewChat={() => {
+                resetChat();
+                setIsMobileMenuOpen(false);
+              }}
+            />
           </div>
         </div>
       )}
@@ -465,7 +473,13 @@ export default function ChatPage() {
                   messages[messages.length - 1]?.role === "user" && (
                     <div className="flex gap-4">
                       <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-border/50">
-                        <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
+                        <Image
+                          src="/assistant-avatar.png"
+                          alt="Assistant"
+                          width={40}
+                          height={40}
+                          className="h-full w-full object-cover"
+                        />
                       </div>
                       <div className="bg-card border border-border rounded-2xl rounded-tl-none px-5 py-3">
                         <div className="flex gap-1.5">

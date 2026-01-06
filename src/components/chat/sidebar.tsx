@@ -5,7 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 import { useQuery, useMutation } from "@apollo/client/react";
 import {
   MessageSquare,
-  ShieldCheck,
   Info,
   ChevronRight,
   Loader2,
@@ -143,17 +142,19 @@ function ChatListItem({
 
   return (
     <div
-      className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all group cursor-pointer ${isActive
-        ? "bg-primary/10 text-primary"
-        : "hover:bg-primary/10 hover:text-primary text-muted-foreground"
-        }`}
+      className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all group cursor-pointer ${
+        isActive
+          ? "bg-primary/10 text-primary"
+          : "hover:bg-primary/10 hover:text-primary text-muted-foreground"
+      }`}
       onClick={onSelect}
     >
       <div
-        className={`p-1.5 rounded-lg border transition-colors shadow-sm ${isActive
-          ? "bg-primary text-primary-foreground border-primary"
-          : "bg-background border-border group-hover:bg-primary group-hover:text-primary-foreground"
-          }`}
+        className={`p-1.5 rounded-lg border transition-colors shadow-sm ${
+          isActive
+            ? "bg-primary text-primary-foreground border-primary"
+            : "bg-background border-border group-hover:bg-primary group-hover:text-primary-foreground"
+        }`}
       >
         <MessageSquare className="h-4 w-4" />
       </div>
@@ -322,12 +323,19 @@ export function SidebarContent({ onNewChat }: { onNewChat?: () => void }) {
           <SidebarButton
             icon={<BookOpen className="h-4 w-4" />}
             label="Fishing Guides"
-            onClick={() => window.open("https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/", "_blank")}
+            onClick={() =>
+              window.open(
+                "https://www.dpird.wa.gov.au/individuals/recreational-fishing/recreational-fishing-guides/",
+                "_blank"
+              )
+            }
           />
           <SidebarButton
             icon={<Search className="h-4 w-4" />}
             label="Identify Fish Species"
-            onClick={() => window.open("https://rules.fish.wa.gov.au/", "_blank")}
+            onClick={() =>
+              window.open("https://rules.fish.wa.gov.au/", "_blank")
+            }
           />
         </div>
       </div>

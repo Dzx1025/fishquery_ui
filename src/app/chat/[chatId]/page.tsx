@@ -2,13 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSubscription } from "@apollo/client/react";
 import { SettingsMenu } from "@/components/chat/settings-menu";
 import {
   Send,
   ShieldCheck,
-  MoreVertical,
   Square,
   Loader2,
   AlertCircle,
@@ -185,7 +185,10 @@ export default function ChatDetailPage() {
         }
       } catch (parseError) {
         // If we already set an error message and threw, re-throw it
-        if (parseError instanceof Error && parseError.message !== "Failed to send message") {
+        if (
+          parseError instanceof Error &&
+          parseError.message !== "Failed to send message"
+        ) {
           throw parseError;
         }
       }
@@ -238,10 +241,10 @@ export default function ChatDetailPage() {
                 setStreamingMessage((prev) =>
                   prev
                     ? {
-                      ...prev,
-                      content: assistantContent,
-                      sources: [...collectedSources],
-                    }
+                        ...prev,
+                        content: assistantContent,
+                        sources: [...collectedSources],
+                      }
                     : null
                 );
               }
@@ -354,7 +357,13 @@ export default function ChatDetailPage() {
             className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
           >
             <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-lg transition-all overflow-hidden border border-border/50">
-              <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+              <Image
+                src="/favicon.ico"
+                alt="FQ"
+                width={40}
+                height={40}
+                className="h-full w-full object-cover"
+              />
             </div>
             <div className="hidden sm:flex flex-col leading-none">
               <span className="text-lg font-black tracking-tight">
@@ -368,8 +377,9 @@ export default function ChatDetailPage() {
 
           <div className="hidden md:flex items-center gap-1.5 border-l border-border pl-4">
             <span
-              className={`h-2 w-2 rounded-full ${isLoading ? "bg-chart-4 animate-pulse" : "bg-chart-3"
-                }`}
+              className={`h-2 w-2 rounded-full ${
+                isLoading ? "bg-chart-4 animate-pulse" : "bg-chart-3"
+              }`}
             />
             <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
               {isLoading ? "Thinking..." : "Online"}
@@ -378,8 +388,6 @@ export default function ChatDetailPage() {
         </div>
 
         <div className="flex items-center gap-2">
-
-
           {/* User Profile Button */}
           <div className="border-l border-border pl-3">
             {user ? (
@@ -394,8 +402,6 @@ export default function ChatDetailPage() {
           </div>
 
           <SettingsMenu />
-
-
         </div>
       </header>
 
@@ -416,10 +422,12 @@ export default function ChatDetailPage() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <SidebarContent onNewChat={() => {
-              resetChat();
-              setIsMobileMenuOpen(false);
-            }} />
+            <SidebarContent
+              onNewChat={() => {
+                resetChat();
+                setIsMobileMenuOpen(false);
+              }}
+            />
           </div>
         </div>
       )}
@@ -463,7 +471,13 @@ export default function ChatDetailPage() {
               messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-4">
                   <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-border/50">
-                    <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
+                    <Image
+                      src="/assistant-avatar.png"
+                      alt="Assistant"
+                      width={40}
+                      height={40}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                   <div className="bg-card border border-border rounded-2xl rounded-tl-none px-5 py-3">
                     <div className="flex gap-1.5">
@@ -492,7 +506,9 @@ export default function ChatDetailPage() {
                       <div className="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center">
                         <AlertCircle className="h-5 w-5 text-destructive" />
                       </div>
-                      <h3 className="text-lg font-bold text-foreground">Message Limit</h3>
+                      <h3 className="text-lg font-bold text-foreground">
+                        Message Limit
+                      </h3>
                     </div>
                     <button
                       onClick={() => setError(null)}
