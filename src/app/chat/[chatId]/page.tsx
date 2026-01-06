@@ -83,6 +83,7 @@ export default function ChatDetailPage() {
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const initialSentRef = React.useRef(false);
+  const localMessagesRef = React.useRef<Message[]>([]);
 
   // Subscribe to messages (only for logged-in users)
   const { data: subData, loading: subLoading } =
@@ -93,24 +94,40 @@ export default function ChatDetailPage() {
 
   // Update messages when subscription data changes (only for logged-in users, not during streaming)
   React.useEffect(() => {
-    // Only update from subscription if user is authenticated and we have data
-    if (isAuthenticated && subData?.chats_message && !isLoading) {
-      const formattedMessages: Message[] = subData.chats_message.map(
-        (msg, idx) => ({
-          id: `msg-${idx}-${msg.created_at}`,
-          role: msg.message_type === "user" ? "user" : "assistant",
-          content: msg.content,
-          sources: transformSources(msg.metadata?.sources),
-          timestamp: new Date(msg.created_at).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+    // Only update from subscription if:
+    // 1. User is authenticated
+    // 2. We have subscription data
+    // 3. Not currently loading/streaming
+    // 4. Subscription has more or equal messages than local state (avoid overwriting with stale data)
+    if (
+      isAuthenticated &&
+      subData?.chats_message &&
+      !isLoading &&
+      !streamingMessage
+    ) {
+      const subMessageCount = subData.chats_message.length;
+      const localMessageCount = localMessagesRef.current.length;
+
+      // Only update if subscription has at least as many messages as local state
+      // This prevents overwriting with stale data when subscription reconnects
+      if (subMessageCount >= localMessageCount) {
+        const formattedMessages: Message[] = subData.chats_message.map(
+          (msg, idx) => ({
+            id: `msg-${idx}-${msg.created_at}`,
+            role: msg.message_type === "user" ? "user" : "assistant",
+            content: msg.content,
+            sources: transformSources(msg.metadata?.sources),
+            timestamp: new Date(msg.created_at).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
           }),
-        }),
-      );
-      setMessages(formattedMessages);
-      setStreamingMessage(null);
+        );
+        setMessages(formattedMessages);
+        localMessagesRef.current = formattedMessages;
+      }
     }
-  }, [subData, isLoading, isAuthenticated]);
+  }, [subData, isLoading, isAuthenticated, streamingMessage]);
 
   // Scroll to bottom on new messages
   React.useEffect(() => {
@@ -140,6 +157,7 @@ export default function ChatDetailPage() {
           }),
         };
         setMessages([userMessage]);
+        localMessagesRef.current = [userMessage];
 
         try {
           await sendMessage(initialQuestion);
@@ -267,23 +285,24 @@ export default function ChatDetailPage() {
     }
 
     // Streaming complete
-    // For anonymous users, add the streaming message to messages array
-    // For logged-in users, subscription will update with final messages
-    if (!user) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `assistant-${Date.now()}`,
-          role: "assistant",
-          content: assistantContent,
-          sources: collectedSources,
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
-    }
+    // Always add the assistant message to local state
+    // For logged-in users, subscription will eventually sync, but we keep local state as fallback
+    const assistantMessage: Message = {
+      id: `assistant-${Date.now()}`,
+      role: "assistant",
+      content: assistantContent,
+      sources: collectedSources,
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    setMessages((prev) => {
+      const newMessages = [...prev, assistantMessage];
+      localMessagesRef.current = newMessages;
+      return newMessages;
+    });
     setStreamingMessage(null);
   };
 
@@ -306,7 +325,11 @@ export default function ChatDetailPage() {
         minute: "2-digit",
       }),
     };
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => {
+      const newMessages = [...prev, userMessage];
+      localMessagesRef.current = newMessages;
+      return newMessages;
+    });
 
     try {
       await sendMessage(question);
