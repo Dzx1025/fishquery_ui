@@ -424,8 +424,8 @@ export default function ChatPage() {
                 {isLoading &&
                   messages[messages.length - 1]?.role === "user" && (
                     <div className="flex gap-4">
-                      <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm overflow-hidden">
-                        <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-border/50">
+                        <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
                       </div>
                       <div className="bg-card border border-border rounded-2xl rounded-tl-none px-5 py-3">
                         <div className="flex gap-1.5">

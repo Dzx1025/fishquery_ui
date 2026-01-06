@@ -22,7 +22,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02]">
-            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all overflow-hidden">
+            <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-lg transition-all overflow-hidden border border-border/50">
               <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
             </div>
             <div className="flex flex-col leading-none">
@@ -108,8 +108,8 @@ export default function Home() {
                 {/* Chat Header */}
                 <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold overflow-hidden">
-                      <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                    <div className="h-8 w-8 rounded-full flex items-center justify-center overflow-hidden border border-border/50">
+                      <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
                     </div>
                     <div className="flex flex-col leading-tight">
                       <span className="text-sm font-bold">FishQuery Assistant</span>
@@ -128,8 +128,8 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <div className="h-8 w-8 rounded-full bg-primary flex flex-shrink-0 items-center justify-center text-primary-foreground font-bold text-[10px] overflow-hidden">
-                      <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                    <div className="h-8 w-8 rounded-full flex flex-shrink-0 items-center justify-center overflow-hidden border border-border/50">
+                      <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
                     </div>
                     <div className="rounded-2xl rounded-tl-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
                       <p className="mb-2 italic opacity-90">Checking DPIRD 2025 Guidelines...</p>

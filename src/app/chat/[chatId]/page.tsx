@@ -343,7 +343,7 @@ export default function ChatDetailPage() {
             href="/"
             className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
           >
-            <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20 group-hover:shadow-primary/30 transition-all overflow-hidden">
+            <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-lg transition-all overflow-hidden border border-border/50">
               <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
             </div>
             <div className="hidden sm:flex flex-col leading-none">
@@ -420,8 +420,8 @@ export default function ChatDetailPage() {
               !streamingMessage &&
               messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-sm overflow-hidden">
-                    <img src="/favicon.ico" alt="FQ" className="h-full w-full object-cover" />
+                  <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-border/50">
+                    <img src="/assistant-avatar.png" alt="Assistant" className="h-full w-full object-cover" />
                   </div>
                   <div className="bg-card border border-border rounded-2xl rounded-tl-none px-5 py-3">
                     <div className="flex gap-1.5">
