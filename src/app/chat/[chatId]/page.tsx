@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSubscription } from "@apollo/client/react";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -10,12 +11,11 @@ import {
   ShieldCheck,
   MoreVertical,
   Square,
-  LogOut,
-  User,
   Loader2,
 } from "lucide-react";
 import { ChatSidebar } from "@/components/chat/sidebar";
 import { ChatMessage } from "@/components/chat/chat-message";
+import { UserProfileButton } from "@/components/chat/user-profile-button";
 import { Message, Source } from "@/types/chat";
 import { useAuth } from "@/hooks/useAuth";
 import { SUBSCRIBE_TO_MESSAGES } from "@/lib/graphql";
@@ -68,7 +68,7 @@ export default function ChatDetailPage() {
   const searchParams = useSearchParams();
   const chatId = params.chatId as string;
   const initialQuestion = searchParams.get("q");
-  const { user, loading: authLoading, logout } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
 
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [streamingMessage, setStreamingMessage] =
@@ -83,13 +83,13 @@ export default function ChatDetailPage() {
   const { data: subData, loading: subLoading } =
     useSubscription<SubscriptionData>(SUBSCRIBE_TO_MESSAGES, {
       variables: { chatId },
-      skip: !chatId || !user,
+      skip: !chatId || !isAuthenticated,
     });
 
   // Update messages when subscription data changes (only for logged-in users, not during streaming)
   React.useEffect(() => {
-    // Only update from subscription if user is logged in and we have data
-    if (user && subData?.chats_message && !isLoading) {
+    // Only update from subscription if user is authenticated and we have data
+    if (isAuthenticated && subData?.chats_message && !isLoading) {
       const formattedMessages: Message[] = subData.chats_message.map(
         (msg, idx) => ({
           id: `msg-${idx}-${msg.created_at}`,
@@ -105,7 +105,7 @@ export default function ChatDetailPage() {
       setMessages(formattedMessages);
       setStreamingMessage(null);
     }
-  }, [subData, isLoading, user]);
+  }, [subData, isLoading, isAuthenticated]);
 
   // Scroll to bottom on new messages
   React.useEffect(() => {
@@ -114,7 +114,7 @@ export default function ChatDetailPage() {
 
   // Handle initial question from query param (works for both logged-in and anonymous users)
   React.useEffect(() => {
-    if (initialQuestion && !initialSentRef.current && !authLoading) {
+    if (initialQuestion && !initialSentRef.current) {
       initialSentRef.current = true;
       // Clear the query param from URL
       router.replace(`/chat/${chatId}`, { scroll: false });
@@ -137,7 +137,7 @@ export default function ChatDetailPage() {
         setMessages([userMessage]);
 
         try {
-          await sendMessage(initialQuestion, userMessage);
+          await sendMessage(initialQuestion);
         } catch (error) {
           console.error("Failed to send initial message:", error);
         } finally {
@@ -148,15 +148,11 @@ export default function ChatDetailPage() {
 
       sendInitialQuestion();
     }
-  }, [initialQuestion, authLoading, chatId, router]);
-
-  const handleLogout = async () => {
-    await logout();
-    router.push("/");
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuestion, chatId, router]);
 
   // Send message and handle SSE stream
-  const sendMessage = async (content: string, userMessage: Message) => {
+  const sendMessage = async (content: string) => {
     const res = await fetch(`${API_URL}/api/chat/${chatId}/`, {
       method: "POST",
       headers: {
@@ -286,7 +282,7 @@ export default function ChatDetailPage() {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      await sendMessage(question, userMessage);
+      await sendMessage(question);
     } catch (error) {
       console.error("Failed to send message:", error);
     } finally {
@@ -304,7 +300,8 @@ export default function ChatDetailPage() {
     router.push("/chat");
   };
 
-  if (authLoading || subLoading) {
+  // Show loading only when auth is loading or subscription is loading for authenticated users
+  if (authLoading || (isAuthenticated && subLoading)) {
     return (
       <div className="flex flex-col h-screen bg-background text-foreground items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -318,7 +315,7 @@ export default function ChatDetailPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
         <div className="flex items-center gap-4">
-          <a
+          <Link
             href="/"
             className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
           >
@@ -333,7 +330,7 @@ export default function ChatDetailPage() {
                 WA Rules Assistant
               </span>
             </div>
-          </a>
+          </Link>
 
           <div className="hidden md:flex items-center gap-1.5 border-l border-border pl-4">
             <span
@@ -355,39 +352,10 @@ export default function ChatDetailPage() {
             New Chat
           </button>
 
-          {user && (
-            <div className="hidden sm:flex items-center gap-3 border-l border-border pl-3">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold">{user.username}</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-muted-foreground font-medium">
-                      {user.messages_used_today}/{user.daily_message_quota}
-                    </span>
-                    <span
-                      className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full ${
-                        user.subscription_type === "premium"
-                          ? "bg-chart-4/10 text-chart-4"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {user.subscription_type}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-                title="Log out"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </div>
-          )}
+          {/* User Profile Button */}
+          <div className="hidden sm:block border-l border-border pl-3">
+            <UserProfileButton />
+          </div>
 
           <ModeToggle />
           <button className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground">

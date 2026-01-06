@@ -1,23 +1,22 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
   Send,
-  ArrowLeft,
   Settings,
   ShieldCheck,
   MoreVertical,
   Square,
-  LogOut,
-  User,
   Loader2,
 } from "lucide-react";
 import { ChatEntryScreen } from "@/components/chat/chat-entry-screen";
 import { InitialQuestionScreen } from "@/components/chat/initial-question-screen";
 import { ChatSidebar } from "@/components/chat/sidebar";
 import { ChatMessage } from "@/components/chat/chat-message";
+import { UserProfileButton } from "@/components/chat/user-profile-button";
 import { Message, Source } from "@/types/chat";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -27,7 +26,7 @@ const API_URL =
 // --- Main Chat Page ---
 export default function ChatPage() {
   const router = useRouter();
-  const { user, loading: authLoading, logout } = useAuth();
+  const { user } = useAuth();
   const [accessMode, setAccessMode] = React.useState<
     "anonymous" | "login" | null
   >(null);
@@ -40,10 +39,10 @@ export default function ChatPage() {
 
   // Auto-set access mode for logged-in users
   React.useEffect(() => {
-    if (!authLoading && user) {
+    if (user) {
       setAccessMode("login");
     }
-  }, [authLoading, user]);
+  }, [user]);
 
   // Scroll to bottom on new messages
   React.useEffect(() => {
@@ -57,14 +56,6 @@ export default function ChatPage() {
     } else {
       setAccessMode(mode);
     }
-  };
-
-  // Handle logout
-  const handleLogout = async () => {
-    await logout();
-    setAccessMode(null);
-    setChatId(null);
-    setMessages([]);
   };
 
   // Create chat session
@@ -171,10 +162,11 @@ export default function ChatPage() {
           }
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as Error;
       if (
-        error.name === "AbortError" ||
-        error.message === "BodyStreamBuffer was aborted"
+        err.name === "AbortError" ||
+        err.message === "BodyStreamBuffer was aborted"
       ) {
         console.log("Fetch aborted by user");
       } else {
@@ -260,16 +252,6 @@ export default function ChatPage() {
     setInput("");
   };
 
-  // Show loading while checking auth
-  if (authLoading) {
-    return (
-      <div className="flex flex-col h-screen bg-background text-foreground items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="mt-4 text-sm text-muted-foreground">Loading...</p>
-      </div>
-    );
-  }
-
   // Determine what content to show in the main area
   const showEntryScreen = !accessMode && !user;
   const showInitialQuestion = (accessMode || user) && !chatId;
@@ -281,7 +263,7 @@ export default function ChatPage() {
       <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
         <div className="flex items-center gap-4">
           {/* Logo - Links to home */}
-          <a
+          <Link
             href="/"
             className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
           >
@@ -296,7 +278,7 @@ export default function ChatPage() {
                 WA Rules Assistant
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* Status indicator - Only when chatting */}
           {chatId && (
@@ -322,40 +304,10 @@ export default function ChatPage() {
             </button>
           )}
 
-          {/* User Profile Section */}
-          {user && (
-            <div className="hidden sm:flex items-center gap-3 border-l border-border pl-3">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <User className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold">{user.username}</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-muted-foreground font-medium">
-                      {user.messages_used_today}/{user.daily_message_quota}
-                    </span>
-                    <span
-                      className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full ${
-                        user.subscription_type === "premium"
-                          ? "bg-chart-4/10 text-chart-4"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {user.subscription_type}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-                title="Log out"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </div>
-          )}
+          {/* User Profile Button */}
+          <div className="hidden sm:block border-l border-border pl-3">
+            <UserProfileButton />
+          </div>
 
           <ModeToggle />
           <button className="p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground">
