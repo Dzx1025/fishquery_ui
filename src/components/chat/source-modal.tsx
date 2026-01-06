@@ -69,35 +69,75 @@ export function SourceModal({
             {source.document?.content || "No content available"}
           </div>
 
-          {source.document?.metadata &&
-            Object.keys(source.document.metadata).length > 0 && (
-              <div className="mt-4">
-                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">
-                  Metadata
-                </div>
-                <div className="bg-muted/30 rounded-xl p-4 border border-border/50 space-y-2">
-                  {Object.entries(source.document.metadata).map(
-                    ([key, value]) => (
-                      <div key={key} className="flex items-start gap-2 text-xs">
-                        <span className="font-bold text-muted-foreground min-w-[80px]">
-                          {key}:
-                        </span>
-                        <span className="text-foreground break-all">
-                          {String(value)}
-                        </span>
-                      </div>
-                    )
-                  )}
-                </div>
+          {source.document?.metadata && (
+            <div className="mt-4">
+              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">
+                Source Details
               </div>
-            )}
+              <div className="bg-muted/30 rounded-xl p-4 border border-border/50 space-y-3">
+                {/* Source/Document Name */}
+                {Boolean(source.document.metadata.source) && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-bold text-muted-foreground">Document:</span>
+                    <span className="text-foreground font-medium">
+                      {String(source.document.metadata.source).split('/').pop()}
+                    </span>
+                  </div>
+                )}
+
+                {/* Page Information */}
+                {(source.document.metadata.page !== undefined || source.document.metadata.total_pages !== undefined) && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-bold text-muted-foreground">Page:</span>
+                    <span className="text-foreground">
+                      {source.document.metadata.page !== undefined
+                        ? `${Number(source.document.metadata.page) + 1}`
+                        : '?'}
+                      {source.document.metadata.total_pages !== undefined && (
+                        <span className="text-muted-foreground"> of {String(source.document.metadata.total_pages)}</span>
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                {/* Other Metadata (excluding already displayed fields) */}
+                {Object.entries(source.document.metadata)
+                  .filter(([key]) => !['source', 'page', 'total_pages', 'chunk'].includes(key))
+                  .map(([key, value]) => (
+                    <div key={key} className="flex items-start gap-2 text-xs">
+                      <span className="font-bold text-muted-foreground capitalize min-w-[80px]">
+                        {key.replace(/_/g, ' ')}:
+                      </span>
+                      <span className="text-foreground break-all">
+                        {String(value)}
+                      </span>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 border-t border-border bg-muted/30 flex justify-end">
+        <div className="px-6 py-4 border-t border-border bg-muted/30 flex items-center justify-between gap-4">
+          {/* Open Source Link */}
+          {Boolean(source.document?.metadata?.source) && (
+            <a
+              href={`${String(source.document.metadata.source)}${source.document.metadata.page !== undefined ? `#page=${Number(source.document.metadata.page) + 1}` : ''}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-xl border border-border hover:bg-muted transition-colors"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Open Source
+            </a>
+          )}
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-bold rounded-xl bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+            className="px-4 py-2 text-sm font-bold rounded-xl bg-primary text-primary-foreground hover:opacity-90 transition-opacity ml-auto"
           >
             Close
           </button>
