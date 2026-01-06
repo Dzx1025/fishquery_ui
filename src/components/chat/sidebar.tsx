@@ -15,6 +15,7 @@ import {
   Trash2,
   X,
   Check,
+  Plus,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -29,12 +30,33 @@ import {
 function SidebarButton({
   icon,
   label,
+  onClick,
+  variant = "ghost",
 }: {
   icon: React.ReactNode;
   label: string;
+  onClick?: () => void;
+  variant?: "ghost" | "primary";
 }) {
+  if (variant === "primary") {
+    return (
+      <button
+        onClick={onClick}
+        className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-bold transition-all bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] group mb-2"
+      >
+        <div className="p-1 rounded-lg bg-primary-foreground/20 group-hover:bg-primary-foreground/30 transition-colors">
+          {icon}
+        </div>
+        <span>{label}</span>
+      </button>
+    );
+  }
+
   return (
-    <button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground group">
+    <button
+      onClick={onClick}
+      className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-semibold transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground group"
+    >
       <div className="p-1.5 rounded-lg bg-background border border-border group-hover:bg-primary group-hover:text-primary-foreground transition-colors shadow-sm">
         {icon}
       </div>
@@ -119,19 +141,17 @@ function ChatListItem({
 
   return (
     <div
-      className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all group cursor-pointer ${
-        isActive
+      className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all group cursor-pointer ${isActive
           ? "bg-primary/10 text-primary"
           : "hover:bg-primary/10 hover:text-primary text-muted-foreground"
-      }`}
+        }`}
       onClick={onSelect}
     >
       <div
-        className={`p-1.5 rounded-lg border transition-colors shadow-sm ${
-          isActive
+        className={`p-1.5 rounded-lg border transition-colors shadow-sm ${isActive
             ? "bg-primary text-primary-foreground border-primary"
             : "bg-background border-border group-hover:bg-primary group-hover:text-primary-foreground"
-        }`}
+          }`}
       >
         <MessageSquare className="h-4 w-4" />
       </div>
@@ -276,20 +296,20 @@ function ChatList({ userId }: { userId: number }) {
   );
 }
 
-export function ChatSidebar() {
+export function ChatSidebar({ onNewChat }: { onNewChat?: () => void }) {
   const { user } = useAuth();
 
   return (
     <aside className="hidden md:flex flex-col w-72 border-r border-border bg-muted/30 p-4 space-y-6 overflow-y-auto">
-      {/* Chat History - Only for authenticated users */}
-      {user && (
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-2">
-            Chat History
-          </h3>
-          <ChatList userId={user.id} />
-        </div>
-      )}
+      {/* New Chat Button */}
+      <div className="px-2">
+        <SidebarButton
+          variant="primary"
+          icon={<Plus className="h-5 w-5" />}
+          label="New Chat"
+          onClick={onNewChat}
+        />
+      </div>
 
       {/* Quick Actions */}
       <div className="space-y-4">
@@ -307,6 +327,16 @@ export function ChatSidebar() {
           />
         </div>
       </div>
+
+      {/* Chat History - Only for authenticated users */}
+      {user && (
+        <div className="space-y-3">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-2">
+            Chat History
+          </h3>
+          <ChatList userId={user.id} />
+        </div>
+      )}
 
       {/* Info Card */}
       <div className="mt-auto p-4 rounded-2xl bg-primary/5 border border-primary/10">

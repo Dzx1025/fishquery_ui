@@ -284,9 +284,8 @@ export default function ChatPage() {
           {chatId && (
             <div className="hidden md:flex items-center gap-1.5 border-l border-border pl-4">
               <span
-                className={`h-2 w-2 rounded-full ${
-                  isLoading ? "bg-chart-4 animate-pulse" : "bg-chart-3"
-                }`}
+                className={`h-2 w-2 rounded-full ${isLoading ? "bg-chart-4 animate-pulse" : "bg-chart-3"
+                  }`}
               />
               <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
                 {isLoading ? "Thinking..." : "Online"}
@@ -295,14 +294,7 @@ export default function ChatPage() {
           )}
         </div>
         <div className="flex items-center gap-2">
-          {chatId && (
-            <button
-              onClick={resetChat}
-              className="text-xs font-bold text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-full hover:bg-muted transition-colors"
-            >
-              New Chat
-            </button>
-          )}
+
 
           {/* User Profile Button */}
           <div className="hidden sm:block border-l border-border pl-3">
@@ -322,7 +314,7 @@ export default function ChatPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar - Desktop Only */}
-        <ChatSidebar />
+        <ChatSidebar onNewChat={resetChat} />
 
         {/* Content Area */}
         <div className="flex-1 flex flex-col relative bg-background/50">
