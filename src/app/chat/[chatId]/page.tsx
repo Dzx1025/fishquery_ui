@@ -14,9 +14,6 @@ import { Message, Source } from "@/types/chat";
 import { useAuth } from "@/hooks/useAuth";
 import { SUBSCRIBE_TO_MESSAGES } from "@/lib/graphql";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000";
-
 interface DbSource {
   index: number;
   score: number;
@@ -158,16 +155,19 @@ export default function ChatDetailPage() {
   const sendMessage = async (content: string) => {
     setError(null);
 
-    const res = await fetch(`${API_URL}/api/chat/${chatId}/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Stream-Protocol": "ai-sdk",
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/chat/${chatId}/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Stream-Protocol": "ai-sdk",
+        },
+        body: JSON.stringify({ message: content }),
+        credentials: "include",
+        signal: abortControllerRef.current?.signal,
       },
-      body: JSON.stringify({ message: content }),
-      credentials: "include",
-      signal: abortControllerRef.current?.signal,
-    });
+    );
 
     if (!res.ok) {
       try {

@@ -5,9 +5,6 @@ import type {
   AuthResponse,
 } from "@/types/auth";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000";
-
 /**
  * Base fetch wrapper for auth endpoints with credentials
  */
@@ -15,7 +12,7 @@ const authFetch = async (
   url: string,
   options: RequestInit = {},
 ): Promise<Response> => {
-  return fetch(`${API_URL}/api/auth${url}`, {
+  return fetch(`${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/auth${url}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",

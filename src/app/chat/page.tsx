@@ -9,9 +9,6 @@ import { InitialQuestionScreen } from "@/components/chat/initial-question-screen
 import { ErrorModal } from "@/components/chat/error-modal";
 import { useAuth } from "@/hooks/useAuth";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_DJANGO_API_URL || "http://localhost:8000";
-
 export default function ChatPage() {
   const router = useRouter();
   const { user } = useAuth();
@@ -42,12 +39,15 @@ export default function ChatPage() {
 
   // Create chat session
   const createChatSession = async (message: string): Promise<string> => {
-    const res = await fetch(`${API_URL}/api/chat/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/chat/`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+        credentials: "include",
+      },
+    );
 
     const data = await res.json();
 
