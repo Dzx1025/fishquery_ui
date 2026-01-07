@@ -1,23 +1,15 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSubscription } from "@apollo/client/react";
-import { SettingsMenu } from "@/components/chat/settings-menu";
-import {
-  Send,
-  ShieldCheck,
-  Square,
-  Loader2,
-  AlertCircle,
-  X,
-  Menu,
-} from "lucide-react";
-import { ChatSidebar, SidebarContent } from "@/components/chat/sidebar";
+import { Loader2 } from "lucide-react";
+import { ChatLayout } from "@/components/chat/chat-layout";
 import { ChatMessage } from "@/components/chat/chat-message";
-import { UserProfileButton } from "@/components/chat/user-profile-button";
+import { ChatInput } from "@/components/chat/chat-input";
+import { DisclaimerBanner } from "@/components/chat/disclaimer-banner";
+import { LoadingIndicator } from "@/components/chat/loading-indicator";
+import { ErrorModal } from "@/components/chat/error-modal";
 import { Message, Source } from "@/types/chat";
 import { useAuth } from "@/hooks/useAuth";
 import { SUBSCRIBE_TO_MESSAGES } from "@/lib/graphql";
@@ -45,7 +37,6 @@ interface SubscriptionData {
   chats_message: SubscriptionMessage[];
 }
 
-// Transform DB source format to frontend Source format
 function transformSources(dbSources?: DbSource[]): Source[] {
   if (!dbSources) return [];
   return dbSources.map((s, idx) => ({
@@ -70,35 +61,28 @@ export default function ChatDetailPage() {
   const searchParams = useSearchParams();
   const chatId = params.chatId as string;
   const initialQuestion = searchParams.get("q");
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [streamingMessage, setStreamingMessage] =
     React.useState<Message | null>(null);
   const [input, setInput] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-
   const [error, setError] = React.useState<string | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const abortControllerRef = React.useRef<AbortController | null>(null);
   const initialSentRef = React.useRef(false);
   const localMessagesRef = React.useRef<Message[]>([]);
 
-  // Subscribe to messages (only for logged-in users)
   const { data: subData, loading: subLoading } =
     useSubscription<SubscriptionData>(SUBSCRIBE_TO_MESSAGES, {
       variables: { chatId },
       skip: !chatId || !isAuthenticated,
     });
 
-  // Update messages when subscription data changes (only for logged-in users, not during streaming)
+  // Update messages from subscription
   React.useEffect(() => {
-    // Only update from subscription if:
-    // 1. User is authenticated
-    // 2. We have subscription data
-    // 3. Not currently loading/streaming
-    // 4. Subscription has more or equal messages than local state (avoid overwriting with stale data)
     if (
       isAuthenticated &&
       subData?.chats_message &&
@@ -108,8 +92,6 @@ export default function ChatDetailPage() {
       const subMessageCount = subData.chats_message.length;
       const localMessageCount = localMessagesRef.current.length;
 
-      // Only update if subscription has at least as many messages as local state
-      // This prevents overwriting with stale data when subscription reconnects
       if (subMessageCount >= localMessageCount) {
         const formattedMessages: Message[] = subData.chats_message.map(
           (msg, idx) => ({
@@ -129,24 +111,21 @@ export default function ChatDetailPage() {
     }
   }, [subData, isLoading, isAuthenticated, streamingMessage]);
 
-  // Scroll to bottom on new messages
+  // Scroll to bottom
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streamingMessage]);
 
-  // Handle initial question from query param (works for both logged-in and anonymous users)
+  // Handle initial question
   React.useEffect(() => {
     if (initialQuestion && !initialSentRef.current) {
       initialSentRef.current = true;
-      // Clear the query param from URL
       router.replace(`/chat/${chatId}`, { scroll: false });
 
-      // Send the initial question
       const sendInitialQuestion = async () => {
         setIsLoading(true);
         abortControllerRef.current = new AbortController();
 
-        // Add user message
         const userMessage: Message = {
           id: `user-${Date.now()}`,
           role: "user",
@@ -162,7 +141,6 @@ export default function ChatDetailPage() {
         try {
           await sendMessage(initialQuestion);
         } catch (error) {
-          // Error is already displayed in UI via setError, only log unexpected errors
           if (error instanceof Error && !error.message.includes("limit")) {
             console.error("Failed to send initial message:", error);
           }
@@ -177,9 +155,7 @@ export default function ChatDetailPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuestion, chatId, router]);
 
-  // Send message and handle SSE stream
   const sendMessage = async (content: string) => {
-    // Clear any previous error
     setError(null);
 
     const res = await fetch(`${API_URL}/api/chat/${chatId}/`, {
@@ -194,7 +170,6 @@ export default function ChatDetailPage() {
     });
 
     if (!res.ok) {
-      // Try to parse the error response
       try {
         const errorData = await res.json();
         if (errorData.error) {
@@ -202,7 +177,6 @@ export default function ChatDetailPage() {
           throw new Error(errorData.error);
         }
       } catch (parseError) {
-        // If we already set an error message and threw, re-throw it
         if (
           parseError instanceof Error &&
           parseError.message !== "Failed to send message"
@@ -218,7 +192,6 @@ export default function ChatDetailPage() {
     let assistantContent = "";
     const collectedSources: Source[] = [];
 
-    // Initialize streaming message
     setStreamingMessage({
       id: `streaming-${Date.now()}`,
       role: "assistant",
@@ -284,9 +257,6 @@ export default function ChatDetailPage() {
       }
     }
 
-    // Streaming complete
-    // Always add the assistant message to local state
-    // For logged-in users, subscription will eventually sync, but we keep local state as fallback
     const assistantMessage: Message = {
       id: `assistant-${Date.now()}`,
       role: "assistant",
@@ -315,7 +285,6 @@ export default function ChatDetailPage() {
     setIsLoading(true);
     abortControllerRef.current = new AbortController();
 
-    // Add user message to local state
     const userMessage: Message = {
       id: `user-${Date.now()}`,
       role: "user",
@@ -334,7 +303,6 @@ export default function ChatDetailPage() {
     try {
       await sendMessage(question);
     } catch (error) {
-      // Error is already displayed in UI via setError, only log unexpected errors
       if (error instanceof Error && !error.message.includes("limit")) {
         console.error("Failed to send message:", error);
       }
@@ -349,11 +317,11 @@ export default function ChatDetailPage() {
     setIsLoading(false);
   };
 
-  const resetChat = () => {
-    router.push("/chat");
+  const handleInputChange = (value: string) => {
+    setInput(value);
+    if (error) setError(null);
   };
 
-  // Show loading only when auth is loading or subscription is loading for authenticated users
   if (authLoading || (isAuthenticated && subLoading)) {
     return (
       <div className="flex flex-col h-screen bg-background text-foreground items-center justify-center">
@@ -364,259 +332,49 @@ export default function ChatDetailPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground transition-colors duration-300">
-      {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-10">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="p-2 -ml-2 rounded-full hover:bg-muted transition-colors text-muted-foreground md:hidden"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+    <ChatLayout
+      onNewChat={() => router.push("/chat")}
+      isLoading={isLoading}
+      showStatus
+    >
+      <ErrorModal
+        show={!!error}
+        message={error || ""}
+        onClose={() => setError(null)}
+      />
 
-          <Link
-            href="/"
-            className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
-          >
-            <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-lg transition-all overflow-hidden border border-border/50">
-              <Image
-                src="/favicon.ico"
-                alt="FQ"
-                width={40}
-                height={40}
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="hidden sm:flex flex-col leading-none">
-              <span className="text-lg font-black tracking-tight">
-                FishQuery
-              </span>
-              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest opacity-80">
-                WA Rules Assistant
-              </span>
-            </div>
-          </Link>
+      <DisclaimerBanner />
 
-          <div className="hidden md:flex items-center gap-1.5 border-l border-border pl-4">
-            <span
-              className={`h-2 w-2 rounded-full ${
-                isLoading ? "bg-chart-4 animate-pulse" : "bg-chart-3"
-              }`}
-            />
-            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
-              {isLoading ? "Thinking..." : "Online"}
-            </span>
-          </div>
-        </div>
+      {/* Message List */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+        {messages.map((message) => (
+          <ChatMessage key={message.id} message={message} isLoading={false} />
+        ))}
 
-        <div className="flex items-center gap-2">
-          {/* User Profile Button */}
-          <div className="border-l border-border pl-3">
-            {user ? (
-              <UserProfileButton />
-            ) : (
-              <Link href="/login">
-                <button className="text-sm font-bold text-muted-foreground hover:text-foreground px-3 py-2 rounded-full transition-colors">
-                  Log in
-                </button>
-              </Link>
-            )}
-          </div>
-
-          <SettingsMenu />
-        </div>
-      </header>
-
-      {/* Mobile Sidebar Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden">
-          <div
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
-            onClick={() => setIsMobileMenuOpen(false)}
+        {streamingMessage && (
+          <ChatMessage
+            key={streamingMessage.id}
+            message={streamingMessage}
+            isLoading={true}
           />
-          <div className="relative w-72 bg-background border-r border-border h-full shadow-2xl animate-in slide-in-from-left duration-300 flex flex-col p-4">
-            <div className="flex items-center justify-between mb-4 px-2">
-              <span className="font-bold text-lg">Menu</span>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-1 rounded-full hover:bg-muted"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <SidebarContent
-              onNewChat={() => {
-                resetChat();
-                setIsMobileMenuOpen(false);
-              }}
-            />
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        <ChatSidebar onNewChat={resetChat} />
+        {isLoading &&
+          !streamingMessage &&
+          messages[messages.length - 1]?.role === "user" && (
+            <LoadingIndicator />
+          )}
 
-        <div className="flex-1 flex flex-col relative bg-background/50">
-          {/* Disclaimer Banner */}
-          <div className="bg-chart-4/5 border-b border-chart-4/10 px-6 py-2.5 flex items-center justify-center gap-2 text-[11px] font-semibold text-chart-4/80">
-            <ShieldCheck className="h-3 w-3" />
-            <span>
-              AI powered by official DPIRD 2025 guidelines. Always verify local
-              signs.
-            </span>
-          </div>
-
-          {/* Message List */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
-            {messages.map((message) => (
-              <ChatMessage
-                key={message.id}
-                message={message}
-                isLoading={false}
-              />
-            ))}
-
-            {/* Streaming message */}
-            {streamingMessage && (
-              <ChatMessage
-                key={streamingMessage.id}
-                message={streamingMessage}
-                isLoading={true}
-              />
-            )}
-
-            {/* Loading indicator when waiting for response */}
-            {isLoading &&
-              !streamingMessage &&
-              messages[messages.length - 1]?.role === "user" && (
-                <div className="flex gap-4">
-                  <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-sm overflow-hidden border border-border/50">
-                    <Image
-                      src="/assistant-avatar.png"
-                      alt="Assistant"
-                      width={40}
-                      height={40}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="bg-card border border-border rounded-2xl rounded-tl-none px-5 py-3">
-                    <div className="flex gap-1.5">
-                      <span className="w-2 h-2 bg-muted-foreground/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                      <span className="w-2 h-2 bg-muted-foreground/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                      <span className="w-2 h-2 bg-muted-foreground/40 rounded-full animate-bounce" />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-            {/* Error message modal */}
-            {error && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                {/* Backdrop */}
-                <div
-                  className="absolute inset-0 bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-300"
-                  onClick={() => setError(null)}
-                />
-
-                {/* Modal Content */}
-                <div className="relative bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                  {/* Header */}
-                  <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-destructive/5">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center">
-                        <AlertCircle className="h-5 w-5 text-destructive" />
-                      </div>
-                      <h3 className="text-lg font-bold text-foreground">
-                        Message Limit
-                      </h3>
-                    </div>
-                    <button
-                      onClick={() => setError(null)}
-                      className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-                    >
-                      <X className="h-5 w-5" />
-                    </button>
-                  </div>
-
-                  {/* Body */}
-                  <div className="px-6 py-5">
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {error}
-                    </p>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="px-6 py-4 border-t border-border bg-muted/30 flex items-center justify-end gap-3">
-                    <button
-                      onClick={() => setError(null)}
-                      className="px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    {error.toLowerCase().includes("upgrade") && (
-                      <a
-                        href="/pricing"
-                        className="px-5 py-2.5 text-sm font-bold uppercase tracking-wider bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
-                      >
-                        Upgrade Plan
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <div className="p-6 bg-linear-to-t from-background to-transparent">
-            <form
-              onSubmit={handleSubmit}
-              className="max-w-4xl mx-auto relative group"
-            >
-              <div className="relative flex items-center rounded-[1.5rem] border border-border bg-card shadow-2xl transition-all focus-within:ring-4 focus-within:ring-primary/10 focus-within:border-primary/50 overflow-hidden">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => {
-                    setInput(e.target.value);
-                    if (error) setError(null);
-                  }}
-                  placeholder="Ask FishQuery about WA fishing rules..."
-                  className="w-full py-4 pl-6 pr-24 bg-transparent text-sm focus:outline-none font-medium placeholder:text-muted-foreground/60"
-                  disabled={isLoading}
-                />
-                <div className="absolute right-2 flex items-center gap-1">
-                  {isLoading ? (
-                    <button
-                      type="button"
-                      onClick={handleStop}
-                      className="p-2.5 rounded-xl bg-destructive text-destructive-foreground shadow-lg hover:scale-105 active:scale-95 transition-all"
-                    >
-                      <Square className="h-5 w-5" />
-                    </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      disabled={!input.trim()}
-                      className="p-2.5 rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                    >
-                      <Send className="h-5 w-5" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            </form>
-            <p className="text-[10px] text-center mt-4 text-muted-foreground font-medium uppercase tracking-widest opacity-40">
-              FishQuery may make mistakes. Verify with DPIRD.
-            </p>
-          </div>
-        </div>
+        <div ref={messagesEndRef} />
       </div>
-    </div>
+
+      <ChatInput
+        value={input}
+        onChange={handleInputChange}
+        onSubmit={handleSubmit}
+        onStop={handleStop}
+        isLoading={isLoading}
+      />
+    </ChatLayout>
   );
 }
