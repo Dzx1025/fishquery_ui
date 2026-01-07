@@ -8,10 +8,12 @@ import { ChatEntryScreen } from "@/components/chat/chat-entry-screen";
 import { InitialQuestionScreen } from "@/components/chat/initial-question-screen";
 import { ErrorModal } from "@/components/chat/error-modal";
 import { useAuth } from "@/hooks/useAuth";
+import { useFingerprint } from "@/hooks/useFingerprint";
 
 export default function ChatPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { fingerprint } = useFingerprint();
   const [accessMode, setAccessMode] = React.useState<
     "anonymous" | "login" | null
   >(null);
@@ -39,11 +41,20 @@ export default function ChatPage() {
 
   // Create chat session
   const createChatSession = async (message: string): Promise<string> => {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    // Add fingerprint header for anonymous users
+    if (accessMode === "anonymous" && fingerprint) {
+      headers["X-Browser-Fingerprint"] = fingerprint;
+    }
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/chat/`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ message }),
         credentials: "include",
       },

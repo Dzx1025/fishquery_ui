@@ -13,6 +13,7 @@ import { ErrorModal } from "@/components/chat/error-modal";
 import { Message, Source } from "@/types/chat";
 import { useAuth } from "@/hooks/useAuth";
 import { SUBSCRIBE_TO_MESSAGES } from "@/lib/graphql";
+import { useFingerprint } from "@/hooks/useFingerprint";
 
 interface DbSource {
   index: number;
@@ -59,6 +60,7 @@ export default function ChatDetailPage() {
   const chatId = params.chatId as string;
   const initialQuestion = searchParams.get("q");
   const { isAuthenticated, loading: authLoading } = useAuth();
+  const { fingerprint } = useFingerprint();
 
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [streamingMessage, setStreamingMessage] =
@@ -155,14 +157,21 @@ export default function ChatDetailPage() {
   const sendMessage = async (content: string) => {
     setError(null);
 
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "X-Stream-Protocol": "ai-sdk",
+    };
+
+    // Add fingerprint header for anonymous users
+    if (!isAuthenticated && fingerprint) {
+      headers["X-Browser-Fingerprint"] = fingerprint;
+    }
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/api/chat/${chatId}/`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Stream-Protocol": "ai-sdk",
-        },
+        headers,
         body: JSON.stringify({ message: content }),
         credentials: "include",
         signal: abortControllerRef.current?.signal,
