@@ -65,7 +65,7 @@ export function SourceModal({
           <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">
             Content
           </div>
-          <div className="text-sm text-foreground leading-relaxed whitespace-pre-wrap bg-muted/30 rounded-xl p-4 border border-border/50">
+          <div className="text-sm text-foreground leading-relaxed whitespace-pre-wrap bg-muted/30 rounded-xl p-4 border border-border/50 font-mono">
             {source.document?.content || "No content available"}
           </div>
 
@@ -94,7 +94,7 @@ export function SourceModal({
                     <span className="font-bold text-muted-foreground">
                       Page:
                     </span>
-                    <span className="text-foreground">
+                    <span className="text-foreground font-mono">
                       {source.document.metadata.page !== undefined
                         ? `${Number(source.document.metadata.page) + 1}`
                         : "?"}

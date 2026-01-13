@@ -56,7 +56,7 @@ function CitationLink({ source, label }: { source?: Source; label: string }) {
     <>
       <span className="relative inline-block">
         <button
-          className="text-primary hover:text-primary/80 font-semibold cursor-pointer hover:underline underline-offset-2"
+          className="text-primary hover:text-primary/80 font-semibold font-mono cursor-pointer hover:underline underline-offset-2"
           onMouseEnter={() => setShowPopover(true)}
           onMouseLeave={() => setShowPopover(false)}
           onClick={() => setShowModal(true)}

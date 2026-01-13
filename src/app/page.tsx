@@ -65,7 +65,9 @@ export default function Home() {
               </div>
               <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight md:text-7xl">
                 Navigate WA Fishing Rules with{" "}
-                <span className="text-primary italic">Confidence.</span>
+                <span className="text-primary italic font-serif">
+                  Confidence.
+                </span>
               </h1>
               <p className="max-w-xl text-lg text-muted-foreground font-sans leading-relaxed md:text-xl">
                 Instant, AI-powered answers for Western Australia&apos;s
@@ -149,7 +151,7 @@ export default function Home() {
                         open season
                       </span>
                       .
-                      <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-sans">
+                      <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-mono">
                         <li>Min Size: 500mm</li>
                         <li>Bag Limit: 1 per person</li>
                         <li>Boat Limit: 2 per boat</li>
@@ -270,7 +272,7 @@ export default function Home() {
                 Australian recreational fishers understand and comply with local
                 regulations.
               </p>
-              <div className="flex items-center gap-3 text-xs font-bold font-sans rounded-lg bg-chart-4/10 text-chart-4 border border-chart-4/20 p-4">
+              <div className="flex items-center gap-3 text-xs font-bold font-serif rounded-lg bg-chart-4/10 text-chart-4 border border-chart-4/20 p-4">
                 <Info className="h-4 w-4 shrink-0" />
                 <span>
                   DISCLAIMER: This is an AI tool. Always verify rules with

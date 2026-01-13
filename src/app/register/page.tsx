@@ -243,7 +243,7 @@ export default function RegisterPage() {
         </div>
       </main>
 
-      <footer className="p-6 text-center text-xs text-muted-foreground font-medium uppercase tracking-widest opacity-50">
+      <footer className="p-6 text-center text-xs text-muted-foreground font-medium font-serif uppercase tracking-widest opacity-50">
         © 2026 FishQuery Assistant • Pro-Angler Environment
       </footer>
     </div>

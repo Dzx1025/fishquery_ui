@@ -70,7 +70,7 @@ export function ChatMessage({ message, isLoading }: ChatMessageProps) {
             </>
           )}
         </div>
-        <span className="text-[10px] font-bold text-muted-foreground px-1 uppercase tracking-tighter opacity-60">
+        <span className="text-[10px] font-mono font-bold text-muted-foreground px-1 uppercase tracking-tighter opacity-60">
           {message.timestamp}
         </span>
       </div>

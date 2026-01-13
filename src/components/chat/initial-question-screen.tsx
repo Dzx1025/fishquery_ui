@@ -97,7 +97,7 @@ export function InitialQuestionScreen({
           ))}
         </div>
 
-        <p className="text-center text-[10px] text-muted-foreground font-medium uppercase tracking-widest opacity-40">
+        <p className="text-center text-[10px] text-muted-foreground font-medium font-serif uppercase tracking-widest opacity-40">
           FishQuery may make mistakes. Verify with DPIRD.
         </p>
       </div>
