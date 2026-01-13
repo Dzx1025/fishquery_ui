@@ -45,22 +45,9 @@ export default function Home() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            <ModeToggle />
-
-            <div className="flex items-center gap-1 border-l border-border pl-3">
-              <Link href="/login">
-                <button className="text-sm font-bold text-muted-foreground hover:text-foreground px-3 py-2 sm:px-4 rounded-full transition-colors">
-                  Log in
-                </button>
-              </Link>
-            </div>
-
-            <Link href="/chat">
-              <button className="hidden sm:flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-primary/30 active:scale-95 text-nowrap">
-                Launch Chat
-              </button>
-              <button className="sm:hidden flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-primary/30 active:scale-95 text-nowrap">
-                Chat
+            <Link href="/login">
+              <button className="flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-primary/30 active:scale-95">
+                Log in
               </button>
             </Link>
           </div>
@@ -355,6 +342,7 @@ export default function Home() {
               >
                 GitHub <ExternalLink className="h-3 w-3" />
               </a>
+              <ModeToggle />
             </div>
           </div>
         </div>
