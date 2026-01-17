@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather, Fira_Code } from "next/font/google";
+import { DM_Sans, Merriweather, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ApolloWrapper } from "@/components/apollo-provider";
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -57,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${merriweather.variable} ${firaCode.variable} font-sans antialiased`}
+        className={`${dmSans.variable} ${merriweather.variable} ${firaCode.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider
