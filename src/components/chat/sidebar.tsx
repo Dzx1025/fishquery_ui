@@ -73,12 +73,14 @@ function ChatListItem({
   onSelect,
   onRename,
   onDelete,
+  style,
 }: {
   chat: Chat;
   isActive: boolean;
   onSelect: () => void;
   onRename: (id: string, newTitle: string) => void;
   onDelete: (id: string) => void;
+  style?: React.CSSProperties;
 }) {
   const [showMenu, setShowMenu] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -142,7 +144,8 @@ function ChatListItem({
 
   return (
     <div
-      className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all group cursor-pointer ${
+      style={style}
+      className={`relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all group cursor-pointer animate-in fade-in slide-in-from-left-4 duration-500 fill-mode-backwards ${
         isActive
           ? "bg-primary/10 text-primary"
           : "hover:bg-primary/10 hover:text-primary text-muted-foreground"
@@ -285,10 +288,14 @@ function ChatList({ userId }: { userId: number }) {
 
   return (
     <div className="grid gap-1">
-      {chats.map((chat) => (
+      {chats.map((chat, index) => (
         <ChatListItem
           key={chat.id}
           chat={chat}
+          style={{
+            animationDelay: `${index * 0.05}s`,
+            animationFillMode: "backwards",
+          }}
           isActive={chat.id === currentChatId}
           onSelect={() => handleSelect(chat.id)}
           onRename={handleRename}

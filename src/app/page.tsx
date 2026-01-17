@@ -96,7 +96,7 @@ export default function Home() {
             {/* Chat Mockup */}
             <div className="relative group">
               <div className="absolute -inset-4 rounded-[2.5rem] bg-linear-to-br from-primary to-secondary blur-2xl opacity-10 group-hover:opacity-20 transition-opacity" />
-              <div className="relative flex flex-col rounded-[2rem] border border-border bg-card shadow-2xl overflow-hidden aspect-4/5 sm:aspect-3/4 md:aspect-auto">
+              <div className="relative flex flex-col rounded-[2rem] border border-border bg-card shadow-2xl overflow-hidden aspect-4/5 sm:aspect-3/4 md:aspect-auto animate-float">
                 {/* Chat Header */}
                 <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
                   <div className="flex items-center gap-3">
