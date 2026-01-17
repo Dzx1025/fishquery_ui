@@ -122,7 +122,7 @@ function ChatListItem({
             if (e.key === "Enter") handleRename();
             if (e.key === "Escape") setIsEditing(false);
           }}
-          className="flex-1 px-2 py-1 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="flex-1 px-2 py-1 text-sm bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
         />
         <button
           onClick={handleRename}
@@ -181,7 +181,7 @@ function ChatListItem({
             className="fixed inset-0 z-10"
             onClick={() => setShowMenu(false)}
           />
-          <div className="absolute right-0 top-full mt-1 z-20 bg-card border border-border rounded-lg shadow-lg py-1 min-w-[120px]">
+          <div className="absolute right-0 top-full mt-1 z-20 bg-popover text-popover-foreground border border-border rounded-lg shadow-lg py-1 min-w-[120px]">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -351,7 +351,7 @@ export function SidebarContent({ onNewChat }: { onNewChat?: () => void }) {
       )}
 
       {/* Info Card - Push to bottom */}
-      <div className="mt-auto p-4 rounded-2xl bg-primary/5 border border-primary/10">
+      <div className="mt-auto p-4 rounded-xl bg-primary/5 border border-primary/10">
         <div className="flex items-center gap-2 text-primary mb-2">
           <Info className="h-4 w-4" />
           <span className="text-xs font-bold">Safe Fishing</span>

@@ -64,7 +64,7 @@ function CitationLink({ source, label }: { source?: Source; label: string }) {
           {label}
         </button>
         {showPopover && !showModal && (
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 p-3 bg-card border border-border rounded-xl shadow-xl z-50 text-sm animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 p-3 bg-popover text-popover-foreground border border-border rounded-xl shadow-xl z-50 text-sm animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
             <div className="font-bold text-foreground mb-1 text-xs">
               {source.title}
             </div>

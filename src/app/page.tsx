@@ -76,7 +76,7 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link href="/chat">
-                  <button className="group flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95">
+                  <button className="group flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:scale-105 hover:shadow-2xl active:scale-95">
                     Start Chatting Now{" "}
                     <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </button>
@@ -86,7 +86,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <button className="flex items-center gap-2 rounded-2xl border border-border bg-background px-8 py-4 text-lg font-bold shadow-sm transition-all hover:bg-muted/50">
+                  <button className="flex items-center gap-2 rounded-xl border border-border bg-background px-8 py-4 text-lg font-bold shadow-sm transition-all hover:bg-muted/50">
                     Read the Rules
                   </button>
                 </a>
@@ -363,8 +363,8 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="p-8 rounded-3xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:translate-y-[-4px]">
-      <div className="mb-6 h-14 w-14 rounded-2xl bg-primary/5 text-primary flex items-center justify-center">
+    <div className="p-8 rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:translate-y-[-4px]">
+      <div className="mb-6 h-14 w-14 rounded-xl bg-primary/5 text-primary flex items-center justify-center">
         {icon}
       </div>
       <h3 className="text-xl font-black mb-3">{title}</h3>

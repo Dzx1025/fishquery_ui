@@ -20,7 +20,7 @@ export function ErrorModal({ show, message, onClose }: ErrorModalProps) {
         onClick={onClose}
       />
       {/* Modal */}
-      <div className="relative bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-card border border-border rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-destructive/5">
           <div className="flex items-center gap-3">

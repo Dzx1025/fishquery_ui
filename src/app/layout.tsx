@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Lora, Fira_Code } from "next/font/google";
+import { Inter, Merriweather, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/hooks/useAuth";
@@ -11,9 +11,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const lora = Lora({
+const merriweather = Merriweather({
   subsets: ["latin"],
-  variable: "--font-lora",
+  variable: "--font-merriweather",
   display: "swap",
 });
 
@@ -57,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${lora.variable} ${firaCode.variable} font-sans antialiased`}
+        className={`${inter.variable} ${merriweather.variable} ${firaCode.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider

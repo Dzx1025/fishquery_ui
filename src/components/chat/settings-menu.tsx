@@ -56,7 +56,7 @@ export function SettingsMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-3 w-64 bg-card/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+        <div className="absolute right-0 top-full mt-3 w-64 bg-popover/95 text-popover-foreground backdrop-blur-md border border-border rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
           <div className="px-4 pb-2 border-b border-border/50 mb-2">
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">
               Preferences

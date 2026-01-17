@@ -76,7 +76,7 @@ export function UserProfileButton() {
       </button>
 
       {isOpen && user && (
-        <div className="absolute right-0 top-full mt-2 w-64 bg-card border border-border rounded-xl shadow-lg py-2 z-50">
+        <div className="absolute right-0 top-full mt-2 w-64 bg-popover text-popover-foreground border border-border rounded-xl shadow-lg py-2 z-50">
           <div className="px-4 py-3 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">

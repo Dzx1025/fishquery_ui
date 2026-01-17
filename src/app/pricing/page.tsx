@@ -62,7 +62,7 @@ export default function PricingPage() {
           <div className="pt-8 animate-in fade-in slide-in-from-bottom-12 duration-1000">
             <Link
               href="/chat"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-xl font-bold hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20"
             >
               Take Me Back to Chat
             </Link>
