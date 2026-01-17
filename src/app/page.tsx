@@ -96,90 +96,92 @@ export default function Home() {
             {/* Chat Mockup */}
             <div className="relative group">
               <div className="absolute -inset-4 rounded-[2.5rem] bg-linear-to-br from-primary to-secondary blur-2xl opacity-10 group-hover:opacity-20 transition-opacity" />
-              <div className="relative flex flex-col rounded-[2rem] border border-border bg-card shadow-2xl overflow-hidden aspect-4/5 sm:aspect-3/4 md:aspect-auto animate-float">
-                {/* Chat Header */}
-                <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-full flex items-center justify-center overflow-hidden border border-border/50">
-                      <Image
-                        src="/assistant-avatar.png"
-                        alt="Assistant"
-                        width={32}
-                        height={32}
-                        className="h-full w-full object-cover"
-                      />
+              <div className="relative rounded-[2rem] p-[1px] aspect-4/5 sm:aspect-3/4 md:aspect-auto animate-float shadow-2xl overflow-hidden bg-linear-to-br from-border/50 via-border to-border/50 dark:from-primary/40 dark:via-border dark:to-secondary/40">
+                <div className="flex flex-col h-full w-full rounded-[2rem] bg-card overflow-hidden">
+                  {/* Chat Header */}
+                  <div className="flex items-center justify-between border-b border-border bg-muted/30 px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-full flex items-center justify-center overflow-hidden border border-border/50">
+                        <Image
+                          src="/assistant-avatar.png"
+                          alt="Assistant"
+                          width={32}
+                          height={32}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="flex flex-col leading-tight">
+                        <span className="text-sm font-bold">
+                          FishQuery Assistant
+                        </span>
+                        <span className="text-[10px] text-chart-3 font-bold uppercase tracking-wider">
+                          Online
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col leading-tight">
-                      <span className="text-sm font-bold">
-                        FishQuery Assistant
-                      </span>
-                      <span className="text-[10px] text-chart-3 font-bold uppercase tracking-wider">
-                        Online
-                      </span>
-                    </div>
+                    <Settings className="h-4 w-4 text-muted-foreground" />
                   </div>
-                  <Settings className="h-4 w-4 text-muted-foreground" />
-                </div>
 
-                {/* Chat Body */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                  <div className="flex gap-3 flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-muted flex shrink-0 items-center justify-center">
-                      <User className="h-4 w-4" />
+                  {/* Chat Body */}
+                  <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    <div className="flex gap-3 flex-row-reverse">
+                      <div className="h-8 w-8 rounded-full bg-muted flex shrink-0 items-center justify-center">
+                        <User className="h-4 w-4" />
+                      </div>
+                      <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium max-w-[80%]">
+                        Can I keep a West Australian Dhufish in the Perth region
+                        right now?
+                      </div>
                     </div>
-                    <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium max-w-[80%]">
-                      Can I keep a West Australian Dhufish in the Perth region
-                      right now?
+                    <div className="flex gap-3">
+                      <div className="h-8 w-8 rounded-full flex shrink-0 items-center justify-center overflow-hidden border border-border/50">
+                        <Image
+                          src="/assistant-avatar.png"
+                          alt="Assistant"
+                          width={32}
+                          height={32}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="rounded-2xl rounded-tl-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
+                        <p className="mb-2 italic opacity-90">
+                          Checking DPIRD 2025 Guidelines...
+                        </p>
+                        Yes, but currently the West Coast Bioregion is in an{" "}
+                        <span className="underline decoration-2 font-bold underline-offset-2">
+                          open season
+                        </span>
+                        .
+                        <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-mono">
+                          <li>Min Size: 500mm</li>
+                          <li>Bag Limit: 1 per person</li>
+                          <li>Boat Limit: 2 per boat</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 flex-row-reverse">
+                      <div className="h-8 w-8 rounded-full bg-muted flex shrink-0 items-center justify-center">
+                        <User className="h-4 w-4" />
+                      </div>
+                      <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium">
+                        Thanks! What about the closed season dates?
+                      </div>
                     </div>
                   </div>
-                  <div className="flex gap-3">
-                    <div className="h-8 w-8 rounded-full flex shrink-0 items-center justify-center overflow-hidden border border-border/50">
-                      <Image
-                        src="/assistant-avatar.png"
-                        alt="Assistant"
-                        width={32}
-                        height={32}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div className="rounded-2xl rounded-tl-none bg-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-lg shadow-primary/10 max-w-[85%] leading-relaxed">
-                      <p className="mb-2 italic opacity-90">
-                        Checking DPIRD 2025 Guidelines...
-                      </p>
-                      Yes, but currently the West Coast Bioregion is in an{" "}
-                      <span className="underline decoration-2 font-bold underline-offset-2">
-                        open season
-                      </span>
-                      .
-                      <ul className="mt-2 space-y-1 list-disc list-inside text-xs opacity-90 font-mono">
-                        <li>Min Size: 500mm</li>
-                        <li>Bag Limit: 1 per person</li>
-                        <li>Boat Limit: 2 per boat</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="flex gap-3 flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-muted flex shrink-0 items-center justify-center">
-                      <User className="h-4 w-4" />
-                    </div>
-                    <div className="rounded-2xl rounded-tr-none bg-muted px-4 py-2.5 text-sm font-medium">
-                      Thanks! What about the closed season dates?
-                    </div>
-                  </div>
-                </div>
 
-                {/* Chat Input */}
-                <div className="p-4 bg-muted/30 border-t border-border mt-auto">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Ask about rules, bag limits..."
-                      className="w-full pl-4 pr-12 py-3 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
-                      readOnly
-                    />
-                    <button className="absolute right-2 top-1.5 p-1.5 rounded-lg bg-primary text-primary-foreground">
-                      <Send className="h-4 w-4" />
-                    </button>
+                  {/* Chat Input */}
+                  <div className="p-4 bg-muted/30 border-t border-border mt-auto">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Ask about rules, bag limits..."
+                        className="w-full pl-4 pr-12 py-3 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                        readOnly
+                      />
+                      <button className="absolute right-2 top-1.5 p-1.5 rounded-lg bg-primary text-primary-foreground">
+                        <Send className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
