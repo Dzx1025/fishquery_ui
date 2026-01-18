@@ -17,6 +17,7 @@ export default function AboutPage() {
                 src="/favicon.ico"
                 alt="FishQuery Logo"
                 fill
+                sizes="40px"
                 className="object-cover"
               />
             </div>
@@ -93,7 +94,7 @@ export default function AboutPage() {
           </section>
 
           {/* Story Section */}
-          <section className="relative p-8 md:p-12 rounded-[2rem] bg-gradient-to-br from-cyan-900/40 to-slate-900/40 border border-cyan-500/20 backdrop-blur-xl overflow-hidden">
+          <section className="relative p-8 md:p-12 rounded-4xl bg-linear-to-br from-cyan-900/40 to-slate-900/40 border border-cyan-500/20 backdrop-blur-xl overflow-hidden">
             <div className="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
             <div className="relative z-10 space-y-6">
               <div className="flex items-center gap-3 text-cyan-400">

@@ -18,6 +18,7 @@ export default function LandingPage() {
                 src="/favicon.ico"
                 alt="FishQuery Logo"
                 fill
+                sizes="40px"
                 className="object-cover"
               />
             </div>
