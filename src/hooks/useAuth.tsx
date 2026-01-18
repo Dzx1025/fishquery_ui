@@ -38,6 +38,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuth = async () => {
     setLoading(true);
     try {
+      // Check if user has ever been authenticated (localStorage flag)
+      const hasAuthSession =
+        typeof window !== "undefined" &&
+        localStorage.getItem("hasAuthSession") === "true";
+
+      // Skip API calls if user has never logged in
+      if (!hasAuthSession) {
+        setIsAuthenticated(false);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       let res = await getProfile();
 
       // If access token is expired/missing, try to refresh
@@ -45,6 +58,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const refreshRes = await refreshToken();
         if (refreshRes.status === "success") {
           res = await getProfile();
+        } else {
+          // If refresh also fails, clear the session flag
+          localStorage.removeItem("hasAuthSession");
         }
       }
 
@@ -97,6 +113,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (profileRes.status === "success" && profileRes.data) {
           setUser(profileRes.data);
           setIsAuthenticated(true);
+          // Set localStorage flag to indicate user has an active session
+          localStorage.setItem("hasAuthSession", "true");
         }
         return { success: true };
       }
@@ -114,6 +132,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setUser(null);
     setIsAuthenticated(false);
+    // Clear localStorage flag on logout
+    localStorage.removeItem("hasAuthSession");
   };
 
   const refreshUser = async () => {

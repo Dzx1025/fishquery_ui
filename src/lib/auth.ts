@@ -63,20 +63,44 @@ export const logout = async (): Promise<AuthResponse> => {
 
 /**
  * Refresh access token
+ * Returns error response silently for unauthenticated users
  */
 export const refreshToken = async (): Promise<AuthResponse> => {
-  const res = await authFetch("/token/refresh/", {
-    method: "POST",
-  });
-  return res.json();
+  try {
+    const res = await authFetch("/token/refresh/", {
+      method: "POST",
+    });
+    return res.json();
+  } catch {
+    // Return a structured error response instead of throwing
+    return {
+      status: "error",
+      code: 400,
+      message: "No refresh token",
+      data: null,
+      errors: null,
+    };
+  }
 };
 
 /**
  * Get user profile
+ * Returns error response silently for unauthenticated users
  */
 export const getProfile = async (): Promise<ProfileResponse> => {
-  const res = await authFetch("/profile/");
-  return res.json();
+  try {
+    const res = await authFetch("/profile/");
+    return res.json();
+  } catch {
+    // Return a structured error response instead of throwing
+    return {
+      status: "error",
+      code: 401,
+      message: "Not authenticated",
+      data: null,
+      errors: null,
+    };
+  }
 };
 
 /**
